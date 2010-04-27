@@ -14,8 +14,8 @@ $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/manipulation.py
 import threading
 import logging
 import atexit
-import time
-import Zope2
+from types import StringTypes
+#import Zope2
 from math import ceil
 import transaction
 from ZODB.POSException import ConflictError
@@ -28,20 +28,33 @@ class ImageQueueProcessorThread(threading.Thread) :
 	"""
 
 	__stopped = False
-
-	def __init__(self, portal_path, itemPath):
+	
+	
+	def __init__(self, portal_path, itemsPath) :
 		threading.Thread.__init__(self)
-		self.app = app = Zope2.app()
-		self.portal = portal = app.unrestrictedTraverse(portal_path)
-		self.imgTool = portal.portal_image_manipulation
+		self.portal_path = portal_path
 		self.queue = []
-		if itemPath :
-			self.queueAdd(itemPath)
-		else :
-			ctool = portal.portal_catalog
-			brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=0)
-			for b in brains :
-				self.queueAdd(b.getPath())
+		if isinstance(itemsPath, StringTypes) :
+			itemsPath = [itemsPath]
+		for i in itemsPath :
+			self.queueAdd(i)
+
+#	def __init__(self, portal_path, itemPath):
+#		threading.Thread.__init__(self)
+#		self.app = app = Zope2.app()
+#		self.portal = portal = app.unrestrictedTraverse(portal_path)
+#		self.imgTool = portal.portal_image_manipulation
+#		self.queue = []
+#		if itemPath :
+#			self.queueAdd(itemPath)
+#		else :
+#			ctool = portal.portal_catalog
+#			brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=0)
+#			for b in brains :
+#				self.queueAdd(b.getPath())
+	
+	def __del__(self) :
+		print "ayé, c'est la fin !"
 	
 	@property
 	def queueSize(self) :
@@ -52,21 +65,33 @@ class ImageQueueProcessorThread(threading.Thread) :
 
 	def run(self) :
 		console.info('process started.')
-		atexit.register(self.stop)
+		#atexit.register(self.stop)
+		import Zope2
+		app = Zope2.app()
 		while not self.__stopped and self.queueSize :
-			self._process()
+			self._process(app)
+		
+		con = app._p_jar
+		con.close()
+		#con.close()
 		console.info('process finished.')
+		#print con
+		#print con.transaction_manager
+		
 
 	def stop(self):
 		console.info('process stopped.')
 		self.__stopped = True
 	
-	def _process(self) :
+	def _process(self, app) :
 		
 		path = self.queue.pop(0)
 		
+		#import Zope2
+		#app = Zope2.app()
+		
 		try :
-			p = self.app.unrestrictedTraverse(path)
+			p = app.unrestrictedTraverse(path)
 		except KeyError :
 			console.warn('deleted during processing: %s' % path)
 			return
@@ -126,7 +151,8 @@ class ImageQueueProcessorThread(threading.Thread) :
 		except ConflictError :
 			console.warn('Resync after ZODB ConflicError')
 			transaction.abort()
-			self.portal._p_jar.sync()
+			portal = app.unrestrictedTraverse(portal_path)
+			portal._p_jar.sync()
 			self.queueAdd(path)
 			return
 		except :

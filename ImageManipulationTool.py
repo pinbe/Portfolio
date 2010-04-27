@@ -28,9 +28,9 @@ from Products.MailHost.decorator import synchronized
 import time
 from logging import getLogger
 from threading import Lock
+import weakref
 console = getLogger('[portal_image_manipulation]')
-
-queue_threads = {}
+queue_threads = weakref.WeakValueDictionary()
 
 
 class ImageManipulationTool( UniqueObject, OrderedFolder) :
