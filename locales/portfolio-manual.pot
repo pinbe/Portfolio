@@ -1,0 +1,16 @@
+# from portfolio-manual
+
+msgid "not saved yet"
+msgstr ""
+
+msgid "Load in my selection"
+msgstr ""
+
+msgid "Unload from my selection"
+msgstr ""
+
+msgid "My albums"
+msgstr ""
+
+msgid "You don't have any album yet."
+msgstr ""

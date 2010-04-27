@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:metal="http://xml.zope.org/namespaces/metal"
+      tal:define="portal_url here/portal_url">
+  <head>
+    <title>photo: zoom view</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <script type="text/javascript" tal:attributes="src here/epoz_script_detect.js/absolute_url"></script>
+    <script type="text/javascript" tal:attributes="src here/javascript_events_api.js/absolute_url"></script>
+    <script type="text/javascript" tal:attributes="src here/sarissa.js/absolute_url"></script>
+    <script type="text/javascript" tal:attributes="src here/base_properties.js/absolute_url"></script>
+    <script type="text/javascript" tal:attributes="src here/DHTMLapi.js/absolute_url"></script>
+    <script type="text/javascript">
+    // <!--
+      function portal_url() {
+				var e = document.getElementById("Portal_URL");
+				return e.innerHTML;
+			}
+    // -->
+    </script>
+    <script type="text/javascript" tal:attributes="src string:${portal_url}/base_properties.js"></script>
+    <script type="text/javascript" tal:attributes="src string:${portal_url}/navigateur.js"></script>
+    <script type="text/javascript" tal:attributes="src string:${portal_url}/mosaique.js"></script>
+    <link rel="stylesheet" media="screen" tal:attributes="href here/global_plinn_style.css/absolute_url" />
+  </head>
+  <body style="background:#484848" i18n:domain="portfolio" tal:define="zoom_menu here/zoom_view_menu|nothing">
+      <div tal:condition="zoom_menu" style="position:absolute; z-index:3; top:5px; left:5px">
+        <div tal:content="structure zoom_menu" style="position:relative;background-color:#000"
+        >optional menu</div>
+      </div>
+      <img tal:condition="not:zoom_menu"
+           tal:attributes="src string:$portal_url/prev_img_btn.gif" width="23" height="27"
+           alt="back" title="back"
+           style="position:absolute; width:23px; height:27px; z-index:3; top:0; left:0"
+           onclick="history.back()"
+           i18n:attributes="alt;title"
+           />
+      <span id="Portal_URL"  style="display:none" tal:content="portal_url"></span>
+      <div id="zoneAffichage"
+           style="left:5px;top:5px;margin:0;padding:0; position:absolute"><br/></div>
+      <script type="text/javascript"
+              tal:content="string:
+        var url = '${here/absolute_url}';
+      ">
+      </script>
+      <script type="text/javascript">
+      // <!--
+        function initMosaique() {
+          initDHTMLAPI();
+          var main = document.getElementById('zoneAffichage');
+          if (browser.isIE) {
+            var width = getInsideWindowWidth() -5;
+            var height = getInsideWindowHeight() -5;
+            main.style.width = width + 'px';
+            main.style.height = height + 'px';
+          }
+          else {
+            main.style.bottom = 0;
+            main.style.right = 0;
+          }
+  				var margins = {'top':5, 'right':5, 'bottom':5, 'left':5};
+  				var mosaique = new Mosaique(document.getElementById('zoneAffichage'), url, margins);
+        }
+        addListener(window, 'load', initMosaique);
+      // -->
+      </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<image xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <thumbnailwidth tal:content="options/thumbnailWidth">256</thumbnailwidth>
+  <thumbnailheight tal:content="options/thumbnailHeight">145</thumbnailheight>
+  <tilesize tal:content="options/tileSize">256</tilesize>
+	<zoom tal:repeat="z options/zoomLevels"
+	      tal:attributes="zoomlevel z/zoomlevel">
+    <width tal:content="z/width">907</width>
+    <height tal:content="z/height">514</height>
+    <tilesx tal:content="z/tileX">4</tilesx>
+    <tilesy tal:content="z/tileY">3</tilesy>
+  </zoom>
+</image>

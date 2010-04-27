@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:media="http://search.yahoo.com/mrss"
+     xmlns:tal="http://xml.zope.org/namespaces/tal" version="2.0">
+<channel tal:define="channel_info options/channel_info; size channel_info/size">
+  <title tal:content="channel_info/title">All About Everything</title>
+  <link tal:content="channel_info/url">http://www.example.com/podcasts/everything/index.html</link>
+  <item tal:repeat="item_info options/listItemInfos">
+    <title tal:content="item_info/title"></title>
+    <link tal:content="string:${item_info/url}/getResizedImage?size=600_600"></link>
+    <media:content tal:attributes="url string:${item_info/url}/getResizedImage?${size};
+                                   duration channel_info/duration"
+                   type="image/jpeg"/>
+  </item>
+</channel>
+</rss>

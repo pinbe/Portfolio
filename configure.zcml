@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:i18n="http://namespaces.zope.org/i18n">
+  <include file="permissions.zcml"/>
+  <include file="content.zcml"/>
+  <include file="event.zcml"/>
+    
+  <cmf:registerDirectory directory="skins" name="portfolio" recursive="True"/>
+  <i18n:registerTranslations directory="locales"/>
+  
+</configure>

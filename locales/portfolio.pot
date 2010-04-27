@@ -1,0 +1,441 @@
+############################################################
+# Copyright © 2005-2008  Benoît PIN <benoit.pin@ensmp.fr>  #
+# Plinn - http://plinn.org                                 #
+#                                                          #
+# This program is free software; you can redistribute it   #
+# and/or modify it under the terms of the Creative Commons #
+# "Attribution-Noncommercial 2.0 Generic"                  #
+# http://creativecommons.org/licenses/by-nc/2.0/           #
+############################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Plinn - Portfolio 2\n"
+"POT-Creation-Date: $Date: Mon Sep  7 10:25:46 2009 $\n"
+"Language-Team: Benoît Pin <benoit.pin@ensmp.fr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ImageManipulationTool.py:42
+msgid "Processor"
+msgstr ""
+
+#: ImageManipulationTool.py:58
+msgid "Process started."
+msgstr ""
+
+#: ImageManipulationTool.py:66
+msgid "Process stopped."
+msgstr ""
+
+#: skins/add_to_cart.py:14
+#: skins/my_cart.py:73
+msgid "You must enter an integer for quantity (found: %s)"
+msgstr ""
+
+#: skins/add_to_cart.py:17
+#: skins/my_cart.py:75
+msgid "You must enter a positive value for quantity (found: %s)"
+msgstr ""
+
+#: skins/add_to_cart.py:39
+#: skins/my_cart.py:85
+msgid "Only %d available copies of this photo in this size."
+msgstr ""
+
+#: skins/add_to_cart.py:41
+#: skins/my_cart.py:87
+msgid "Only one last available copy of this photo in this size."
+msgstr ""
+
+#: skins/add_to_cart.py:43
+msgid "No more available copy of this photo in this size."
+msgstr ""
+
+#: skins/add_to_cart.py:48
+msgid ""
+"Your cart is locked:\n"
+"please complete your current order first."
+msgstr ""
+
+#: skins/add_to_cart.py:54
+msgid "Added to cart."
+msgstr ""
+
+#: skins/add_to_selection.py:37
+msgid "%s added to selection."
+msgstr ""
+
+#: skins/add_to_selection.py:39
+msgid "This %s is already in the selection."
+msgstr ""
+
+#: skins/get_slide_buyable_items.pt:21
+#: skins/photo_layout_macros.pt:43
+#: skins/photo_layout_macros.pt:45
+#: skins/photo_view.pt:91
+#: skins/photo_view.pt:94
+msgid "Add to cart"
+msgstr ""
+
+#: skins/get_slide_buyable_items.pt:27
+msgid "quantity:"
+msgstr ""
+
+#: skins/get_slide_buyable_items.pt:34
+msgid "Cancel"
+msgstr ""
+
+#: skins/lightbox_save_control.py:10
+msgid "No photo selected."
+msgstr ""
+
+#: skins/lightbox_save_control.py:21
+msgid "You must enter a title."
+msgstr ""
+
+#: skins/lightbox_save_control.py:27
+msgid "Lightbox created."
+msgstr ""
+
+#: skins/lightbox_view_template.pt:19
+#. Default: ""
+msgid "lightbox_selected_explanations"
+msgstr ""
+
+#: skins/lightbox_view_template.pt:22
+#: skins/selection_view_template.pt:20
+msgid "${DYNAMIC_CONTENT}"
+msgstr ""
+
+#: skins/metadata_edit_form_macros.pt:258
+msgid "Save"
+msgstr ""
+
+#: skins/my_cart.py:138
+#: skins/my_cart_template.pt:113
+msgid "My cart"
+msgstr ""
+
+#: skins/my_cart.py:58
+msgid "Order >>"
+msgstr ""
+
+#: skins/my_cart.py:60
+msgid "Shipping >>"
+msgstr ""
+
+#: skins/my_cart.py:89
+msgid "No more available copy of this photo and in this size."
+msgstr ""
+
+#: skins/my_cart_template.pt:114
+msgid "Your cart is currently empty."
+msgstr ""
+
+#: skins/my_cart_template.pt:26
+msgid "Image"
+msgstr ""
+
+#: skins/my_cart_template.pt:27
+msgid "Printing format and type"
+msgstr ""
+
+#: skins/my_cart_template.pt:28
+msgid "Quantity"
+msgstr ""
+
+#: skins/my_cart_template.pt:29
+msgid "Amount (incl tax)"
+msgstr ""
+
+#: skins/my_cart_template.pt:53
+#: skins/my_cart_template.pt:53
+msgid "refresh amount"
+msgstr ""
+
+#: skins/my_cart_template.pt:59
+#: skins/my_cart_template.pt:59
+msgid "delete"
+msgstr ""
+
+#: skins/my_cart_template.pt:69
+msgid "Prints"
+msgstr ""
+
+#: skins/my_cart_template.pt:70
+msgid "Total"
+msgstr ""
+
+#: skins/my_cart_template.pt:80
+#: skins/sell_macros.pt:16
+msgid "Shipping"
+msgstr ""
+
+#: skins/my_cart_template.pt:85
+msgid "VAT"
+msgstr ""
+
+#: skins/my_cart_template.pt:90
+msgid "Total amount to pay"
+msgstr ""
+
+#: skins/photo_info.pt:18
+#: skins/save_as_lightbox_template.pt:15
+msgid "Title"
+msgstr ""
+
+#: skins/photo_info.pt:22
+msgid "Type"
+msgstr ""
+
+#: skins/photo_info.pt:26
+msgid "Created"
+msgstr ""
+
+#: skins/photo_info.pt:30
+msgid "Modified"
+msgstr ""
+
+#: skins/photo_info.pt:34
+msgid "Dimensions"
+msgstr ""
+
+#: skins/photo_info.pt:9
+msgid "Preview:"
+msgstr ""
+
+#: skins/photo_layout_macros.pt:28
+#: skins/photo_layout_macros.pt:30
+msgid "Add to selection"
+msgstr ""
+
+#: skins/photo_layout_macros.pt:35
+#: skins/photo_layout_macros.pt:37
+msgid "Remove to selection"
+msgstr ""
+
+#: skins/photo_layout_macros.pt:50
+#: skins/photo_layout_macros.pt:52
+#: skins/portfolio_presentation_template.pt:47
+msgid "Delete"
+msgstr ""
+
+#: skins/photo_layout_macros.pt:61
+#: skins/photo_layout_macros.pt:64
+msgid "Hide for anonymous"
+msgstr ""
+
+#: skins/photo_layout_macros.pt:72
+#: skins/photo_layout_macros.pt:75
+msgid "Show for anonymous"
+msgstr ""
+
+#: skins/photo_medium.pt:37
+#: skins/photo_medium.pt:38
+msgid "previous"
+msgstr ""
+
+#: skins/photo_medium.pt:44
+#: skins/photo_medium.pt:45
+msgid "next"
+msgstr ""
+
+#: skins/photo_medium.pt:52
+msgid "zoom in"
+msgstr ""
+
+#: skins/photo_medium.pt:52
+msgid "zoom out"
+msgstr ""
+
+#: skins/photo_view.pt:115
+#: skins/photo_view_ajax_template.pt:18
+msgid "Keywords"
+msgstr ""
+
+#: skins/photo_view.pt:122
+#: skins/photo_view_ajax_template.pt:26
+msgid "reference:"
+msgstr ""
+
+#: skins/photo_view.pt:127
+#: skins/photo_view_ajax_template.pt:33
+msgid "download picture"
+msgstr ""
+
+#: skins/photo_view.pt:29
+msgid "Empty image: upload an image file in \"Edit\" tab."
+msgstr ""
+
+#: skins/photo_view.pt:44
+#: skins/photo_view.pt:47
+msgid "Previous"
+msgstr ""
+
+#: skins/photo_view.pt:50
+#: skins/photo_view.pt:53
+msgid "Next"
+msgstr ""
+
+#: skins/photo_view.pt:69
+#: skins/photo_view.pt:72
+msgid "Back to portfolio..."
+msgstr ""
+
+#: skins/photo_view.pt:75
+#: skins/photo_view.pt:77
+msgid "Full screen (f)"
+msgstr ""
+
+#: skins/photo_view.pt:99
+#: skins/photo_view.pt:104
+msgid "Edit metadata"
+msgstr ""
+
+#: skins/portfolio_edit_template.pt:36
+msgid "If a file already exists"
+msgstr ""
+
+#: skins/portfolio_edit_template.pt:39
+msgid "overwrite"
+msgstr ""
+
+#: skins/portfolio_edit_template.pt:44
+msgid "rename"
+msgstr ""
+
+#: skins/portfolio_presentation_template.pt:22
+msgid "Delete presentation"
+msgstr ""
+
+#: skins/save_as_lightbox_template.pt:12
+msgid "Save current selection as lightbox"
+msgstr ""
+
+#: skins/save_as_lightbox_template.pt:21
+msgid "Description"
+msgstr ""
+
+#: skins/selection_view.py:64
+#: skins/selection_view.py:66
+#: skins/selectioncontext.py:114
+#: skins/selectioncontext.py:116
+#: skins/selection_view_template.pt:18
+msgid "My selection"
+msgstr ""
+
+#: skins/selection_view_template.pt:23
+msgid "You are editing this ligthbox:"
+msgstr ""
+
+#: skins/selection_view_template.pt:30
+msgid "Save as..."
+msgstr ""
+
+#: skins/selection_view_template.pt:33
+msgid "${please_login} if you want to save this selection."
+msgstr ""
+
+#: skins/selection_view_template.pt:34
+#. Default: "Please log in"
+msgid "login_to_save_seletion"
+msgstr ""
+
+#: skins/selection_view_template.pt:38
+msgid "Empty selection."
+msgstr ""
+
+#: skins/sell_macros.pt:14
+msgid "Cart"
+msgstr ""
+
+#: skins/sell_macros.pt:15
+msgid "Authentication"
+msgstr ""
+
+#: skins/sell_macros.pt:17
+msgid "Payment"
+msgstr ""
+
+#: skins/sell_macros.pt:18
+msgid "Confirmation"
+msgstr ""
+
+#: skins/shipping_set_control.py:10
+msgid "Please enter a city."
+msgstr ""
+
+#: skins/shipping_set_control.py:11
+msgid "Please enter zip code."
+msgstr ""
+
+#: skins/shipping_set_control.py:12
+msgid "Please enter a country."
+msgstr ""
+
+#: skins/shipping_set_control.py:27
+msgid "No cart found. Your session may have expired."
+msgstr ""
+
+#: skins/shipping_set_control.py:30
+msgid "Shipping informations saved."
+msgstr ""
+
+#: skins/shipping_set_control.py:8
+msgid "Please enter a name."
+msgstr ""
+
+#: skins/shipping_set_control.py:9
+msgid "Please enter an address."
+msgstr ""
+
+#: skins/shipping_template.pt:14
+msgid "Please set shipping informations"
+msgstr ""
+
+#: skins/shipping_template.pt:19
+#: skins/shipping_template.pt:60
+msgid "Validate >>"
+msgstr ""
+
+#: skins/shipping_template.pt:23
+msgid "Fullname"
+msgstr ""
+
+#: skins/shipping_template.pt:29
+msgid "Address"
+msgstr ""
+
+#: skins/shipping_template.pt:36
+msgid "City"
+msgstr ""
+
+#: skins/shipping_template.pt:42
+msgid "Zip code"
+msgstr ""
+
+#: skins/shipping_template.pt:48
+msgid "Country"
+msgstr ""
+
+#: skins/zoom_view.pt:27
+msgid "back"
+msgstr ""
+
+# from portfolio-manual
+
+msgid "not saved yet"
+msgstr ""
+
+msgid "Load in my selection"
+msgstr ""
+
+msgid "Unload from my selection"
+msgstr ""
+
+msgid "My albums"
+msgstr ""
+
+msgid "You don't have any album yet."
+msgstr ""

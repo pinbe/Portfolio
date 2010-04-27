@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title>Gabarit photo</title>
+    <link href="style.css" rel="stylesheet" media="screen" />
+  </head>
+
+  <body i18n:domain="portfolio">
+    <table width="100%" cellspacing="0">
+      <tr>
+        <td width="25%"></td>
+        <td width="50%">
+          <table cellspacing="0">
+            <tr>
+              <td>
+                <br/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img id="MainImage" src="corse_071.jpg" alt="" height="332" width="500" border="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <br/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table id="Footer" width="100%" cellspacing="0">
+                  <tr>
+                    <td width="20">
+                      <a title="previous" href="." i18n:attributes="title"
+  ><img src="fleche_g.gif" alt="previous" height="21" width="16" border="0"
+        tal:attributes="src here/fleche_g.gif/absolute_url"
+        i18n:attributes="alt" /></a>
+                    </td>
+                    <td id="ImgCaption">Corse - Plage de Palombagia - Septembre 2002</td>
+                    <td width="18">
+                      <a title="next" href="." i18n:attributes="title"
+  ><img src="fleche_d.gif" alt="next" height="21" width="16" border="0"
+        tal:attributes="src here/fleche_d.gif/absolute_url" i18n:attributes="alt" /></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="20"></td>
+                    <td>
+                      <a title="zoom out" href="." i18n:attributes="title">-</a> / <a title="zoom in" href="." i18n:attributes="title">+</a>
+                    </td>
+                    <td width="18"></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="25%"></td>
+      </tr>
+    </table>
+  </body>
+
+</html>

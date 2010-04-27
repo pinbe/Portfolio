@@ -1,0 +1,23 @@
+<tal:block i18n:domain="portfolio">
+<tal:header tal:replace="structure here/manage_page_header">header</tal:header>
+<tal:tabs   tal:replace="structure here/manage_tabs">tabs</tal:tabs>
+<div>
+  <h3 i18n:translate="">Processor status</h3>
+  <div tal:define="running here/isRunning">
+    <p>
+      <span tal:omit-tag="" i18n:translate="">status:</span>
+      <span tal:condition="running" i18n:translate="" style="font-weight:bold">running</span>
+      <span tal:condition="not:running" i18n:translate="" style="font-weight:bold">stopped</span>
+    </p>
+    <p tal:condition="running">
+      <span tal:omit-tag="" i18n:translate="">queue size:</span>
+      <span style="font-weight:bold" tal:content="here/getQueueSize ">0</span>
+    </p>
+    <form tal:attributes="action here/absolute_url" method="post">
+      <input tal:condition="running" type="submit" name="manage_stopProcess:method" value="Stop" i18n:attributes="value"/>
+      <input tal:condition="not:running" type="submit" name="manage_startProcess:method" value="Start" i18n:attributes="value"/>
+    </form>
+  </div>
+</div>
+<tal:footer tal:replace="structure here/manage_page_footer">footer</tal:footer>
+</tal:block>

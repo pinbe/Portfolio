@@ -1,0 +1,273 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <head>
+    <title>Metadata form macro widgets</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  </head>
+  <body>
+    <input metal:define-macro="simpleTextFied" tal:define="field python:here.getXmpField(fieldName)" tal:attributes="value field/value; name field/id"/>
+    <div metal:define-macro="iptc" tal:omit-tag=""
+         tal:define="simpleTextField here/metadata_edit_form_macros/macros/simpleTextFied">
+	    <table class="metadata_category" cellspacing="0" cellpadding="0">
+	      <tr class="name">
+	        <td><br/></td>
+	        <th>Contact</th>
+	      </tr>
+	      <tbody>
+  	      <tr>
+  	        <th>Créateur</th>
+  	        <td tal:define="fieldName python:'dc:creator'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Fonction</th>
+  	        <td tal:define="fieldName python:'photoshop:AuthorsPosition'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Adresse</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiAdrExtadr'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Ville</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiAdrCity'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Région</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiAdrRegion'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Code postal</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiAdrPcode'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Pays</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiAdrCtry'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Téléphone</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiTelWork'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Adresse électronique</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiEmailWork'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr class="last">
+  	        <th>Site internet</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CiUrlWork'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	      </tbody>
+	      
+	      <tr class="name">
+	        <td><br/></td>
+	        <th>Contenu</th>
+	      </tr>
+	      <tbody>
+  	      <tr>
+  	        <th>Titre</th>
+  	        <td tal:define="fieldName python:'photoshop:Headline'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Légende</th>
+  	        <td tal:define="field python:here.getXmpField('dc:description')">
+  	          <textarea tal:attributes="name field/id" tal:content="field/value" cols="35" rows="5"></textarea>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Mots-clefs</th>
+  	        <td tal:define="field python:here.getXmpField('dc:subject')">
+  	          <textarea tal:attributes="name field/id" tal:content="field/value" cols="35" rows="3"></textarea>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Code sujet IPTC</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:SubjectCode'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Auteur de la description</th>
+  	        <td tal:define="fieldName python:'photoshop:CaptionWriter'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Catégorie</th>
+  	        <td tal:define="fieldName python:'photoshop:Category'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr class="last">
+  	        <th>Autres catégories</th>
+  	        <td tal:define="fieldName python:'photoshop:SupplementalCategories'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	      </tbody>
+
+	      <tr class="name">
+	        <td><br/></td>
+	        <th>Image</th>
+	      </tr>
+	      <tbody>
+  	      <tr>
+  	        <th>Date de création</th>
+  	        <td tal:define="fieldName python:'photoshop:DateCreated'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Catégorie intellectuelle</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:IntellectualGenre'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Scène</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:Scene'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Emplacement</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:Location'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Ville</th>
+  	        <td tal:define="fieldName python:'photoshop:City'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Région</th>
+  	        <td tal:define="fieldName python:'photoshop:State'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Pays</th>
+  	        <td tal:define="fieldName python:'photoshop:Country'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr class="last">
+  	        <th>Code pays ISO</th>
+  	        <td tal:define="fieldName python:'Iptc4xmpCore:CountryCode'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	      </tbody>
+
+	      <tr class="name">
+	        <td><br/></td>
+	        <th>État</th>
+	      </tr>
+	      <tbody>
+  	      <tr>
+  	        <th>Titre</th>
+  	        <td tal:define="fieldName python:'dc:title'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Identifiant de la fonction</th>
+  	        <td tal:define="fieldName python:'photoshop:TransmissionReference'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Instructions</th>
+  	        <td tal:define="fieldName python:'photoshop:Instructions'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr>
+  	        <th>Fournisseur</th>
+  	        <td tal:define="fieldName python:'photoshop:Credit'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr class="last">
+  	        <th>Source</th>
+  	        <td tal:define="fieldName python:'photoshop:Source'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	      </tbody>
+	      
+	      
+	      <tr class="name">
+	        <td><br/></td>
+	        <th>Copyright</th>
+	      </tr>
+	      <tbody>
+  	      <tr>
+  	        <th>État du copyright</th>
+  	        <td tal:define="field python:here.getXmpField('xmpRights:Marked')">
+  	          <select tal:define="marked field/value" tal:attributes="name field/id">
+  	            <option value="" tal:attributes="selected python:marked==''">Indéterminé</option>
+  	            <option value="True" tal:attributes="selected python:marked=='True'">Protégé par un copyright</option>
+  	            <option value="False" tal:attributes="selected python:marked=='False'">Domaine public</option>
+	            </select>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Copyright</th>
+  	        <td tal:define="fieldName python:'dc:rights'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+  	      <tr>
+  	        <th>Condit. d'utilis.</th>
+  	        <td tal:define="fieldName python:'xmpRights:UsageTerms'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	        <tr class="last">
+  	        <th>URL info copyright</th>
+  	        <td tal:define="fieldName python:'xmpRights:WebStatement'">
+  	          <input metal:use-macro="simpleTextField"/>
+  	        </td>
+	        </tr>
+	      </tbody>
+
+	      <tr class="name last">
+	        <td><br/></td>
+	        <th>
+	          <input type="submit" value="Save"
+	                 name="edit_metadata"
+	                 i18n:attributes="value"
+	                 style="background:#f0f0f0;
+	                        width:auto;
+	                        color:#000;
+	                        border: 2px #f0f0f0 outset"/>
+	        </th>
+	      </tr>
+      </table>
+    </div>
+    
+    <div metal:define-macro="iptc_ajax_form">
+    </div>
+  </body>
+</html>

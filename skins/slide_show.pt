@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  tal:define="photos python:filter(lambda p : not p.id.startswith('._') and p.size, here.listNearestFolderContents(contentFilter={'portal_type':'Photo'})) ;
+  						lastIndex python:len(photos)-1;
+              start python:request.get('start', 0) ;
+              batch python:modules['ZTUtils'].Batch(photos, size=1, start=start) ;
+              previous python:batch.previous ;
+              next python:batch.next ;
+              nextStart python:next and (start + 1) or 0 ;
+              expandedTitle python:batch[0].title and here.Title() + ' - ' + batch[0].title or here.Title() ;
+              transition python:here.getOrSetSessionVar('stransition', value=request.get('transition', None), default='auto') ;
+              toggleTrans python: transition == 'auto' and 'manual' or 'auto' ;
+              dummy python:request.RESPONSE.setHeader('Content-Type', 'text/html;;charset=utf-8');
+              mtool here/portal_membership;
+              member mtool/getAuthenticatedMember;
+              isAnon mtool/isAnonymousUser;
+              pWidth python:not isAnon and member.photo_width or 800;"
+  i18n:domain="plinn">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title tal:content="expandedTitle">Gabarit photo</title>
+    <link href="slide_style.css" rel="stylesheet" media="screen"
+      tal:attributes="href string:${here/portal_url}/slide_style.css" />
+    <meta http-equiv="refresh" content="5;URL=next_url"
+      tal:condition="python:transition == 'auto'"
+      tal:attributes="content python:'5;;url=' + here.absolute_url() + '/slide_show?start:int=' + str(nextStart)" />
+  <script type="text/javascript">//<!--
+function preloadNextImage(nextImageUrl) {
+  nextImage = new Image() ;
+  nextImage.src = nextImageUrl ;
+}
+// -->
+</script>
+  </head>
+
+  <body tal:attributes="onload python:next and '''javascript:preloadNextImage('%s/getResizedImage?size=%d_%d');;''' % (next[0].absolute_url(), pWidth, pWidth) or nothing">
+    <table width="100%" cellspacing="0">
+      <tr>
+        <td width="25%">
+          <table id="Nav" cellspacing="0">
+            <tr>
+              <td colspan="3">
+                <a href="." tal:attributes="href here/absolute_url" title="Close" i18n:attributes="title"
+                ><img src="close.gif" height="24" width="24" border="0" tal:attributes="src here/close.gif/absolute_url" alt="Close" i18n:attributes="alt" /></a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3"><br /></td>
+            </tr>
+            <tr>
+              <td>
+                <a title="Previous" href="." tal:condition="previous"
+                         tal:attributes="href string:${request/URL0}?start:int=${previous/first}"
+                         i18n:attributes="title"
+                        ><img src="fleche_g.gif" alt="Previous" height="24" width="24" border="0" tal:attributes="src here/fleche_g.gif/absolute_url" i18n:attributes="alt" /></a>
+                <a title="Previous" href="." tal:condition="not:previous"
+                         tal:attributes="href string:${request/URL0}?start:int=${lastIndex}"
+                         i18n:attributes="title"
+                        ><img src="fleche_g.gif" alt="Previous" height="24" width="24" border="0" tal:attributes="src here/fleche_g.gif/absolute_url" i18n:attributes="alt" /></a>
+              </td>
+              <td tal:define="title python:transition == 'auto' and 'Stop' or 'Play'">
+                <a href="." tal:attributes="href python:'%s?start:int=%s&transition=%s' % (request['URL0'], start, toggleTrans ) ; title title" i18n:attributes="title"
+                ><img src="pause.gif" alt="" height="24" width="24" border="0"
+                      tal:attributes="src python:here.absolute_url() + '/' +(transition == 'auto' and 'pause.gif' or 'play.gif') ; alt title" /></a>
+              </td>
+              <td>
+                <a title="Next" href="." tal:condition="next"
+                         tal:attributes="href string:${request/URL0}?start:int=${next/first}"
+                         i18n:attributes="title"
+                        ><img src="fleche_d.gif" alt="Next" height="24" width="24" border="0" tal:attributes="src here/fleche_d.gif/absolute_url" i18n:attributes="alt" /></a>
+                <a title="Next" href="." tal:condition="not:next"
+                         tal:attributes="href request/URL0"
+                         i18n:attributes="title"
+                        ><img src="fleche_d.gif" alt="Next" height="24" width="24" border="0" tal:attributes="src here/fleche_d.gif/absolute_url" i18n:attributes="alt" /></a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" tal:content="python:'%d / %d'%(start+1, lastIndex+1)" style="font-size:small; text-align:center; color:#666"></td>
+            </tr>
+          </table>
+        </td>
+        <td width="50%">
+          <table cellspacing="0">
+            <tr>
+              <td>
+                <br/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img id="MainImage" src="corse_071.jpg" alt="" height="332" width="500" border="0"
+                     tal:define="size python:batch[0].getResizedImageSize(size=(pWidth, pWidth))"
+                     tal:attributes="src python:batch[0].absolute_url() + '/getResizedImage?size=%d_%d' % (pWidth, pWidth) ;
+                                     width  python:size[0] ;
+                                     height python:size[1]" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <br/>
+              </td>
+            </tr>
+            <tr tal:define="dt     python:batch[0].DateTimeOriginal() ;
+                            year   dt/year ;
+                            month  python:str(dt.month()).zfill(2) ;
+                            day    python:str(dt.day()).zfill(2) ;
+                            hour   python:str(dt.hour()).zfill(2) ;
+                            minute python:str(dt.minute()).zfill(2) ;
+                            second python:str(int(dt.second())).zfill(2)">
+              <td id="Footer">
+                <span tal:replace="expandedTitle">Corse - Plage de Palombagia - Septembre 2002</span>
+                - <span i18n:translate=""><span i18n:name="month" tal:content="month" />/<span i18n:name="day" tal:content="day" />/<span i18n:name="year" tal:content="year" />&nbsp;&nbsp;<span i18n:name="hour" tal:content="hour" />:<span i18n:name="minute" tal:content="minute" />:<span i18n:name="second" tal:content="second" /></span>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="25%"></td>
+      </tr>
+    </table>
+  </body>
+
+</html>

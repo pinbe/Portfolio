@@ -1,0 +1,18 @@
+body  {
+  color: white;
+  background-color: black }
+
+#Footer {
+  font-family: Tahoma, Arial, Helvetica, Geneva, Swiss, SunSans-Regular;
+  text-align: center }
+
+#MainImage {
+  padding: 5px;
+  border: solid 1px white }
+
+a {
+  color: white;
+  text-decoration: none }
+td {
+  vertical-align: top }
+

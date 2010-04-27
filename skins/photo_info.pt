@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div tal:define="locale_date_fmt here/locale_date_fmt"
+     i18n:domain="portfolio"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     xmlns:tal="http://xml.zope.org/namespaces/tal">
+	<table class="finder_preview">
+		<tr>
+			<td colspan="2">
+				<div i18n:translate="">Preview:</div>
+				<div class="thumbnail">
+					<img tal:define="size here/getThumbnailSize"
+							 tal:attributes="src string:${here/absolute_url}/getThumbnail;
+															 width size/width; height size/height; alt here/title_or_id"/>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th i18n:translate="">Title</th>
+			<td tal:content="here/title_or_id">Photo title</td>
+		</tr>
+		<tr>
+			<th i18n:translate="">Type</th>
+			<td tal:content="here/content_type">image/jpeg</td>
+		</tr>
+		<tr>
+			<th i18n:translate="">Created</th>
+			<td tal:content="python:here.created().strftime(locale_date_fmt)">creation date</td>
+		</tr>
+		<tr>
+			<th i18n:translate="">Modified</th>
+			<td tal:content="python:here.modified().strftime(locale_date_fmt)">modification date</td>
+		</tr>
+		<tr>
+			<th i18n:translate="">Dimensions</th>
+			<td><span tal:replace="here/width">width</span> x <span tal:replace="here/height">height</span></td>
+		</tr>
+	</table>
+</div>

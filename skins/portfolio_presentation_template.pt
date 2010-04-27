@@ -1,0 +1,84 @@
+<html metal:use-macro="here/content_edit_form/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <head>
+    <title>Portfolio presentation form</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+  </head>
+  <body>
+    <div metal:fill-slot="main" tal:omit-tag="" i18n:domain="portfolio">
+      <form tal:attributes="action string:${here/absolute_url}/portfolio_presentation_form" method="post">
+
+        <h3>Page de présentation</h3>
+        <div tal:condition="not:here/hasPresentationPage">
+          <input type="submit" name="createPresentationPage" value="Créer une page de présentation"/>
+        </div>
+        <div tal:condition="here/hasPresentationPage" tal:omit-tag="">
+          <div tal:define="inputname string:presentation_page; inputvalue here/presentation_page" tal:omit-tag="">
+            <div metal:use-macro="here/wysiwyg_support/macros/wysiwygEditorBox">
+              Wysiwig Code
+            </div>
+          </div>
+          <input type="submit" name="savePresentation" value="Save" i18n:attributes="value"/>
+          <input type="submit" name="deletePresentation" value="Delete presentation" i18n:attributes="value"
+                 style="float:right"/>
+          <br clear="all"/>
+        </div>
+      </form>
+      <form tal:attributes="action string:${here/absolute_url}/portfolio_presentation_form" method="post" id="sample_image_form">
+        <h3>image échantillon</h3>
+        <div>
+          <span tal:condition="not:here/samplePhotoPath" tal:omit-tag="">
+            <img tal:attributes="src string:${portal_url}/no_image.jpg" width="192" height="180" alt="No sample image defined"
+                 id="sampleImageThumbnail"/>
+          </span>
+          <span tal:condition="here/samplePhotoPath" tal:omit-tag="">
+            <span tal:define="sample here/samplePhoto" tal:condition="sample" tal:omit-tag="">
+              <img tal:attributes="src sample/src;
+                                   alt sample/alt;
+                                   width sample/width;
+                                   height sample/height"
+                   id="sampleImageThumbnail"/>
+            </span>
+          </span>
+        </div>
+        <input type="text" name="path" tal:attributes="value here/samplePhotoPath" />
+        <input type="submit" name="defineSample" tal:attributes="value python:here.samplePhotoPath is None and 'Définir...' or 'Changer...'"/>
+        &nbsp;&nbsp;
+        <input type="submit" name="deleteSample" value="Delete" i18n:attributes="value"
+               tal:attributes="class python:here.samplePhotoPath is None and 'hidden' or None" />
+
+      </form>
+      <script type="text/javascript">
+      // <!--
+        var fm = new FormManager(document.getElementById('sample_image_form'));
+        var portfolioPresentationForm = document.getElementById('sample_image_form');
+        portfolioPresentationForm.elements.namedItem("path").className = 'hidden';
+        portfolioPresentationForm.elements.namedItem("defineSample").name = 'selectSample';
+
+        fm.onBeforeSubmit = function(m, evt) {
+          if (m.submitButton.name == 'selectSample') {
+            var path = absolute_url().slice(portal_url().length);
+            var url = portal_url() + "/editor/filemanager/browser/mac_finder/browser.html?Connector=connectors/plinn/connector&Type=Image&path=" + path + '/';
+            var winOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes,width=645,height=405";
+            window.open(url, 'sampleImageSelector', winOptions);
+
+            window.SetUrl = function (url) {
+              with(m.submitButton) {
+                name = 'defineSample';
+                value = 'Valider';
+              }
+              portfolioPresentationForm.elements.namedItem('path').value = unescape(url.slice(absolute_url().length+1));
+              var thumbnail = new Image();
+              thumbnail.src = url + '/getThumbnail';
+              var img = document.getElementById('sampleImageThumbnail');
+              img.parentNode.replaceChild(thumbnail, img);
+              thumbnail.id = 'sampleImageThumbnail';
+            }
+            return 'cancelSubmit'
+          }
+        }
+      // -->
+      </script>
+    </div>
+  </body>
+</html>

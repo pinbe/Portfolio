@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five">
+
+  <!-- Portfolio -->
+
+  <five:registerClass
+      class=".container.Portfolio"
+      meta_type="Portfolio"
+      permission="cmf.AddPortalContent"
+      />
+
+  <utility
+      component=".container.PortfolioFactory"
+      name="portfolio.portfolio"
+      />
+
+  <five:registerClass
+      class=".photo.Photo"
+      meta_type="Photo"
+      permission="cmf.AddPortalContent"
+      />
+
+  <utility
+      component=".photo.PhotoFactory"
+      name="portfolio.photo"
+      />
+  <five:registerClass
+      class=".lightbox.Lightbox"
+      meta_type="Lightbox"
+      permission="portfolio.AddLightbox"
+      />
+  
+  <utility
+      component=".lightbox.LightboxFactory"
+      name="portfolio.lightbox"
+      />
+</configure>

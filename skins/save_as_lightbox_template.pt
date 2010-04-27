@@ -1,0 +1,36 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <head>
+    <title>selection save as template</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+  </head>
+  <body>
+    <div metal:fill-slot="main_no_tabs" tal:omit-tag="">
+      <form tal:attributes="action string:$portal_url/save_as_lightbox_form">
+        <table class="TwoColumnForm" i18n:domain="portfolio">
+          <tr>
+            <td colspan="2" i18n:translate="">Save current selection as lightbox</td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Title</th>
+            <td>
+              <input type="text" name="title" tal:attributes="value options/title"/>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Description</th>
+            <td>
+              <textarea name="description" tal:content="options/description"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td><br/></td>
+            <td>
+              <input type="submit" name="create" value="Save" i18n:attributes="value"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>

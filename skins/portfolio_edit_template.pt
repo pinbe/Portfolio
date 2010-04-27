@@ -1,0 +1,68 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title></title>
+  </head>
+
+  <body>
+    <div metal:fill-slot="header">
+      <div metal:use-macro="here/widgets/macros/generic_header">
+        generic_header macro
+      </div>
+    </div>
+    
+    <div metal:fill-slot="main" tal:omit-tag="" i18n:domain="portfolio">
+      <applet code="wjhk.jupload2.JUploadApplet"
+          archive="wjhk.jupload.jar" width="640" height="450" alt=""
+          mayscript="true"
+          tal:attributes="archive string:${portal_url}/jupload/wjhk.jupload.jar">
+        <param name="postURL"
+            tal:attributes="value string:${here/absolute_url}/add_uploaded_content">
+        <param name="lookAndFeel" value="system"/>
+        <param name="serverProtocol" value="HTTP/1.1"/>
+        <param name="uploadPolicy" value="DefaultUploadPolicy" />
+        <param name="nbFilesPerRequest" value="1" />
+        <param name="formdata" value="authform"/>
+        <param name="showLogWindow" value="false"/>
+        <param name="debugLevel" value="0" />
+        <param name="filenameEncoding" value="utf-8"/>
+        plugin required.
+      </applet>
+      <br />
+      <form name="authform">
+        <fieldset style="width:10em">
+          <legend i18n:translate="">If a file already exists</legend>
+          <label>
+            <input type="radio" name="overwrite:boolean" value="True" checked="checked"/>
+            <span i18n:translate="" tal:omit-tag="">overwrite</span>
+          </label>
+          <br/>
+          <label>
+            <input type="radio" name="overwrite:boolean" value="False"/>
+            <span i18n:translate="" tal:omit-tag="">rename</span>
+          </label>
+        </fieldset>
+        <input type="hidden" name="__ac" value=""/>
+      </form>
+      <script type="text/javascript">
+      // <!--
+        var auth = document.authform.elements.namedItem('__ac');
+        auth.setAttribute('value', unescape(document.cookie.match(/__ac="([^"]*)"/)[1]));
+      // -->
+      </script>
+      <!--
+      <hr/>
+      <form method="post" enctype="multipart/form-data"
+            tal:attributes="action string:${context/absolute_url}/portfolio_edit_form">
+        <input type="hidden" name="noAjax" value="1" />
+        <h2 i18n:translate="">Import a photo zipped file</h2>
+        <input type="file" name="zipfile" size="16" />&nbsp;&nbsp;
+        <input type="submit" name="upload_zip" value="Import" i18n:attributes="value" />
+      </form>
+      -->
+    </div>
+  </body>
+
+</html>

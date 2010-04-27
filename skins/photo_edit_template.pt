@@ -1,0 +1,42 @@
+<html metal:use-macro="here/main_template/macros/master">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title>photo_edit_form</title>
+  </head>
+
+  <body>
+    <div metal:fill-slot="header" tal:replace="nothing"></div>
+    <div metal:fill-slot="main" i18n:domain="plinn">
+      
+      <table tal:condition="here/size" class="photo_viewer">
+        <tr>
+          <td>
+      	    <img src="corse_071.jpg" border="0"
+      	    		 tal:define="size python:here.getResizedImageSize(size=(500,500));
+      	    		 						 width python:size[0];
+      	    		 						 height python:size[1];"
+      	         tal:attributes="src string:${here/absolute_url}/getResizedImage?size=500_500;
+      	                         alt here/Title;
+      	                         width width;
+      	                         height height"/>
+            <h4>Nouveau fichier</h4>
+            <form action="." method="post" enctype="multipart/form-data"
+                tal:attributes="action string:${here/absolute_url}/photo_edit_form">
+              <input type="hidden" name="noAjax" value="1" />
+              <input type="file" name="file" size="16"><input type="submit" name="upload" value="Send" i18n:attributes="value" />
+            </form>
+        	</td>
+
+      	  <td>
+      	    <form tal:attributes="action string:${here/absolute_url}/photo_edit_form" method="post">
+      	      <div metal:use-macro="here/metadata_edit_form_macros/macros/iptc">
+      	      </div>
+    	      </form>
+    	    </td>
+        </tr>
+  	  </table>
+    </div>
+	</body>
+
+</html>
