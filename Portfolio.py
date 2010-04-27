@@ -9,8 +9,6 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """ Deprecated Image and Portfolio classes
-$Id: Portfolio.py 622 2008-11-16 23:38:18Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/Portfolio.py $
 """
 
 from deprecated.Portfolio import Portfolio, Photo

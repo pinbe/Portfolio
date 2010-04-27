@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-####################################################
-# Copyright © 2009 Luxia SAS. All rights reserved. #
-#                                                  #
-# Contributors:                                    #
-#  - Benoît Pin <pinbe@luxia.fr>                   #
-####################################################
+############################################################
+# Copyright © 2005-2008  Benoît PIN <benoit.pin@ensmp.fr>  #
+# Plinn - http://plinn.org                                 #
+#                                                          #
+# This program is free software; you can redistribute it   #
+# and/or modify it under the terms of the Creative Commons #
+# "Attribution-Noncommercial 2.0 Generic"                  #
+# http://creativecommons.org/licenses/by-nc/2.0/           #
+############################################################
 """ Interfaces for Portfolio classes
-
-$Id: interfaces.py 1202 2009-07-15 08:48:42Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/interfaces.py $
 """
 
 from zope.interface import Interface

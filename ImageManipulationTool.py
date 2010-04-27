@@ -9,8 +9,6 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """ Image manipulation tool
-$Id: ImageManipulationTool.py 1391 2009-09-16 23:36:05Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/ImageManipulationTool.py $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -102,8 +100,13 @@ class ImageManipulationTool( UniqueObject, OrderedFolder) :
 		
 		if not self.isRunning() :
 			utool = getToolByName(self, 'portal_url')
+			ctool = getToolByName(self, 'portal_catalog')
 			portal = utool.getPortalObject()
-			thread = ImageQueueProcessorThread(portal.getPhysicalPath(), itemPath)
+			brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=0)
+			paths = [b.getPath() for b in brains]
+			if itemPath is not None :
+				paths.insert(0, itemPath)
+			thread = ImageQueueProcessorThread(portal.getPhysicalPath(), paths)
 			thread.start()
 			path = self.absolute_url(1)
 			queue_threads[path] = thread

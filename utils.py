@@ -9,8 +9,6 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """ Global utilities for portfolio / photo objects.
-$Id: utils.py 1200 2009-07-08 15:50:15Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/utils.py $
 """
 
 from AccessControl import ModuleSecurityInfo

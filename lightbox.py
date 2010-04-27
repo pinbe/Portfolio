@@ -10,8 +10,6 @@
 ############################################################
 """ Lightboxes contains references to images.
     References are made with CMFUid stuff.
-$Id: lightbox.py 622 2008-11-16 23:38:18Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/lightbox.py $
 """
 
 from Globals import InitializeClass

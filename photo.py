@@ -9,8 +9,6 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """ CMFAware Image
-$Id: photo.py 1202 2009-07-15 08:48:42Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/photo.py $
 """
 
 from Globals import InitializeClass

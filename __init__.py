@@ -9,8 +9,6 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """ Image manipulation and presentation for CMF
-$Id: __init__.py 626 2008-11-22 09:11:58Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/__init__.py $
 """
 
 from Products.CMFCore import utils as cmfutils

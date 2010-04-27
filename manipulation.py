@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-####################################################
-# Copyright © 2009 Luxia SAS. All rights reserved. #
-#                                                  #
-# Contributors:                                    #
-#  - Benoît Pin <pinbe@luxia.fr>                   #
-####################################################
+############################################################
+# Copyright © 2005-2010  Benoît PIN <benoit.pin@ensmp.fr>  #
+# Plinn - http://plinn.org                                 #
+#                                                          #
+# This program is free software; you can redistribute it   #
+# and/or modify it under the terms of the Creative Commons #
+# "Attribution-Noncommercial 2.0 Generic"                  #
+# http://creativecommons.org/licenses/by-nc/2.0/           #
+############################################################
 """ Image threaded batch computation module
-
-$Id: manipulation.py 1391 2009-09-16 23:36:05Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/manipulation.py $
 """
 
 import threading
 import logging
 import atexit
 from types import StringTypes
-#import Zope2
 from math import ceil
 import transaction
 from ZODB.POSException import ConflictError
@@ -38,23 +37,6 @@ class ImageQueueProcessorThread(threading.Thread) :
 			itemsPath = [itemsPath]
 		for i in itemsPath :
 			self.queueAdd(i)
-
-#	def __init__(self, portal_path, itemPath):
-#		threading.Thread.__init__(self)
-#		self.app = app = Zope2.app()
-#		self.portal = portal = app.unrestrictedTraverse(portal_path)
-#		self.imgTool = portal.portal_image_manipulation
-#		self.queue = []
-#		if itemPath :
-#			self.queueAdd(itemPath)
-#		else :
-#			ctool = portal.portal_catalog
-#			brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=0)
-#			for b in brains :
-#				self.queueAdd(b.getPath())
-	
-	def __del__(self) :
-		print "ayé, c'est la fin !"
 	
 	@property
 	def queueSize(self) :
@@ -84,12 +66,7 @@ class ImageQueueProcessorThread(threading.Thread) :
 		self.__stopped = True
 	
 	def _process(self, app) :
-		
 		path = self.queue.pop(0)
-		
-		#import Zope2
-		#app = Zope2.app()
-		
 		try :
 			p = app.unrestrictedTraverse(path)
 		except KeyError :
