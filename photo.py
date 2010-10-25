@@ -21,9 +21,11 @@ from Products.CMFCore.permissions import View, AccessContentsInformation, \
 from permissions import ViewRawImage
 from zope.component.factory import Factory
 from zope.interface import implements
-from webdav.WriteLockInterface import WriteLockInterface as z2IWriteLock
+#from webdav.WriteLockInterface import WriteLockInterface as z2IWriteLock
+from webdav.interfaces import IWriteLock
 from Products.CMFCore.interfaces import IContentish
-from Products.CMFCore.interfaces.Contentish import Contentish as z2IContentish
+from Products.CMFCore.interfaces import IDynamicType
+#from Products.CMFCore.interfaces.Contentish import Contentish as z2IContentish
 
 from Products.CMFCore.DynamicType import DynamicType
 from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
@@ -37,8 +39,8 @@ from interfaces import IPhoto
 class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 	""" Photo CMF aware """
 	
-	implements(IPhoto, IContentish)
-	__implements__ = (z2IContentish, z2IWriteLock, DynamicType.__implements__)
+	implements(IPhoto, IContentish, IWriteLock, IDynamicType)
+	#__implements__ = (z2IContentish, IWriteLock, DynamicType.__implements__)
 	
 	meta_type = BasePhoto.meta_type
 	manage_options = BasePhoto.manage_options

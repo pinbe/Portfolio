@@ -11,4 +11,5 @@
 """ Deprecated Image and Portfolio classes
 """
 
-from deprecated.Portfolio import Portfolio, Photo
+# TODO: se décider à le virer pour de bon !
+# from deprecated.Portfolio import Portfolio, Photo

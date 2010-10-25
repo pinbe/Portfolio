@@ -12,7 +12,7 @@
 """
 
 from AccessControl import ModuleSecurityInfo
-from Products.PageTemplates.GlobalTranslationService import getGlobalTranslationService
+#from Products.PageTemplates.GlobalTranslationService import getGlobalTranslationService
 from zope.i18nmessageid import MessageFactory
 
 security = ModuleSecurityInfo('Products.Portfolio.utils')
@@ -24,10 +24,12 @@ security.declarePublic('translate')
 def translate(message, context):
 	""" Translate i18n message.
 	"""
-	GTS = getGlobalTranslationService()
+	# TODO: touver une solution.
+	# GTS = getGlobalTranslationService()
 	if isinstance(message, Exception):
 		try:
 			message = message[0]
 		except (TypeError, IndexError):
 			pass
+	return message
 	return GTS.translate('portfolio', message, context=context)
