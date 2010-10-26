@@ -53,7 +53,6 @@
                   <img tal:attributes="src string:${portal_url}/next_img_btn.gif" width="23" height="27" alt="Next" i18n:attributes="alt"
                        name="next" />
                 </a>
-                <!--
                 <img tal:attributes="src string:${portal_url}/slide_show_btn.gif" width="33" height="27" alt="slide show" i18n:attributes="alt"
                      id="slide_show"/>
                 <script type="text/javascript" tal:content="python:'''
@@ -64,7 +63,6 @@
                   })();
                   '''">
                 </script>
-                -->
                 <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
                 <a title="Back to portfolio..." rel="index"
                    tal:attributes="href contextInfos/backUrl"
