@@ -50,6 +50,7 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 	security.declareProtected(ViewRawImage, 'getJpegImage')
 		
 	def __init__(self, id, title='', file='', content_type='', precondition='', **kw) :
+		DefaultDublinCoreImpl.__init__(self, title=title)
 		BasePhoto.__init__(self, id, title, file, content_type=content_type, precondition=precondition, **kw)
 		self.id = id
 		self.title = title
