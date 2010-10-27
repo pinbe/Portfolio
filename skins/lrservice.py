@@ -12,7 +12,7 @@ fg = context.REQUEST.form.get
 method = fg('method')
 
 if method == 'normaliseAndCreatePath' :
-    normalizedPath = []
+    normalizedPath, uids = [], []
     o = portal
     path = fg('path', '').split('	') # séparateur : 0x09 (tabulation)
     for part in path :
@@ -24,8 +24,10 @@ if method == 'normaliseAndCreatePath' :
             id = o.invokeFactory('Portfolio', validId, title=part)
             o = o[id]
             normalizedPath.append(id)
+        uid = uidtool.register(o)
+        uids.append(uid)
     
-    return '/'.join(normalizedPath)
+    return '%s\n%s' % ('/'.join(normalizedPath), ' '.join([str(uid) for uid in uids]))
 
 elif method == 'uploadPhoto' :
     path = fg('normalizedPath')
