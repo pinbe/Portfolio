@@ -14,7 +14,7 @@ method = fg('method')
 if method == 'normaliseAndCreatePath' :
     normalizedPath = []
     o = portal
-    path = fg('path', '').split('/')
+    path = fg('path', '').split('	') # séparateur : 0x09 (tabulation)
     for part in path :
         validId = makeValidId(o, part, allow_dup=1)
         if o.hasObject(validId) :
