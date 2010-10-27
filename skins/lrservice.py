@@ -43,3 +43,9 @@ elif method == 'uploadPhoto' :
     photo = portfolio[photoId]
     uid = uidtool.register(photo)
     return '%s %s' % (uid, photo.absolute_url())
+
+elif method == 'deletePhoto' :
+    photo = uidtool.queryObject(fg('uid'))
+    if photo :
+        parent = photo.getParentNode()
+        parent.manage_delObjects([photo.getId()])
