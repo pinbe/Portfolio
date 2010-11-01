@@ -22,7 +22,7 @@ if mtool.checkPermission(ReviewPortalContent, context) :
 req = context.REQUEST
 pho_start = req.get('pho_start', 0)
 batch = Batch(portfolio.listNearestFolderContents(contentFilter={'portal_type' : ['Photo']}, sorted=True),
-			  20, pho_start, orphan=1, quantumleap=1, b_start_str='pho_start')
+			  50, pho_start, orphan=5, quantumleap=1, b_start_str='pho_start')
 
 
 infos = []
