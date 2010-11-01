@@ -104,7 +104,7 @@ class ImageManipulationTool( UniqueObject, OrderedFolder) :
 			portal = utool.getPortalObject()
 			brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=0)
 			paths = [b.getPath() for b in brains]
-			if itemPath is not None :
+			if itemPath is not None and itemPath not in paths :
 				paths.insert(0, itemPath)
 			thread = ImageQueueProcessorThread(portal.getPhysicalPath(), paths)
 			thread.start()
