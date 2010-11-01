@@ -5,4 +5,9 @@
           zope.app.container.interfaces.IObjectAddedEvent"
     handler=".event_handlers.processQueueAdd"
       />
+  <subscriber
+    for=".interfaces.IPhoto
+          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".event_handlers.processQueueAdd"
+      />
 </configure>
