@@ -33,7 +33,7 @@ else :
 
 start = req.get('b_start', 0)
 brains = [uidh.getBrain(uid) for uid in context.uids]
-batch = Batch(brains, 20, start, orphan=1, quantumleap=1)
+batch = Batch(brains, context.default_batch_size, start, orphan=1, quantumleap=1)
 
 hereUrl = context.absolute_url()
 cart = sd.get('cart', None)

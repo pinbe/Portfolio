@@ -29,7 +29,7 @@ else :
 
 start = req.get('b_start', 0)
 brains = [uidh.getBrain(uid) for uid in selection]
-batch = Batch(brains, 20, start, orphan=1, quantumleap=1)#, b_start_str='pho_start')
+batch = Batch(brains, context.default_batch_size, start, orphan=1, quantumleap=1)#, b_start_str='pho_start')
 cart = req.SESSION.get('cart', None)
 
 infos = []
