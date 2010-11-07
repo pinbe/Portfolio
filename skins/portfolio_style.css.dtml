@@ -1,8 +1,8 @@
 /*
 <dtml-with base_properties>
 <dtml-with portfolio_properties>
-$Id: portfolio_style.css.dtml 1312 2009-08-26 09:01:06Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/portfolio_style.css.dtml $
+
+
 */
 /* Photo / Portfolio */
 .photo_viewer {

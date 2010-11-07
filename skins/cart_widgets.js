@@ -3,8 +3,8 @@
 * Contributors
 * — Benoît Pin <pinbe@luxia.fr>
 * 
-* $Id: cart_widgets.js 1006 2009-05-16 16:20:20Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/cart_widgets.js $
+* 
+* 
 */
 
 

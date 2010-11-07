@@ -9,8 +9,8 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """
-$Id: composite.py 1225 2009-07-25 21:52:23Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/Extensions/composite.py $
+
+
 """
 
 from AccessControl import Unauthorized

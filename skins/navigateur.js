@@ -2,8 +2,8 @@
 * © 2007 Benoît Pin – Centre de recherche en informatique – École des mines de Paris
 * http://plinn.org
 * Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-* $Id: navigateur.js 1289 2009-08-14 15:39:00Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/navigateur.js $
+* 
+* 
 */
 
 function Navigateur(mosaique) {

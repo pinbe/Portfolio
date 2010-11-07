@@ -2,8 +2,8 @@
 * © 2007-2008 Benoît Pin – Centre de recherche en informatique – École des mines de Paris
 * http://plinn.org
 * Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-* $Id: mosaique.js 1265 2009-08-05 08:22:59Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/mosaique.js $
+* 
+* 
 */
 
 var Mosaique;

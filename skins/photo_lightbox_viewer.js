@@ -2,8 +2,8 @@
 * © 2008 Benoît Pin – Centre de recherche en informatique – École des mines de Paris
 * http://plinn.org
 * Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-* $Id: photo_lightbox_viewer.js 1006 2009-05-16 16:20:20Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/photo_lightbox_viewer.js $
+* 
+* 
 */
 
 

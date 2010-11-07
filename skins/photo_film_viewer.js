@@ -2,8 +2,8 @@
 * © 2008 Benoît Pin – Centre de recherche en informatique – École des mines de Paris
 * http://plinn.org
 * Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-* $Id: photo_film_viewer.js 1303 2009-08-21 22:19:05Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/photo_film_viewer.js $
+* 
+* 
 */
 
 var FilmSlider;

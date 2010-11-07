@@ -3,8 +3,8 @@
 * Contributors
 * — Benoît Pin <pinbe@luxia.fr>
 * 
-* $Id: cart_listing.js 1009 2009-05-17 15:18:05Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/cart_listing.js $
+* 
+* 
 */
 
 var CartListing;

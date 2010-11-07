@@ -9,8 +9,8 @@
 # http://creativecommons.org/licenses/by-nc/2.0/           #
 ############################################################
 """ Image and Portfolio classes
-$Id: Portfolio.py 622 2008-11-16 23:38:18Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/deprecated/Portfolio.py $
+
+
 """
 
 from OFS.OrderSupport import OrderSupport

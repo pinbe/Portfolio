@@ -1,8 +1,8 @@
 /*
 * © 2007 Benoît PIN – Centre de recherche en informatique – École des mines de Paris
 * Licence Creative Commons http://creativecommons.org/licenses/by/2.0/
-* $Id: retractable_menu.js 507 2008-05-16 16:43:58Z pin $
-* $URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/skins/retractable_menu.js $
+* 
+* 
 *
 * element : element représentant le menu
 * visibleAtStartup : menu visible au début

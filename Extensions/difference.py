@@ -10,8 +10,8 @@
 ############################################################
 
 """
-$Id: difference.py 622 2008-11-16 23:38:18Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/Portfolio/trunk/Extensions/difference.py $
+
+
 """
 from AccessControl import Unauthorized
 from PIL.Image import new as newImage, open as imgopen, composite
