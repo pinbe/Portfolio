@@ -122,9 +122,10 @@ FilmSlider.prototype.fitToScreen = function(evt) {
 
 FilmSlider.prototype._fitToScreen = function(evt) {
 	var wh = getWindowHeight();
-	var ch = document.body.clientHeight;
+	var rb = getObjectTop(this.rail) + getObjectHeight(this.rail); // rail bottom
+	var delta = wh - rb
 	var sh = getObjectHeight(this.stretchable);
-	var newSize = sh + wh - ch;
+	var newSize = sh + delta;
 	this.stretchable.style.height = newSize + 'px';
 	
 	var ratio = this.image.height / this.image.width;
