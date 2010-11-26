@@ -92,15 +92,15 @@ FilmSlider.prototype.resizeSlider = function(evt) {
 	var filmWidth = this.slideSize * this.filmLength;
 	var sliderRatio = this.sliderRatio =  filmBarWidth / filmWidth;
 	var sliderWidth = filmBarWidth * sliderRatio;
+	this.rail.style.width = filmBarWidth + 'px';
+	this.rail.style.display = 'block';
+  	this.rail.style.visibility = 'visible';
 	if (sliderRatio < 1) {
-		this.rail.style.width = filmBarWidth + 'px';
 		this.slider.style.width = Math.round(sliderWidth) + 'px';
-		this.rail.style.display = 'block';
-	  	this.rail.style.visibility = 'visible';
+		this.slider.style.visibility = 'visible';
 	}
 	else {
-		this.rail.style.display = 'none';
-	  	this.rail.style.visibility = 'hidden';
+		this.slider.style.visibility = 'hidden';
 	}
 	
 	this.winSize = {'width'  : getWindowWidth(),
