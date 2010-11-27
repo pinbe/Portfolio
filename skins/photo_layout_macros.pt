@@ -115,7 +115,6 @@
       <div class="jsslider">
         <span id="slider"></span>
       </div>
-      <br clear="all"/>
       <script type="text/javascript" tal:content="python:'''
           var startSlideShow, slideShowNext, stopSlideShow;
           (function(){
