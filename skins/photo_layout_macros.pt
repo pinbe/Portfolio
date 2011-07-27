@@ -131,8 +131,10 @@
                            document.getElementById('image_toolbar'),
                            document.getElementById('Breadcrumbs'));
             startSlideShow = function() {return fs.startSlideShow();};
-            slideShowNext = function() {return fs.slideShowNext();};
             stopSlideShow = function() {return fs.stopSlideShow();};
+            slideShowPrevious = function() {return fs.slideShowPrevious();};
+            slideShowNext = function() {return fs.slideShowNext();};
+            slideShowImageLoaded = function() {return fs.slideShowImageLoaded();};
           })();
           ''' % {'filmLength': len(contextInfos['infos'])
                 ,'center': index
