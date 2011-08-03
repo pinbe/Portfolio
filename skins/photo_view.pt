@@ -59,9 +59,9 @@
                   (function(){
                   var params = {'allowFullScreen' : true
                                ,'allowScriptAccess' : 'always'};
-                  swfobject.embedSWF('slide_show.swf', 'slide_show', '33', '27', '9.0.0', undefined, undefined, params);
+                  swfobject.embedSWF('%s/slide_show.swf', 'slide_show', '33', '27', '9.0.0', undefined, undefined, params);
                   })();
-                  '''">
+                  ''' % portal_url">
                 </script>
                 <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
                 <a title="Back to portfolio..." rel="index"
