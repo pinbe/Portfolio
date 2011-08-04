@@ -24,11 +24,9 @@ security.declarePublic('translate')
 def translate(message, context):
 	""" Translate i18n message.
 	"""
-	# TODO: touver une solution.
-	# GTS = getGlobalTranslationService()
 	if isinstance(message, Exception):
 		try:
 			message = message[0]
 		except (TypeError, IndexError):
 			pass
-	return i18ntranslate(message, domain='photoprint', context=context.REQUEST)
+	return i18ntranslate(message, domain='portfolio', context=context.REQUEST)
