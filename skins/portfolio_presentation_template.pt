@@ -58,9 +58,9 @@
         fm.onBeforeSubmit = function(m, evt) {
           if (m.submitButton.name == 'selectSample') {
             var path = absolute_url().slice(portal_url().length);
-            var url = portal_url() + "/editor/filemanager/browser/mac_finder/browser.html?Connector=connectors/plinn/connector&Type=Image&path=" + path + '/';
+            var url = portal_url() + "/ckeditor/filemanager/browser/mac_finder/browser.html?Connector=connectors/plinn/connector&Type=Image&path=" + path + '/';
             var winOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes,width=645,height=405";
-            window.open(url, 'sampleImageSelector', winOptions);
+            window.open(url, 'StandaloneBrowser', winOptions);
 
             window.SetUrl = function (url) {
               with(m.submitButton) {
