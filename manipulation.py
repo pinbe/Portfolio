@@ -128,7 +128,7 @@ class ImageQueueProcessorThread(threading.Thread) :
 		except ConflictError :
 			console.warn('Resync after ZODB ConflicError')
 			transaction.abort()
-			portal = app.unrestrictedTraverse(portal_path)
+			portal = app.unrestrictedTraverse(self.portal_path)
 			portal._p_jar.sync()
 			self.queueAdd(path)
 			return
