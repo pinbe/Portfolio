@@ -571,8 +571,7 @@ FilmSlider.prototype.keyPressHandler = function(evt) {
 	var target = getTargetedObject(evt);
 	if (target.tagName == 'INPUT' || target.tagName== 'TEXTAREA')
 		return;
-	var evt = evt = getEventObject(evt);
-	evt = getEventObject(evt);
+	var evt = getEventObject(evt);
 	var charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
 	switch(charPress) {
 		case 'f':
