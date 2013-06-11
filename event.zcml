@@ -2,7 +2,7 @@
     xmlns="http://namespaces.zope.org/zope">
   <subscriber
     for=".interfaces.IPhoto
-          zope.app.container.interfaces.IObjectAddedEvent"
+          zope.container.interfaces.IObjectAddedEvent"
     handler=".event_handlers.processQueueAdd"
       />
   <subscriber
