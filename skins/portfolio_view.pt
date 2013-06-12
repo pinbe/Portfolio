@@ -4,8 +4,9 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <metal:block metal:fill-slot="javascript_head_slot">
-      <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>
-      <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_lightbox_viewer.js"></script>
+      <script type="text/javascript" tal:attributes="src string:$portal_url/cart_widgets.js"></script>
+      <script type="text/javascript" tal:attributes="src string:$portal_url/photo_lightbox_viewer.js"></script>
+      <script type="text/javascript" tal:attributes="src string:$portal_url/fileupload.js"charset="utf-8"></script>
     </metal:block>
     <title>portfolio_view</title>
   </head>

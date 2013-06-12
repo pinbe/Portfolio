@@ -160,6 +160,13 @@ table.metadata_category select:focus {
   font-size: &dtml-fontSmallSize;;
 }
 
+div.lightbox { /*the lightbox itself*/
+  min-height:300px;
+}
+
+.photo-drop-target {
+  background: url('&dtml-portal_url;/image-upload-dd-target.png') no-repeat center center;
+}
 
 .lightbox span {
     width: &dtml-slide_size;px;

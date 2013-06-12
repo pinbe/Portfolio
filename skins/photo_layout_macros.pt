@@ -8,7 +8,7 @@
          tal:define="slide_size portal_object/slide_size;"
          i18n:domain="portfolio">
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
-      <div id="lightbox" class="lightbox">
+      <div id="lightbox" class="lightbox photo-drop-target">
         <span tal:repeat="info infos" tal:omit-tag="">
           <span tal:define="size info/thumbSize;
                             margin_top python:(slide_size - size['height']) / 2;
