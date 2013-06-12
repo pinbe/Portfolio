@@ -85,7 +85,9 @@
       <script type="text/javascript">
       // <!--
       (function(){
-        new Lightbox(document.getElementById('lightbox'));
+        var lb = document.getElementById('lightbox');
+        new Lightbox(lb);
+        new DDFileUploader(lb);
       })();
       // -->
       </script>
