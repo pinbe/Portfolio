@@ -294,6 +294,17 @@ div.lightbox { /*the lightbox itself*/
   background: url(&dtml-portal_url;/slide-eye-closed.png);
 }
 
+.lightbox span.upload-progress {
+  display: block;
+  position:relative;
+  background:#ef8e32;
+  height:5px;
+  border-radius:3px;
+  width:0;
+  margin-left:11px;
+  top:208px;
+}
+
 .image_toolbar {
   background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;
   position:relative;
