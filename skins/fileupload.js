@@ -50,8 +50,6 @@ DDFileUploader.prototype.handleFiles = function(files) {
 		slide = this.createSlide(file);
 		this.previewQueuePush(slide);
 		this.uploadQueuePush(slide);
-		// this.previewUploadedImage(file);
-		// this.upload(file);
 	}
 };
 
@@ -142,7 +140,6 @@ DDFileUploader.prototype.createSlide = function(file) {
 	var size = this.thumbnailSize;
 	var self = this;
 	img.onload = function(evt) {
-		console.info('createSlide loaded.')
 		if (img.width > img.height) { // landscape
 			img.height = Math.round(size * img.height / img.width);
 			img.width = size;
@@ -165,7 +162,6 @@ DDFileUploader.prototype.createSlide = function(file) {
 
 	slide.appendChild(a);
 	slide.appendChild(progressBar);
-	// this.progressBar = progressBar;
 	this.dropbox.appendChild(slide);
 	
 	return slide;
@@ -184,10 +180,8 @@ DDFileUploader.prototype.previewUploadedImage = function(slide) {
 	var self = this;
 	
 	reader.onload = function(evt) {
-		console.info('previewUploadedImage loaded.')
 		slide.img.src = evt.target.result;
-		setTimeout(function(){self.previewQueueLoadNext();}, 1000);
-		// self.previewQueueLoadNext();
+		setTimeout(function(){self.previewQueueLoadNext();}, 500);
 	};
 	reader.readAsDataURL(slide.file);
 };
