@@ -71,7 +71,7 @@ DDFileUploader.prototype.progressHandler = function(evt) {
 	if (evt.lengthComputable) {
 		var progress = evt.loaded / evt.total;
 		this.updateProgressBar(progress);
-		var currentOpacity = this.previewImg.style.opacity
+		var currentOpacity = this.previewImg.style.opacity;
 		this.previewImg.style.opacity = Math.max(currentOpacity, progress);
 	}
 };
