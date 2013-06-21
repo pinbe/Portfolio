@@ -15,6 +15,7 @@ DDFileUploader = function(dropbox, uploadUrl) {
 	addListener(dropbox, 'drop', function(evt){self.drop(evt);});
 };
 
+// Drag and drop
 DDFileUploader.prototype.dragenter = function(evt) {
 	disableDefault(evt);
 	disablePropagation(evt);
@@ -28,7 +29,6 @@ DDFileUploader.prototype.dragover = function(evt) {
 	dt.dropEffect = 'copy';
 };
 
-
 DDFileUploader.prototype.drop = function(evt) {
 	disableDefault(evt);
 	disablePropagation(evt);
@@ -38,6 +38,7 @@ DDFileUploader.prototype.drop = function(evt) {
 	this.handleFiles(dt.files);
 };
 
+// Methods about upload
 DDFileUploader.prototype.handleFiles = function(files) {
 	var file, i;
 	for (i = 0; i < files.length; i++) {
@@ -47,50 +48,6 @@ DDFileUploader.prototype.handleFiles = function(files) {
 		this.upload(file);
 	}
 };
-
-
-DDFileUploader.prototype.createSlide = function() {
-	var slide = document.createElement('span');
-
-	var a = document.createElement('a');
-	a.href = '#';
-	a.className = 'slide';
-
-	var img = document.createElement('img');
-	this.previewImg = img;
-	var size = this.thumbnailSize;
-	var self = this;
-	img.onload = function(evt) {
-		if (img.width > img.height) { // landscape
-			img.height = Math.round(size * img.height / img.width);
-			img.width = size;
-		}
-		else {
-			img.width = Math.round(size * img.width / img.height);
-			img.height = size;
-		}
-		img.style.marginLeft = Math.round((self.slideSize - img.width) / 2) + 'px';
-		img.style.marginTop = Math.round((self.slideSize - img.height) / 2) + 'px';
-		img.className = undefined;
-	};
-	a.appendChild(img);
-
-	var progressBar = document.createElement('span');
-	progressBar.className = 'upload-progress';
-
-	slide.appendChild(a);
-	slide.appendChild(progressBar);
-	this.progressBar = progressBar;
-	this.dropbox.appendChild(slide);
-};
-
-DDFileUploader.prototype.updateProgressBar = function(progress) {
-	// 0 <= progress <= 1
-	var size = this.progressBarMaxSize * progress;
-	size = Math.round(size);
-	this.progressBar.style.width = size + 'px';
-};
-
 
 DDFileUploader.prototype.upload = function(file) {
 	var reader = new FileReader();
@@ -114,8 +71,53 @@ DDFileUploader.prototype.progressHandler = function(evt) {
 	if (evt.lengthComputable) {
 		var progress = evt.loaded / evt.total;
 		this.updateProgressBar(progress);
-		this.previewImg.style.opacity=progress;
+		var currentOpacity = this.previewImg.style.opacity
+		this.previewImg.style.opacity = Math.max(currentOpacity, progress);
 	}
+};
+
+// User interface
+DDFileUploader.prototype.createSlide = function() {
+	var slide = document.createElement('span');
+
+	var a = document.createElement('a');
+	a.href = '#';
+	a.className = 'slide';
+
+	var img = document.createElement('img');
+	this.previewImg = img;
+	var size = this.thumbnailSize;
+	var self = this;
+	img.onload = function(evt) {
+		if (img.width > img.height) { // landscape
+			img.height = Math.round(size * img.height / img.width);
+			img.width = size;
+		}
+		else {
+			img.width = Math.round(size * img.width / img.height);
+			img.height = size;
+		}
+		img.style.marginLeft = Math.round((self.slideSize - img.width) / 2) + 'px';
+		img.style.marginTop = Math.round((self.slideSize - img.height) / 2) + 'px';
+		img.style.opacity = 0.2;
+		img.className = undefined;
+	};
+	a.appendChild(img);
+
+	var progressBar = document.createElement('span');
+	progressBar.className = 'upload-progress';
+
+	slide.appendChild(a);
+	slide.appendChild(progressBar);
+	this.progressBar = progressBar;
+	this.dropbox.appendChild(slide);
+};
+
+DDFileUploader.prototype.updateProgressBar = function(progress) {
+	// 0 <= progress <= 1
+	var size = this.progressBarMaxSize * progress;
+	size = Math.round(size);
+	this.progressBar.style.width = size + 'px';
 };
 
 DDFileUploader.prototype.previewUploadedImage = function(file) {
