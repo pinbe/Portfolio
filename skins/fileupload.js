@@ -100,17 +100,12 @@ DDFileUploader.prototype.upload = function(file) {
 	addListener(req.upload, 'progress', function(evt){self.progressHandler(evt);});
 	addListener(req.upload, 'load', function(evt){self.uploadCompleteHandler(evt);});
 
-	// req.upload.addEventListener("load", function(e){
-	//   self.ctrl.update(100);
-	//   var canvas = self.ctrl.ctx.canvas;
-	//   canvas.parentNode.removeChild(canvas);
-	//  }, false);
 	req.open("PUT", this.uploadUrl + '/' + file.name);
 	req.setRequestHeader("Content-Type", file.type);
-	// req.overrideMimeType('text/plain; charset=x-user-defined-binary');
-	reader.onload = function(evt) {
-		req.sendAsBinary(evt.target.result);
-	};
+	addListener(reader, 'load', function(evt){req.sendAsBinary(evt.target.result);})
+	// reader.onload = function(evt) {
+	// 	req.sendAsBinary(evt.target.result);
+	// };
 	reader.readAsBinaryString(file);
 };
 
@@ -119,8 +114,11 @@ DDFileUploader.prototype.uploadCompleteHandler = function(evt) {
 };
 
 DDFileUploader.prototype.progressHandler = function(evt) {
-	if (evt.lengthComputable)
-		this.updateProgressBar(evt.loaded / evt.total);
+	if (evt.lengthComputable) {
+		var progress = evt.loaded / evt.total;
+		this.updateProgressBar(progress);
+		this.previewImg.style.opacity=progress;
+	}
 };
 
 DDFileUploader.prototype.previewUploadedImage = function(file) {
