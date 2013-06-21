@@ -89,7 +89,7 @@ DDFileUploader.prototype.updateProgressBar = function(progress) {
 	var size = this.progressBarMaxSize * progress;
 	size = Math.round(size);
 	this.progressBar.style.width = size + 'px';
-}
+};
 
 
 DDFileUploader.prototype.upload = function(file) {
@@ -102,10 +102,7 @@ DDFileUploader.prototype.upload = function(file) {
 
 	req.open("PUT", this.uploadUrl + '/' + file.name);
 	req.setRequestHeader("Content-Type", file.type);
-	addListener(reader, 'load', function(evt){req.sendAsBinary(evt.target.result);})
-	// reader.onload = function(evt) {
-	// 	req.sendAsBinary(evt.target.result);
-	// };
+	addListener(reader, 'load', function(evt){req.sendAsBinary(evt.target.result);});
 	reader.readAsBinaryString(file);
 };
 
