@@ -88,8 +88,9 @@ DDFileUploader.prototype.progressHandler = function(evt) {
 
 DDFileUploader.prototype.previewQueuePush = function(slide) {
 	this.previewQueue.push(slide);
-	if (!this._previewQueueRunning)
+	if (!this._previewQueueRunning) {
 		this.startPreviewQueue();
+	}
 };
 
 DDFileUploader.prototype.startPreviewQueue = function() {
@@ -99,16 +100,19 @@ DDFileUploader.prototype.startPreviewQueue = function() {
 
 DDFileUploader.prototype.previewQueueLoadNext = function() {
 	var slide = this.previewQueue.shift();
-	if (slide)
+	if (slide) {
 		this.previewUploadedImage(slide);
-	else
+	}
+	else {
 		this._previewQueueRunning = false;
+	}
 };
 
 DDFileUploader.prototype.uploadQueuePush = function(slide) {
 	this.uploadQueue.push(slide);
-	if (!this._uploadQueueRunning)
+	if (!this._uploadQueueRunning) {
 		this.startUploadQueue();
+	}
 };
 
 DDFileUploader.prototype.startUploadQueue = function() {
@@ -119,10 +123,12 @@ DDFileUploader.prototype.startUploadQueue = function() {
 
 DDFileUploader.prototype.uploadQueueLoadNext = function() {
 	var slide = this.uploadQueue.shift();
-	if (slide)
+	if (slide) {
 		this.upload(slide);
-	else
+	}
+	else {
 		this._uploadQueueRunning = false;
+	}
 };
 
 
