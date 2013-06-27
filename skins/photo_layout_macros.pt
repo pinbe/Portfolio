@@ -86,7 +86,7 @@
       // <!--
       (function(){
         var lb = document.getElementById('lightbox');
-        var uploadUrl = absolute_url() + '/jsupload';
+        var uploadUrl = absolute_url();
         new Lightbox(lb);
         new DDFileUploader(lb, uploadUrl);
       })();
