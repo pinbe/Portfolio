@@ -21,10 +21,10 @@ req.other['disable_cookie_login__'] = 1
 
 options = {}
 
-options['channel_info'] = { 'base': stool.getHTML4UpdateBase(context),
+options['channel_info'] = { 'base': stool.getHTML4UpdateBase(None),
 							'description': context.Description(),
-							'frequency': stool.getUpdateFrequency(context),
-							'period': stool.getUpdatePeriod(context),
+							'frequency': stool.getUpdateFrequency(None),
+							'period': stool.getUpdatePeriod(None),
 							'title': context.title_or_id(),
 							'url': context.absolute_url(),
 							'author': mtool.getMemberFullNameById(context.Creator(), nameBefore=0),
@@ -35,7 +35,7 @@ key, reverse = context.getDefaultSorting()
 items = stool.getSyndicatableContent(context)
 items = sequence.sort( items, ((key, 'cmp', reverse and 'desc' or 'asc'),) )
 items = LazyFilter(items, skip='View')
-b_size = stool.getMaxItems(context)
+b_size = stool.getMaxItems(None)
 if all is False:
 	batch_obj = Batch(items, b_size, 0, orphan=0)
 elif all is True :
