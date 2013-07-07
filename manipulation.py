@@ -18,6 +18,7 @@ from types import StringTypes
 from math import ceil
 import transaction
 from ZODB.POSException import ConflictError
+from zope.site.hooks import setSite
 from cStringIO import StringIO
 
 console = logging.getLogger('[manipulation thread]')
@@ -50,6 +51,8 @@ class ImageQueueProcessorThread(threading.Thread) :
 		#atexit.register(self.stop)
 		import Zope2
 		app = Zope2.app()
+		portal = app.unrestrictedTraverse(self.portal_path)
+		setSite(portal)
 		while not self.__stopped and self.queueSize :
 			self._process(app)
 		
