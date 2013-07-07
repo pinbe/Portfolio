@@ -21,11 +21,9 @@ from Products.CMFCore.permissions import View, AccessContentsInformation, \
 from permissions import ViewRawImage
 from zope.component.factory import Factory
 from zope.interface import implements
-#from webdav.WriteLockInterface import WriteLockInterface as z2IWriteLock
 from webdav.interfaces import IWriteLock
 from Products.CMFCore.interfaces import IContentish
 from Products.CMFCore.interfaces import IDynamicType
-#from Products.CMFCore.interfaces.Contentish import Contentish as z2IContentish
 
 from Products.CMFCore.DynamicType import DynamicType
 from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
@@ -40,7 +38,6 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 	""" Photo CMF aware """
 	
 	implements(IPhoto, IContentish, IWriteLock, IDynamicType)
-	#__implements__ = (z2IContentish, IWriteLock, DynamicType.__implements__)
 	
 	meta_type = BasePhoto.meta_type
 	manage_options = BasePhoto.manage_options
@@ -61,7 +58,10 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 		
 	def update_data(self, data, content_type=None) :
 		BasePhoto.update_data(self, data, content_type=content_type)
-		self.reindexObject()
+		# update_data can be invoked during construction
+		# in this case, reindexObject put a parasite catalag entry.
+		if self.getParentNode() :
+			self.reindexObject()
 	
 
 	def _getAfterResizingHooks(self) :
@@ -191,14 +191,6 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 	security.declareProtected(View, 'hiddenForAnonymous')
 	def hiddenForAnonymous(self):
 		return getattr(self, '_hiddenForAnon', False)
-		
-	
-#	security.declareProtected(AccessContentsInformation, 'position')
-#	def position(self):
-#		" returns position of self in parent container "
-#		parent = self.getParentNode()
-#		position = parent.getObjectPosition(self.getId())
-#		return position
 		
 	
 	#
