@@ -125,7 +125,11 @@ class ImageQueueProcessorThread(threading.Thread) :
 				pass
 			
 			p.tiles_available = 1
-			p.reindexObject(idxs=['tiles_available'])
+
+			portal = app.unrestrictedTraverse(self.portal_path)
+			ctool = portal.portal_catalog
+			uid = '/'.join(p.getPhysicalPath())
+			ctool.reindexObject(p, idxs=['tiles_available'], uid=uid)
 			transaction.commit()
 
 		except ConflictError :
