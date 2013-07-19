@@ -22,12 +22,9 @@
     </div>
 
     <div metal:fill-slot="main" tal:omit-tag=""
-         tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent;
-                     ctool nocall:here/portal_catalog;
-                     slide_size portal_object/slide_size;
-                     Batch python:modules['Products.Plinn'].Batch;
-                     pho_start python:0;pho_start request/pho_start | pho_start;
-                     port_start python:0;port_start request/port_start | port_start;
+         tal:define="Batch python:modules['Products.Plinn'].Batch;
+                     pho_start python:request.get('pho_start', 0);
+                     port_start python:request.get('port_start', 0);
                      portfolios python:Batch(here.listNearestFolderContents(contentFilter={'portal_type' : 'Portfolio'}),
                                              16, port_start, orphan=1, quantumleap=1, b_start_str='port_start');">
     <div tal:condition="python:here.hasPresentationPage() and pho_start < 20"
