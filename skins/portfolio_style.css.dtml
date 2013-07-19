@@ -310,6 +310,13 @@ div.lightbox {
   top:208px;
 }
 
+.lightbox span.label {
+  position: relative;
+  padding-left:0.5em;
+  top: -4px;
+/*  border: 1px solid red;*/
+}
+
 .image_toolbar {
   background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;
   position:relative;

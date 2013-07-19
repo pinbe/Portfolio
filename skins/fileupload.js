@@ -57,6 +57,7 @@ DDFileUploader.prototype.upload = function(slide) {
 	var reader = new FileReader();
 	var req = new XMLHttpRequest();
 	var file = slide.file;
+	this.uploadedSlide = slide;
 	this.previewImg = slide.img;
 	this.progressBar = slide.progressBar;
 	var self = this;
@@ -66,12 +67,21 @@ DDFileUploader.prototype.upload = function(slide) {
 
 	req.open("PUT", this.uploadUrl + '/' + file.name);
 	req.setRequestHeader("Content-Type", file.type);
-	addListener(reader, 'load', function(evt){req.sendAsBinary(evt.target.result);});
+	addListener(reader, 'load',
+		function(evt){
+			console.info('load');
+			try {
+				req.sendAsBinary(evt.target.result);
+			}
+			catch(e){}
+		});
 	reader.readAsBinaryString(file);
 };
 
 DDFileUploader.prototype.uploadCompleteHandler = function(evt) {
-	this.progressBar.parentNode.removeChild(this.progressBar);
+	var slide = this.uploadedSlide;
+	this.uploadedSlide.removeChild(slide.label);
+	this.uploadedSlide.removeChild(slide.label);
 	this.uploadQueueLoadNext();
 };
 
@@ -161,6 +171,11 @@ DDFileUploader.prototype.createSlide = function(file) {
 	};
 	a.appendChild(img);
 	slide.img = img;
+	
+	var label = document.createElement('span');
+	slide.label = label;
+	label.className = 'label';
+	label.innerHTML = file.name;
 
 	var progressBar = document.createElement('span');
 	progressBar.className = 'upload-progress';
@@ -168,6 +183,7 @@ DDFileUploader.prototype.createSlide = function(file) {
 
 	slide.appendChild(a);
 	slide.appendChild(progressBar);
+	slide.appendChild(label);
 	this.dropbox.appendChild(slide);
 	
 	return slide;
