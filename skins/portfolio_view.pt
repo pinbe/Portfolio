@@ -6,7 +6,11 @@
     <metal:block metal:fill-slot="javascript_head_slot">
       <script type="text/javascript" tal:attributes="src string:$portal_url/cart_widgets.js"></script>
       <script type="text/javascript" tal:attributes="src string:$portal_url/photo_lightbox_viewer.js"></script>
-      <script type="text/javascript" tal:attributes="src string:$portal_url/fileupload.js"charset="utf-8"></script>
+      <tal:block
+        tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent"
+        tal:condition="python: mtool.checkPermission(AddPortalContent, here)">
+        <script type="text/javascript" tal:attributes="src string:$portal_url/fileupload.js"charset="utf-8"></script>
+      </tal:block>
     </metal:block>
     <title>portfolio_view</title>
   </head>
@@ -22,7 +26,9 @@
     </div>
 
     <div metal:fill-slot="main" tal:omit-tag=""
-         tal:define="Batch python:modules['Products.Plinn'].Batch;
+         tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent;
+                     dropable python:mtool.checkPermission(AddPortalContent, here);
+                     Batch python:modules['Products.Plinn'].Batch;
                      pho_start python:request.get('pho_start', 0);
                      port_start python:request.get('port_start', 0);
                      portfolios python:Batch(here.listNearestFolderContents(contentFilter={'portal_type' : 'Portfolio'}),
