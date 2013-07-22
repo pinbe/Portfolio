@@ -49,7 +49,7 @@ DDFileUploader.prototype.handleFiles = function(files) {
 		file = files[i];
 		slide = this.createSlide(file);
         // this.previewQueuePush(slide);
-        // this.uploadQueuePush(slide);
+        this.uploadQueuePush(slide);
 	}
 };
 
@@ -65,8 +65,9 @@ DDFileUploader.prototype.upload = function(slide) {
 	addListener(req.upload, 'progress', function(evt){self.progressHandler(evt);});
 	addListener(req.upload, 'load', function(evt){self.uploadCompleteHandler(evt);});
 
-	req.open("PUT", this.uploadUrl + '/' + file.name);
+	req.open("PUT", this.uploadUrl);
 	req.setRequestHeader("Content-Type", file.type);
+	req.setRequestHeader("X-File-Name", file.name);
 	addListener(reader, 'load',
 		function(evt){
 			console.info('load');
