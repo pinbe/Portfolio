@@ -1,0 +1,13 @@
+<div tal:omit-tag="">
+
+  <div metal:use-macro="here/main_template_macros/macros/global_defines"></div>
+
+  <div tal:define="
+  infos here/getPhotoInfo;
+  info infos/info;
+  features infos/features;
+  slide_size portal_object/slide_size;"
+  tal:omit-tag="">
+    <div metal:use-macro="here/photo_layout_macros/macros/thumbnail"></div>
+  </div>
+</div>

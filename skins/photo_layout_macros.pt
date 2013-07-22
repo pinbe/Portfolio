@@ -18,7 +18,8 @@
                             margin_left python:(slide_size - size['width']) / 2;
                             selected info/selected|nothing"
                 tal:attributes="class info/className;
-                                name info/cmf_uid">
+                                name info/cmf_uid"
+                metal:define-macro="thumbnail">
             <a class="slide" tal:attributes="href info/href; title info/title">
               <img border="0" tal:attributes="src info/thumbUrl;
                                  alt info/title;
