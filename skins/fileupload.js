@@ -70,7 +70,6 @@ DDFileUploader.prototype.upload = function(slide) {
 	req.setRequestHeader("X-File-Name", file.name);
 	addListener(reader, 'load',
 		function(evt){
-			console.info('load');
 			try {
 				req.sendAsBinary(evt.target.result);
 			}
@@ -84,6 +83,9 @@ DDFileUploader.prototype.uploadCompleteHandler = function(evt) {
 	this.uploadedSlide.removeChild(slide.label);
     this.uploadedSlide.removeChild(slide.progressBar);
 	this.uploadQueueLoadNext();
+	var req = getTargetedObject(evt);
+	console.log(req);
+	// this.slide.innerHTML = req.responseXML.documentElement
 };
 
 DDFileUploader.prototype.progressHandler = function(evt) {
