@@ -6,7 +6,8 @@
   infos here/getPhotoInfo;
   info infos/info;
   features infos/features;
-  slide_size portal_object/slide_size;"
+  slide_size portal_object/slide_size;
+  dummy python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')"
   tal:omit-tag="">
     <div metal:use-macro="here/photo_layout_macros/macros/thumbnail"></div>
   </div>
