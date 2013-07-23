@@ -63,7 +63,13 @@ DDFileUploader.prototype.upload = function(slide) {
 	var self = this;
 	
 	addListener(req.upload, 'progress', function(evt){self.progressHandler(evt);});
-	addListener(req.upload, 'load', function(evt){self.uploadCompleteHandler(evt, req);});
+	// addListener(req.upload, 'load', function(evt){self.uploadCompleteHandler(evt, req);});
+	addListener(req, 'readystatechange',
+		function(evt) {
+			if (req.readyState == 4) {
+				self.uploadCompleteHandler(req);
+			}
+		});
 
 	req.open("PUT", this.uploadUrl);
 	req.setRequestHeader("Content-Type", file.type);
@@ -78,12 +84,12 @@ DDFileUploader.prototype.upload = function(slide) {
 	reader.readAsBinaryString(file);
 };
 
-DDFileUploader.prototype.uploadCompleteHandler = function(evt, req) {
+DDFileUploader.prototype.uploadCompleteHandler = function(req) {
 	var slide = this.uploadedSlide;
 	this.uploadedSlide.removeChild(slide.label);
     this.uploadedSlide.removeChild(slide.progressBar);
+	slide.innerHTML = req.responseXML.documentElement.firstChild.data;
 	this.uploadQueueLoadNext();
-	this.slide.innerHTML = req.responseXML.documentElement.firstChild.data;
 };
 
 DDFileUploader.prototype.progressHandler = function(evt) {
