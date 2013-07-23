@@ -2,6 +2,8 @@
 var DDFileUploader;
 
 (function(){
+// nombre maximun d'image chargées en local
+var MAX_PREVIEW = 5;
 
 DDFileUploader = function(dropbox, uploadUrl) {
 	this.dropbox = dropbox;
@@ -11,6 +13,7 @@ DDFileUploader = function(dropbox, uploadUrl) {
 	this.thumbnailSize = 180;
 	this.previewQueue = [];
 	this._previewQueueRunning = false;
+	this.previewsLoaded = 0;
 	this.uploadQueue = [];
 	this._uploadQueueRunning = false;
 	var self = this;
@@ -48,7 +51,7 @@ DDFileUploader.prototype.handleFiles = function(files) {
 	for (i = 0; i < files.length; i++) {
 		file = files[i];
 		slide = this.createSlide(file);
-        // this.previewQueuePush(slide);
+        this.previewQueuePush(slide);
         this.uploadQueuePush(slide);
 	}
 };
@@ -63,10 +66,9 @@ DDFileUploader.prototype.upload = function(slide) {
 	var self = this;
 	
 	addListener(req.upload, 'progress', function(evt){self.progressHandler(evt);});
-	// addListener(req.upload, 'load', function(evt){self.uploadCompleteHandler(evt, req);});
 	addListener(req, 'readystatechange',
 		function(evt) {
-			if (req.readyState == 4) {
+			if (req.readyState === 4) {
 				self.uploadCompleteHandler(req);
 			}
 		});
@@ -89,6 +91,8 @@ DDFileUploader.prototype.uploadCompleteHandler = function(req) {
 	this.uploadedSlide.removeChild(slide.label);
     this.uploadedSlide.removeChild(slide.progressBar);
 	slide.innerHTML = req.responseXML.documentElement.firstChild.data;
+	this.previewsLoaded--;
+	this.previewQueueLoadNext();
 	this.uploadQueueLoadNext();
 };
 
@@ -116,11 +120,14 @@ DDFileUploader.prototype.startPreviewQueue = function() {
 };
 
 DDFileUploader.prototype.previewQueueLoadNext = function() {
-	var slide = this.previewQueue.shift();
-	if (slide) {
+	if (this.previewQueue.length && this.previewsLoaded < MAX_PREVIEW) {
+		var slide = this.previewQueue.shift();
+		console.info('previewQueueLoadNext', this.previewsLoaded, slide.file.name);
 		this.previewUploadedImage(slide);
+		this.previewsLoaded++;
 	}
 	else {
+		console.warn('previewQueueLoadNext skipped', this.previewsLoaded);
 		this._previewQueueRunning = false;
 	}
 };
