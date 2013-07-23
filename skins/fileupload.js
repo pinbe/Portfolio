@@ -3,7 +3,7 @@ var DDFileUploader;
 
 (function(){
 // nombre maximun d'image chargées en local
-var MAX_PREVIEW = 5;
+var MAX_PREVIEW = 2;
 
 DDFileUploader = function(dropbox, uploadUrl) {
 	this.dropbox = dropbox;
@@ -90,7 +90,11 @@ DDFileUploader.prototype.uploadCompleteHandler = function(req) {
 	var slide = this.uploadedSlide;
 	this.uploadedSlide.removeChild(slide.label);
     this.uploadedSlide.removeChild(slide.progressBar);
-	slide.innerHTML = req.responseXML.documentElement.firstChild.data;
+	var fragment = getCopyOfNode(req.responseXML.documentElement.firstChild);
+	var img = fragment.getElementsByTagName('img')[0];
+	img.onload = function(evt) {
+		slide.parentNode.replaceChild(fragment, slide);
+	};
 	this.previewsLoaded--;
 	this.previewQueueLoadNext();
 	this.uploadQueueLoadNext();
@@ -122,12 +126,10 @@ DDFileUploader.prototype.startPreviewQueue = function() {
 DDFileUploader.prototype.previewQueueLoadNext = function() {
 	if (this.previewQueue.length && this.previewsLoaded < MAX_PREVIEW) {
 		var slide = this.previewQueue.shift();
-		console.info('previewQueueLoadNext', this.previewsLoaded, slide.file.name);
 		this.previewUploadedImage(slide);
 		this.previewsLoaded++;
 	}
 	else {
-		console.warn('previewQueueLoadNext skipped', this.previewsLoaded);
 		this._previewQueueRunning = false;
 	}
 };
@@ -178,8 +180,8 @@ DDFileUploader.prototype.createSlide = function(file) {
 			img.width = Math.round(size * img.width / img.height);
 			img.height = size;
 		}
-		img.style.marginLeft = Math.round((self.slideSize - img.width) / 2) + 'px';
-		img.style.marginTop = Math.round((self.slideSize - img.height) / 2) + 'px';
+		img.style.marginLeft = Math.floor((self.slideSize - img.width) / 2) + 'px';
+		img.style.marginTop = Math.floor((self.slideSize - img.height) / 2) + 'px';
 		img.style.opacity = 0.2;
 		img.className = undefined;
 	};
