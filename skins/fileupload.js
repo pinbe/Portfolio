@@ -93,6 +93,8 @@ DDFileUploader.prototype.uploadCompleteHandler = function(req) {
 	var fragment = getCopyOfNode(req.responseXML.documentElement.firstChild);
 	var img = fragment.getElementsByTagName('img')[0];
 	img.onload = function(evt) {
+		var preview = slide.getElementsByTagName('img')[0];
+		preview.src = undefined;
 		slide.parentNode.replaceChild(fragment, slide);
 	};
 	this.previewsLoaded--;
