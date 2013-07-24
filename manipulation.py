@@ -18,6 +18,7 @@ from types import StringTypes
 from math import ceil
 import transaction
 from ZODB.POSException import ConflictError
+from ZODB.POSException import ConnectionStateError
 from zope.site.hooks import setSite
 from cStringIO import StringIO
 
@@ -57,11 +58,11 @@ class ImageQueueProcessorThread(threading.Thread) :
 			self._process(app)
 		
 		con = app._p_jar
-		con.close()
-		#con.close()
+		try :
+			con.close()
+		except ConnectionStateError, e :
+			console.warn('ConnectionStateError raised before finished.')
 		console.info('process finished.')
-		#print con
-		#print con.transaction_manager
 		
 
 	def stop(self):
