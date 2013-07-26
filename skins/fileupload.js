@@ -4,9 +4,11 @@ var DDFileUploader;
 (function(){
 // nombre maximun d'image chargées en local
 var MAX_PREVIEW = 2;
+var isThumbnail = /.*\/getThumbnail$/;
 
 DDFileUploader = function(dropbox, uploadUrl) {
 	this.dropbox = dropbox;
+	this.existingSlides = this.indexExistingSlides();
 	this.uploadUrl = uploadUrl;
 	this.slideSize = 222;
 	this.progressBarMaxSize = 200; // pixels
@@ -20,6 +22,18 @@ DDFileUploader = function(dropbox, uploadUrl) {
 	addListener(dropbox, 'dragenter', function(evt){self.dragenter(evt);});
 	addListener(dropbox, 'dragover', function(evt){self.dragover(evt);});
 	addListener(dropbox, 'drop', function(evt){self.drop(evt);});
+};
+
+DDFileUploader.prototype.indexExistingSlides = function() {
+	var images = this.dropbox.getElementsByTagName('img');
+	var i;
+	var index = [];
+	for (i=0 ; i < images.length ; i++) {
+		if (isThumbnail.test(images[i].src)) {
+			index[images[i].src] = images[i];
+		}
+	}
+	return index;
 };
 
 // Drag and drop
@@ -92,13 +106,27 @@ DDFileUploader.prototype.uploadCompleteHandler = function(req) {
     this.uploadedSlide.removeChild(slide.progressBar);
 	var fragment = getCopyOfNode(req.responseXML.documentElement.firstChild);
 	var img = fragment.getElementsByTagName('img')[0];
-	img.onload = function(evt) {
-		// accelerate GC before replacing
+	if (req.status === 200) {
+		// update
+		var existing = this.existingSlides[img.src];
+		if (existing) {
+			existing.src = existing.src + '?' + Math.random().toString();
+		}
 		slide.img.src = '';
 		slide.img.parentNode.removeChild(slide.img);
 		slide.img = undefined;
-		slide.parentNode.replaceChild(fragment, slide);
-	};
+		slide.parentNode.removeChild(slide);
+	}
+	else if(req.status === 201) {
+		// creation
+		img.onload = function(evt) {
+			// accelerate GC before replacing
+			slide.img.src = '';
+			slide.img.parentNode.removeChild(slide.img);
+			slide.img = undefined;
+			slide.parentNode.replaceChild(fragment, slide);
+		};
+	}
 	this.previewsLoaded--;
 	this.previewQueueLoadNext();
 	this.uploadQueueLoadNext();
