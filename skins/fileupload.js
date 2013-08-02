@@ -4,36 +4,16 @@ var DDFileUploaderBase;
 (function(){
 // nombre maximun d'image chargées en local
 var MAX_PREVIEW = 2;
-var isThumbnail = /.*\/getThumbnail$/;
 
 DDFileUploaderBase = function(dropbox, uploadUrl) {
 	this.dropbox = dropbox;
-	this.existingSlides = this.indexExistingSlides();
 	this.uploadUrl = uploadUrl;
-	this.slideSize = 222;
-	this.progressBarMaxSize = 200; // pixels
-	this.thumbnailSize = 180;
-	this.previewQueue = [];
-	this._previewQueueRunning = false;
-	this.previewsLoaded = 0;
 	this.uploadQueue = [];
 	this._uploadQueueRunning = false;
 	var self = this;
 	addListener(dropbox, 'dragenter', function(evt){self.dragenter(evt);});
 	addListener(dropbox, 'dragover', function(evt){self.dragover(evt);});
 	addListener(dropbox, 'drop', function(evt){self.drop(evt);});
-};
-
-DDFileUploaderBase.prototype.indexExistingSlides = function() {
-	var images = this.dropbox.getElementsByTagName('img');
-	var i;
-	var index = [];
-	for (i=0 ; i < images.length ; i++) {
-		if (isThumbnail.test(images[i].src)) {
-			index[images[i].src] = images[i];
-		}
-	}
-	return index;
 };
 
 // Drag and drop
