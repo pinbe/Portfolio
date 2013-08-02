@@ -9,7 +9,8 @@
       <tal:block
         tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent"
         tal:condition="python: mtool.checkPermission(AddPortalContent, here)">
-        <script type="text/javascript" tal:attributes="src string:$portal_url/fileupload.js"charset="utf-8"></script>
+        <script type="text/javascript" tal:attributes="src string:$portal_url/fileupload.js" charset="utf-8"></script>
+        <script type="text/javascript" tal:attributes="src string:$portal_url/portfolio_upload.js" charset="utf-8"></script>
       </tal:block>
     </metal:block>
     <title>portfolio_view</title>

@@ -1,12 +1,12 @@
 // © 2013 Benoît Pin MINES ParisTech
-var DDFileUploader;
+var DDFileUploaderBase;
 
 (function(){
 // nombre maximun d'image chargées en local
 var MAX_PREVIEW = 2;
 var isThumbnail = /.*\/getThumbnail$/;
 
-DDFileUploader = function(dropbox, uploadUrl) {
+DDFileUploaderBase = function(dropbox, uploadUrl) {
 	this.dropbox = dropbox;
 	this.existingSlides = this.indexExistingSlides();
 	this.uploadUrl = uploadUrl;
@@ -24,7 +24,7 @@ DDFileUploader = function(dropbox, uploadUrl) {
 	addListener(dropbox, 'drop', function(evt){self.drop(evt);});
 };
 
-DDFileUploader.prototype.indexExistingSlides = function() {
+DDFileUploaderBase.prototype.indexExistingSlides = function() {
 	var images = this.dropbox.getElementsByTagName('img');
 	var i;
 	var index = [];
@@ -37,12 +37,12 @@ DDFileUploader.prototype.indexExistingSlides = function() {
 };
 
 // Drag and drop
-DDFileUploader.prototype.dragenter = function(evt) {
+DDFileUploaderBase.prototype.dragenter = function(evt) {
 	disableDefault(evt);
 	disablePropagation(evt);
 };
 
-DDFileUploader.prototype.dragover = function(evt) {
+DDFileUploaderBase.prototype.dragover = function(evt) {
 	disableDefault(evt);
 	disablePropagation(evt);
 	evt = getEventObject(evt);
@@ -50,7 +50,7 @@ DDFileUploader.prototype.dragover = function(evt) {
 	dt.dropEffect = 'copy';
 };
 
-DDFileUploader.prototype.drop = function(evt) {
+DDFileUploaderBase.prototype.drop = function(evt) {
 	disableDefault(evt);
 	disablePropagation(evt);
 	getEventObject(evt);
@@ -60,7 +60,7 @@ DDFileUploader.prototype.drop = function(evt) {
 };
 
 // Methods about upload
-DDFileUploader.prototype.handleFiles = function(files) {
+DDFileUploaderBase.prototype.handleFiles = function(files) {
 	var file, i, slide;
 	for (i = 0; i < files.length; i++) {
 		file = files[i];
@@ -70,7 +70,7 @@ DDFileUploader.prototype.handleFiles = function(files) {
 	}
 };
 
-DDFileUploader.prototype.upload = function(slide) {
+DDFileUploaderBase.prototype.upload = function(slide) {
 	var reader = new FileReader();
 	var req = new XMLHttpRequest();
 	var file = slide.file;
@@ -100,7 +100,7 @@ DDFileUploader.prototype.upload = function(slide) {
 	reader.readAsBinaryString(file);
 };
 
-DDFileUploader.prototype.uploadCompleteHandler = function(req) {
+DDFileUploaderBase.prototype.uploadCompleteHandler = function(req) {
 	var slide = this.uploadedSlide;
 	this.uploadedSlide.removeChild(slide.label);
     this.uploadedSlide.removeChild(slide.progressBar);
@@ -132,7 +132,7 @@ DDFileUploader.prototype.uploadCompleteHandler = function(req) {
 	this.uploadQueueLoadNext();
 };
 
-DDFileUploader.prototype.progressHandler = function(evt) {
+DDFileUploaderBase.prototype.progressHandler = function(evt) {
 	if (evt.lengthComputable) {
 		var progress = evt.loaded / evt.total;
 		this.updateProgressBar(progress);
@@ -143,19 +143,19 @@ DDFileUploader.prototype.progressHandler = function(evt) {
 
 // Method about queues
 
-DDFileUploader.prototype.previewQueuePush = function(slide) {
+DDFileUploaderBase.prototype.previewQueuePush = function(slide) {
 	this.previewQueue.push(slide);
 	if (!this._previewQueueRunning) {
 		this.startPreviewQueue();
 	}
 };
 
-DDFileUploader.prototype.startPreviewQueue = function() {
+DDFileUploaderBase.prototype.startPreviewQueue = function() {
 	this._previewQueueRunning = true;
 	this.previewQueueLoadNext();
 };
 
-DDFileUploader.prototype.previewQueueLoadNext = function() {
+DDFileUploaderBase.prototype.previewQueueLoadNext = function() {
 	if (this.previewQueue.length && this.previewsLoaded < MAX_PREVIEW) {
 		var slide = this.previewQueue.shift();
 		this.previewUploadedImage(slide);
@@ -166,20 +166,20 @@ DDFileUploader.prototype.previewQueueLoadNext = function() {
 	}
 };
 
-DDFileUploader.prototype.uploadQueuePush = function(slide) {
+DDFileUploaderBase.prototype.uploadQueuePush = function(slide) {
 	this.uploadQueue.push(slide);
 	if (!this._uploadQueueRunning) {
 		this.startUploadQueue();
 	}
 };
 
-DDFileUploader.prototype.startUploadQueue = function() {
+DDFileUploaderBase.prototype.startUploadQueue = function() {
 	this._uploadQueueRunning = true;
 	this.uploadQueueLoadNext();
 };
 
 
-DDFileUploader.prototype.uploadQueueLoadNext = function() {
+DDFileUploaderBase.prototype.uploadQueueLoadNext = function() {
 	var slide = this.uploadQueue.shift();
 	if (slide) {
 		this.upload(slide);
@@ -191,7 +191,7 @@ DDFileUploader.prototype.uploadQueueLoadNext = function() {
 
 
 // User interface
-DDFileUploader.prototype.createSlide = function(file) {
+DDFileUploaderBase.prototype.createSlide = function(file) {
 	var slide = document.createElement('span');
 	slide.file = file;
 
@@ -237,14 +237,14 @@ DDFileUploader.prototype.createSlide = function(file) {
 	return slide;
 };
 
-DDFileUploader.prototype.updateProgressBar = function(progress) {
+DDFileUploaderBase.prototype.updateProgressBar = function(progress) {
 	// 0 <= progress <= 1
 	var size = this.progressBarMaxSize * progress;
 	size = Math.round(size);
 	this.progressBar.style.width = size + 'px';
 };
 
-DDFileUploader.prototype.previewUploadedImage = function(slide) {
+DDFileUploaderBase.prototype.previewUploadedImage = function(slide) {
 	var reader = new FileReader();
 	var size = this.thumbnailSize;
 	var self = this;
