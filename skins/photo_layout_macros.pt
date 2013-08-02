@@ -92,7 +92,7 @@
         var lb = document.getElementById('lightbox');
         var uploadUrl = absolute_url() + '/put_upload';
         new Lightbox(lb);
-        new DDFileUploader(lb, uploadUrl);
+        new DDImageUploader(lb, uploadUrl);
       })();
       // -->
       </script>
