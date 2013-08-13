@@ -114,8 +114,8 @@ DDFileUploaderBase.prototype.progressHandler = function(evt) {
 };
 
 // Methods about queue
-DDFileUploaderBase.prototype.uploadQueuePush = function(slide) {
-	this.uploadQueue.push(slide);
+DDFileUploaderBase.prototype.uploadQueuePush = function(item) {
+	this.uploadQueue.push(item);
 	if (!this._uploadQueueRunning) {
 		this.startUploadQueue();
 	}
@@ -127,9 +127,9 @@ DDFileUploaderBase.prototype.startUploadQueue = function() {
 };
 
 DDFileUploaderBase.prototype.uploadQueueLoadNext = function() {
-	var slide = this.uploadQueue.shift();
-	if (slide) {
-		this.upload(slide);
+	var item = this.uploadQueue.shift();
+	if (item) {
+		this.upload(item);
 	}
 	else {
 		this._uploadQueueRunning = false;
