@@ -42,13 +42,20 @@ DDFileUploaderBase.prototype.handleFiles = function(files) {
 	// To be implemented by descendant.
 };
 
-DDFileUploaderBase.prototype.upload = function(slide) {
+
+
+DDFileUploaderBase.prototype.beforeUpload = function(item) {
+	// To be implemented by decendant.
+};
+
+
+DDFileUploaderBase.prototype.upload = function(item) {
+	// item.file must be the file to be uploaded
+	this.beforeUpload(item);
 	var reader = new FileReader();
 	var req = new XMLHttpRequest();
-	var file = slide.file;
-	this.uploadedSlide = slide;
-	this.previewImg = slide.img;
-	this.progressBar = slide.progressBar;
+	var file = item.file;
+	
 	var self = this;
 	
 	addListener(req.upload, 'progress', function(evt){self.progressHandler(evt);});

@@ -44,6 +44,12 @@ DDImageUploader.prototype.handleFiles = function(files) {
 	}
 };
 
+DDImageUploader.prototype.beforeUpload = function(slide) {
+	this.uploadedSlide = slide;
+	this.previewImg = slide.img;
+	this.progressBar = slide.progressBar;
+};
+
 
 // Methods about preview queue.
 DDImageUploader.prototype.previewQueuePush = function(slide) {
