@@ -2,8 +2,6 @@
 var DDFileUploaderBase;
 
 (function(){
-// nombre maximun d'image chargées en local
-var MAX_PREVIEW = 2;
 
 DDFileUploaderBase = function(dropbox, uploadUrl) {
 	this.dropbox = dropbox;
@@ -41,13 +39,7 @@ DDFileUploaderBase.prototype.drop = function(evt) {
 
 // Methods about upload
 DDFileUploaderBase.prototype.handleFiles = function(files) {
-	var file, i, slide;
-	for (i = 0; i < files.length; i++) {
-		file = files[i];
-		slide = this.createSlide(file);
-        this.previewQueuePush(slide);
-        this.uploadQueuePush(slide);
-	}
+	// To be implemented by descendant.
 };
 
 DDFileUploaderBase.prototype.upload = function(slide) {
@@ -121,31 +113,7 @@ DDFileUploaderBase.prototype.progressHandler = function(evt) {
 	}
 };
 
-// Method about queues
-
-DDFileUploaderBase.prototype.previewQueuePush = function(slide) {
-	this.previewQueue.push(slide);
-	if (!this._previewQueueRunning) {
-		this.startPreviewQueue();
-	}
-};
-
-DDFileUploaderBase.prototype.startPreviewQueue = function() {
-	this._previewQueueRunning = true;
-	this.previewQueueLoadNext();
-};
-
-DDFileUploaderBase.prototype.previewQueueLoadNext = function() {
-	if (this.previewQueue.length && this.previewsLoaded < MAX_PREVIEW) {
-		var slide = this.previewQueue.shift();
-		this.previewUploadedImage(slide);
-		this.previewsLoaded++;
-	}
-	else {
-		this._previewQueueRunning = false;
-	}
-};
-
+// Methods about queue
 DDFileUploaderBase.prototype.uploadQueuePush = function(slide) {
 	this.uploadQueue.push(slide);
 	if (!this._uploadQueueRunning) {
