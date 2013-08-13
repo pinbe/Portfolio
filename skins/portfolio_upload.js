@@ -50,6 +50,11 @@ DDImageUploader.prototype.beforeUpload = function(slide) {
 	this.progressBar = slide.progressBar;
 };
 
+DDImageUploader.prototype.progressHandlerCB = function(progress) {
+	this.updateProgressBar(progress);
+	var currentOpacity = this.previewImg.style.opacity;
+	this.previewImg.style.opacity = Math.max(currentOpacity, progress);
+};
 
 // Methods about preview queue.
 DDImageUploader.prototype.previewQueuePush = function(slide) {

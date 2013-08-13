@@ -111,12 +111,15 @@ DDFileUploaderBase.prototype.uploadCompleteHandler = function(req) {
 	this.uploadQueueLoadNext();
 };
 
+DDFileUploaderBase.prototype.progressHandlerCB = function(progress) {
+	// To be implemented by descendant.
+	// 0 <= progress <= 1
+};
+
 DDFileUploaderBase.prototype.progressHandler = function(evt) {
 	if (evt.lengthComputable) {
 		var progress = evt.loaded / evt.total;
-		this.updateProgressBar(progress);
-		var currentOpacity = this.previewImg.style.opacity;
-		this.previewImg.style.opacity = Math.max(currentOpacity, progress);
+		this.progressHandlerCB(progress);
 	}
 };
 
