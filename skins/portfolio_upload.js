@@ -1,7 +1,6 @@
 // © 2013 Benoît Pin MINES ParisTech
 
 var DDImageUploader;
-var MAX_PREVIEW = 2; // à virer
 
 (function(){
 // nombre maximun d'image chargées en local
@@ -48,6 +47,37 @@ DDImageUploader.prototype.beforeUpload = function(slide) {
 	this.uploadedSlide = slide;
 	this.previewImg = slide.img;
 	this.progressBar = slide.progressBar;
+};
+
+DDImageUploader.prototype.uploadCompleteHandlerCB = function(req) {
+	var slide = this.uploadedSlide;
+	this.uploadedSlide.removeChild(slide.label);
+    this.uploadedSlide.removeChild(slide.progressBar);
+	var fragment = getCopyOfNode(req.responseXML.documentElement.firstChild);
+	var img = fragment.getElementsByTagName('img')[0];
+	if (req.status === 200) {
+		// update
+		var existing = this.existingSlides[img.src];
+		if (existing) {
+			existing.src = existing.src + '?' + Math.random().toString();
+		}
+		slide.img.src = '';
+		slide.img.parentNode.removeChild(slide.img);
+		slide.img = undefined;
+		slide.parentNode.removeChild(slide);
+	}
+	else if(req.status === 201) {
+		// creation
+		img.onload = function(evt) {
+			// accelerate GC before replacing
+			slide.img.src = '';
+			slide.img.parentNode.removeChild(slide.img);
+			slide.img = undefined;
+			slide.parentNode.replaceChild(fragment, slide);
+		};
+	}
+	this.previewsLoaded--;
+	this.previewQueueLoadNext();
 };
 
 DDImageUploader.prototype.progressHandlerCB = function(progress) {
