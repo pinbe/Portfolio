@@ -126,7 +126,6 @@ DDFileUploaderBase.prototype.startUploadQueue = function() {
 	this.uploadQueueLoadNext();
 };
 
-
 DDFileUploaderBase.prototype.uploadQueueLoadNext = function() {
 	var slide = this.uploadQueue.shift();
 	if (slide) {
@@ -135,73 +134,6 @@ DDFileUploaderBase.prototype.uploadQueueLoadNext = function() {
 	else {
 		this._uploadQueueRunning = false;
 	}
-};
-
-
-// User interface
-DDFileUploaderBase.prototype.createSlide = function(file) {
-	var slide = document.createElement('span');
-	slide.file = file;
-
-	var a = document.createElement('a');
-	a.href = '#';
-	a.className = 'slide';
-
-	var img = document.createElement('img');
-	img.className = 'hidden';
-	var size = this.thumbnailSize;
-	var self = this;
-	img.onload = function(evt) {
-		if (img.width > img.height) { // landscape
-			img.height = Math.round(size * img.height / img.width);
-			img.width = size;
-		}
-		else {
-			img.width = Math.round(size * img.width / img.height);
-			img.height = size;
-		}
-		img.style.marginLeft = Math.floor((self.slideSize - img.width) / 2) + 'px';
-		img.style.marginTop = Math.floor((self.slideSize - img.height) / 2) + 'px';
-		img.style.opacity = 0.2;
-		img.className = undefined;
-	};
-	a.appendChild(img);
-	slide.img = img;
-	
-	var label = document.createElement('span');
-	slide.label = label;
-	label.className = 'label';
-	label.innerHTML = file.name;
-
-	var progressBar = document.createElement('span');
-	progressBar.className = 'upload-progress';
-	slide.progressBar = progressBar;
-
-	slide.appendChild(a);
-	slide.appendChild(progressBar);
-	slide.appendChild(label);
-	this.dropbox.appendChild(slide);
-	
-	return slide;
-};
-
-DDFileUploaderBase.prototype.updateProgressBar = function(progress) {
-	// 0 <= progress <= 1
-	var size = this.progressBarMaxSize * progress;
-	size = Math.round(size);
-	this.progressBar.style.width = size + 'px';
-};
-
-DDFileUploaderBase.prototype.previewUploadedImage = function(slide) {
-	var reader = new FileReader();
-	var size = this.thumbnailSize;
-	var self = this;
-	
-	reader.onload = function(evt) {
-		slide.img.src = evt.target.result;
-		setTimeout(function(){self.previewQueueLoadNext();}, 500);
-	};
-	reader.readAsDataURL(slide.file);
 };
 
 }());
