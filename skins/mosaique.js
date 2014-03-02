@@ -135,7 +135,7 @@ Mosaique.prototype.prepareScreen = function() {
 		position = 'absolute';
 		width = this.screenWidth - this.margins['right'] + 'px';
 		height = this.screenHeight - this.margins['bottom'] + 'px';
-		background = base_properties["backgroundColor"];
+		background = base_properties["contentBackgroundColor"];
 		overflow = 'hidden';
 	}
 	this.screenArea.insertBefore(mask, this.screenArea.firstChild);
