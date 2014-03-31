@@ -11,8 +11,8 @@ DDImageUploader = function(dropbox, uploadUrl, options) {
 	DDFileUploaderBase.apply(this, [dropbox, uploadUrl]);
 
 	this.existingSlides = this.indexExistingSlides();
-	this.slideSize = options.slideSize || 222;
-	this.progressBarMaxSize = this.slideSize - 22 || 200; // pixels
+	this.slideSize = options.slideSize || 222; // pixels
+	this.progressBarMaxSize = this.slideSize - 22 || 200; 
 	this.thumbnailSize = options.thumbnailSize || 180;
 	this.previewQueue = [];
 	this._previewQueueRunning = false;
