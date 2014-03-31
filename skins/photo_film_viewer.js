@@ -94,7 +94,7 @@ FilmSlider.prototype.resizeSlider = function(evt) {
 	var sliderWidth = filmBarWidth * sliderRatio;
 	this.rail.style.width = filmBarWidth + 'px';
 	this.rail.style.display = 'block';
-  	this.rail.style.visibility = 'visible';
+	this.rail.style.visibility = 'visible';
 	if (sliderRatio < 1) {
 		this.slider.style.width = Math.round(sliderWidth) + 'px';
 		this.slider.style.visibility = 'visible';
@@ -103,7 +103,7 @@ FilmSlider.prototype.resizeSlider = function(evt) {
 		this.slider.style.visibility = 'hidden';
 	}
 	
-	this.winSize = {'width'  : getWindowWidth(),
+	this.winSize = {'width'	 : getWindowWidth(),
 					'height' : getWindowHeight()};
 	this.maxRightPosition = filmBarWidth - sliderWidth
 	this.sliderSpeedRatio = - (filmBarWidth - sliderWidth) / (filmWidth - filmBarWidth);
@@ -305,12 +305,13 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 		disableDefault(evt);
 		disablePropagation(evt);
 		target.blur();
+        history.pushState(target.href, '', target.href);
 		
 		var imgBaseUrl = target.href;
 		var canonicalImgUrl;
 		if (this.ctxUrlTranslation[0])
 			canonicalImgUrl = imgBaseUrl.replace(this.ctxUrlTranslation[0],
-											 	 this.ctxUrlTranslation[1]);
+												 this.ctxUrlTranslation[1]);
 		else
 			canonicalImgUrl = imgBaseUrl;
 		
