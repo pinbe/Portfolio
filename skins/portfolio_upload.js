@@ -7,13 +7,13 @@ var DDImageUploader;
 var MAX_PREVIEW = 2;
 var isThumbnail = /.*\/getThumbnail$/;
 
-DDImageUploader = function(dropbox, uploadUrl) {
+DDImageUploader = function(dropbox, uploadUrl, options) {
 	DDFileUploaderBase.apply(this, [dropbox, uploadUrl]);
 
 	this.existingSlides = this.indexExistingSlides();
-	this.slideSize = 222;
-	this.progressBarMaxSize = 200; // pixels
-	this.thumbnailSize = 180;
+	this.slideSize = options.slideSize || 222;
+	this.progressBarMaxSize = this.slideSize - 22 || 200; // pixels
+	this.thumbnailSize = options.thumbnailSize || 180;
 	this.previewQueue = [];
 	this._previewQueueRunning = false;
 	this.previewsLoaded = 0;

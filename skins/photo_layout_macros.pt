@@ -86,15 +86,17 @@
       </div>
       <br clear="all"/>
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
-      <script type="text/javascript">
-      // <!--
+      <script type="text/javascript" tal:content="python:'''
       (function(){
         var lb = document.getElementById('lightbox');
         var uploadUrl = absolute_url() + '/put_upload';
         new Lightbox(lb);
-        new DDImageUploader(lb, uploadUrl);
+        var options = {'slideSize' : %(slideSize)d,
+                       'thumbnailSize' : %(thumbnailSize)d};
+        new DDImageUploader(lb, uploadUrl, options);
       })();
-      // -->
+      ''' % {'slideSize' : portal_object.slide_size,
+             'thumbnailSize' : portal_object.thumb_size}">
       </script>
     </div>
 

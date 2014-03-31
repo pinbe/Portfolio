@@ -307,7 +307,7 @@ div.lightbox {
   border-radius:3px;
   width:0;
   margin-left:11px;
-  top:208px;
+  top:<dtml-var expr="slide_size - 8">px;
 }
 
 .lightbox span.label {
