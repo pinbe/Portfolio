@@ -129,7 +129,7 @@ table.metadata_category select:focus {
   background: &dtml-portfolio_slide_background;;
   color: &dtml-fontColor;;
   display:block;
-  width: <dtml-var expr="thumb_width + 16">px;/*&dtml-slide_size;px;*/
+  width: <dtml-var expr="thumb_size + 16">px;/*&dtml-slide_size;px;*/
   height: 256px;
   display:block;
   text-align:center;
@@ -336,7 +336,7 @@ div.lightbox {
   overflow:hidden;
   position:relative;
   width:100%;
-  height: <dtml-var expr="thumb_height/2 + 12">px;;
+  height: <dtml-var expr="thumb_size/2 + 12">px;;
 }
 
 #film_bar table {
@@ -350,8 +350,8 @@ div.lightbox {
 }
 
 #film_bar a {
-  width: <dtml-var expr="thumb_width/2 + 10">px;;
-  height: <dtml-var expr="thumb_height/2 + 10">px;;
+  width: <dtml-var expr="thumb_size/2 + 10">px;;
+  height: <dtml-var expr="thumb_size/2 + 10">px;;
   display:block;
   text-align:center;
   vertical-align:middle;

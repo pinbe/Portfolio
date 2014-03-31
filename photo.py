@@ -29,7 +29,7 @@ from Products.CMFCore.DynamicType import DynamicType
 from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
 from Products.Photo.Photo import Photo as BasePhoto
 from Products.CMFDefault.DublinCore import DefaultDublinCoreImpl
-from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getToolByName, getUtilityByInterfaceName
 from Products.Photo.cache import memoizedmethod
 from Products.DCWorkflow.utils import modifyRolesForPermission
 from interfaces import IPhoto
@@ -214,4 +214,14 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 	
 InitializeClass(Photo)
 
-PhotoFactory = Factory(Photo)
+class _PhotoFactory(Factory) :
+    def __call__(self, *args, **kw):
+        if not kw.has_key('thumb_height') or not kw.has_key('thumb_width') :
+            utool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IURLTool')
+            portal = utool.getPortalObject()
+            size = portal.getProperty('thumb_size')
+            kw.update({'thumb_height' : size, 'thumb_width' : size })
+        return self._callable(*args, **kw)
+    
+
+PhotoFactory = _PhotoFactory(Photo)

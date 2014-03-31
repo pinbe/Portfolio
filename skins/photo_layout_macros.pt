@@ -102,7 +102,7 @@
     <div metal:define-macro="film_bar" tal:omit-tag="">
       <div id="film_bar">
         <table cellspacing="0">
-          <tr tal:define="slide_size python:portal_object.thumb_height/2 + 10">
+          <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10">
             <td tal:repeat="info contextInfos/infos">
                 <a href="." tal:attributes="href info/href;
                                             class info/className;
@@ -145,7 +145,7 @@
           })();
           ''' % {'filmLength': len(contextInfos['infos'])
                 ,'center': index
-                ,'slideSize': portal_object.thumb_width/2 + 11
+                ,'slideSize': portal_object.thumb_size/2 + 11
                 ,'reBaseCtxUrl':contextInfos['reBaseCtxUrl']
                 ,'canonicalUrl':contextInfos['canonicalUrl']
                 }">
