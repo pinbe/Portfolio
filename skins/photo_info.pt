@@ -32,7 +32,7 @@
 		</tr>
 		<tr>
 			<th i18n:translate="">Dimensions</th>
-			<td><span tal:replace="here/width">width</span> x <span tal:replace="here/height">height</span></td>
+			<td><span tal:replace="here/width">width</span> × <span tal:replace="here/height">height</span></td>
 		</tr>
 	</table>
 </div>
