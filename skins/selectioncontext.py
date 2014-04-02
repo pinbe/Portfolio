@@ -60,7 +60,8 @@ if ajax == True :
     photoPath = list(photo.getPhysicalPath())
     photoPath.insert(portalDepth, 'selectioncontext')
     options['lastBcUrl'] = toUrl(photoPath)
-    meth = getattr(photo, 'photo_view_ajax_template')
+    app = context.restrictedTraverse('/')
+    meth = app.restrictedTraverse(photo.getPhysicalPath() + ('photo_view_ajax_template',))
     return meth(req, resp, **options)
 
 
@@ -134,5 +135,6 @@ options['breadcrumbs'] = breadcrumbs
 
 ti = photo.getTypeInfo()
 method_id = ti.queryMethodID('view', context=photo)
-meth = getattr(photo, method_id)
+app = context.restrictedTraverse('/')
+meth = app.restrictedTraverse(photo.getPhysicalPath() + (method_id,))
 return meth(req, resp, **options)
