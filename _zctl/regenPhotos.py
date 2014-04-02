@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
+import os
 from AccessControl import getSecurityManager
 from Testing.makerequest import makerequest
 from zope.globalrequest import setRequest
@@ -11,7 +12,7 @@ import transaction
 GET_RI_SIGNATURE = (('size', 1), ('keepAspectRatio', 2))
 
 
-def main(app, portal_path, userid) :
+def main(app, portal_path, userid, skipfile) :
     portal = app.unrestrictedTraverse(portal_path)
     portal = makerequest(portal)
     setRequest(portal.REQUEST)
@@ -20,10 +21,23 @@ def main(app, portal_path, userid) :
     sm = getSecurityManager()
     sm._context.user = user
     
-    thumb_size = portal.thumb_size
+    absSkipFilePath = os.path.abspath(os.path.expanduser(skipfile))
+    if os.path.exists(absSkipFilePath) :
+        skipFile = open(absSkipFilePath, 'r+')
+        skip = filter(None, skipFile.readlines())
+        _skipDict = dict([(path.strip(), True) for path in skip])
+        del skip
+    else :
+        skipFile = open(absSkipFilePath, 'w')
+        _skipDict = {}
+
+    toSkip = _skipDict.has_key
     
+    
+    thumb_size = portal.thumb_size
     ctool = portal.portal_catalog
     brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=1)
+    brains = [b for b in brains if not toSkip(b.getPath())]
 
     while brains :
         try :
@@ -83,15 +97,15 @@ def main(app, portal_path, userid) :
                     except AttributeError:
                         pass
                     
-                    # _skipDict[path] = True
-                    # skipFile.write('%s\n' % path)
+                    _skipDict[path] = True
+                    skipFile.write('%s\n' % path)
 
                 except ConflictError :
                     print 'Resync after ZODB ConflicError'
                     transaction.abort()
                     portal._p_jar.sync()
                     brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=1)
-                    # brains = [b for b in brains if not toSkip(b.getPath())]
+                    brains = [b for b in brains if not toSkip(b.getPath())]
                     break
 
                 except KeyboardInterrupt:
@@ -109,19 +123,19 @@ def main(app, portal_path, userid) :
             print 'Objects deleted during processing'
             portal._p_jar.sync()
             brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=1)
-            # brains = [b for b in brains if not toSkip(b.getPath())]
+            brains = [b for b in brains if not toSkip(b.getPath())]
 
         except ConflictError :
             print 'Resync after ZODB ConflicError'
             transaction.abort()
             portal._p_jar.sync()
             brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=1)
-            # brains = [b for b in brains if not toSkip(b.getPath())]
+            brains = [b for b in brains if not toSkip(b.getPath())]
 
         except KeyboardInterrupt:
-            # skipFile.close()
             break
-
+        
+    skipFile.close()
     
     
 
@@ -129,6 +143,13 @@ if __name__ == '__main__':
     parser = ArgumentParser(description="Thumbnails regeneration")
     parser.add_argument('portal_path', help='portal object path')
     parser.add_argument('userid', help='zope user id')
+    parser.add_argument('--skipfile',
+                        type=str,
+                        required=False,
+                        default='skipfile.txt',
+                        help="File that log work's progress.")
     args = parser.parse_args()
-    portal_path, userid = args.portal_path, args.userid
-    main(app, portal_path, userid)
+    main(app,
+         args.portal_path,
+         args.userid,
+         args.skipfile)
