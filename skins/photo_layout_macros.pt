@@ -5,12 +5,12 @@
   </head>
   <body>
     <div metal:define-macro="grid"
-         tal:define="slide_size portal_object/slide_size;"
+         tal:define="slide_size portal_object/slide_size;
+                     mayBeDropable exists:dropable;
+                     dropable python:True if mayBeDropable and dropable else False"
          i18n:domain="portfolio">
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
       <div id="lightbox"
-           tal:define="mayBeDropable exists:dropable;
-                       dropable python:True if mayBeDropable and dropable else False"
            tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
         <span tal:repeat="info infos" tal:omit-tag="">
           <span tal:define="size info/thumbSize;
