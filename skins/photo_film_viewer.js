@@ -20,7 +20,7 @@ FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 	var thisSlider = this;
 	this.filmBar = filmBar;
 	var film = filmBar.firstChild;
-	if (film.nodeType == 3)
+	if (film.nodeType === 3)
 		film = film.nextSibling;
 	this.film = film;
 	this.slider = slider;
@@ -209,12 +209,12 @@ FilmSlider.prototype.loadSibling = function(previous) {
 	var slide = null;
 	if (previous) {
 		slide = this.selectedSlide.parentNode.previousSibling;
-		if (slide && slide.nodeType==3)
+		if (slide && slide.nodeType===3)
 			slide = slide.previousSibling;
 	}
 	else {
 		slide = this.selectedSlide.parentNode.nextSibling;
-		if (slide && slide.nodeType==3)
+		if (slide && slide.nodeType===3)
 			slide = slide.nextSibling;
 	}
 	
@@ -303,7 +303,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 	if (target.tagName != 'A')
 		return;
 	else {
-		if (this.viewMode == 'full') {
+		if (this.viewMode === 'full') {
 			this.mosaique.unload();
 			this.mosaique = null;
 			this.viewMode = 'medium';
@@ -335,7 +335,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 
 		var toggleSelectionBtn = this.buttons['toggle_selection'];
 		var toggleSelectionLink = toggleSelectionBtn.parentNode;
-		this.selectedSlideInSelection = (target.className=='selected');
+		this.selectedSlideInSelection = (target.className==='selected');
 		if (this.selectedSlideInSelection) {
 			toggleSelectionBtn.src = portal_url() + '/unselect_flag_btn.gif';
 			toggleSelectionBtn.alt = toggleSelectionLink.title = 'Retirer de la sélection';
@@ -379,7 +379,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 					break;
 				case 4 :
 					hideProgressImage();
-					if (req.status == '200')
+					if (req.status === '200')
 						thisFS.populateViewer(req);
 					else
 						//window.location.href = target.href;
@@ -399,7 +399,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 
 		for (i in classes) {
 			name = classes[i];
-			if (name == 'displayed')
+			if (name === 'displayed')
 				continue;
 			else
 				newClasses.push(name);
@@ -418,7 +418,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 
 FilmSlider.prototype.toolbarClickHandler = function(evt) {
 	var target = getTargetedObject(evt);
-	if(target.tagName == 'IMG' && target.getAttribute('name')){
+	if(target.tagName === 'IMG' && target.getAttribute('name')){
 		switch(target.getAttribute('name')) {
 			case 'previous' :
 				disableDefault(evt);
@@ -440,7 +440,7 @@ FilmSlider.prototype.toolbarClickHandler = function(evt) {
 				disableDefault(evt);
 				disablePropagation(evt);
 				target.parentNode.blur();
-				if (this.viewMode == 'full') {
+				if (this.viewMode === 'full') {
 					this.mosaique.unload();
 					this.mosaique = null;
 					this.viewMode = 'medium';
@@ -516,7 +516,7 @@ FilmSlider.prototype.toolbarClickHandler = function(evt) {
 				disableDefault(evt);
 				disablePropagation(evt);
 				target.blur();
-				if (this.viewMode == 'full') {
+				if (this.viewMode === 'full') {
 					this.mosaique.unload();
 					this.mosaique = null;
 					this.viewMode = 'medium';
@@ -576,7 +576,7 @@ FilmSlider.prototype.keyDownHandler = function(evt) {
 
 FilmSlider.prototype.keyPressHandler = function(evt) {
 	var target = getTargetedObject(evt);
-	if (target.tagName == 'INPUT' || target.tagName== 'TEXTAREA')
+	if (target.tagName === 'INPUT' || target.tagName=== 'TEXTAREA')
 		return;
 	var evt = getEventObject(evt);
 	var charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
@@ -602,9 +602,9 @@ FilmSlider.prototype.populateViewer = function(req) {
 				link.href = element.getAttribute('backToContextUrl');
 				link = this.buttons['show_buyable'].parentNode;
 				var buyable = element.getAttribute('buyable');
-				if(buyable == 'True')
+				if(buyable === 'True')
 					link.className = null;
-				else if(buyable == 'False')
+				else if(buyable === 'False')
 					link.className = 'hidden';
 				this.image.alt = element.getAttribute('alt');
 				this.updateBreadcrumbs(element.getAttribute('lastBcUrl'),
@@ -640,7 +640,7 @@ FilmSlider.prototype.startSlideShow = function() {
 
 FilmSlider.prototype.slideShowNext = function() {
 	var nextSlide = this.slideShowSlide.parentNode.nextSibling;
-	if (nextSlide && nextSlide.nodeType==3)
+	if (nextSlide && nextSlide.nodeType===3)
 		nextSlide = nextSlide.nextSibling;	
 
 	if (nextSlide) {
@@ -651,7 +651,7 @@ FilmSlider.prototype.slideShowNext = function() {
 	else {
 		var row = this.slideShowSlide.parentNode.parentNode;
 		var first = row.firstChild;
-		if (first.nodeType==3)
+		if (first.nodeType===3)
 			first = first.nextSibling;
 		this.pendingSlideShowSlide = first.getElementsByTagName('a')[0];
 		return this.pendingSlideShowSlide.href;
@@ -660,7 +660,7 @@ FilmSlider.prototype.slideShowNext = function() {
 
 FilmSlider.prototype.slideShowPrevious = function() {
 	var previousSlide = this.slideShowSlide.parentNode.previousSibling;
-	if (previousSlide && previousSlide.nodeType==3)
+	if (previousSlide && previousSlide.nodeType===3)
 		previousSlide = previousSlide.previousSibling;
 
 	if (previousSlide) {
@@ -671,7 +671,7 @@ FilmSlider.prototype.slideShowPrevious = function() {
 	else {
 		var row = this.slideShowSlide.parentNode.parentNode;
 		var last = row.lastChild;
-		if (last.nodeType==3)
+		if (last.nodeType===3)
 			last = last.previousSibling;
 		this.pendingSlideShowSlide = last.getElementsByTagName('a')[0];
 		return this.pendingSlideShowSlide.href;
