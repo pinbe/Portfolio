@@ -357,7 +357,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 					break;
 				case 4 :
 					hideProgressImage();
-					if (req.status === '200') { thisFS.populateViewer(req); }
+					if (req.status === 200) { thisFS.populateViewer(req); }
 					break;
 			}
 		};
