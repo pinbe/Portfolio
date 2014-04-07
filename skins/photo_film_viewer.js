@@ -1,9 +1,7 @@
 /*
-* © 2008-2014 Benoît Pin – Centre de recherche en informatique – MINES ParisTech
-* http://plinn.org
-* Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-* 
-* 
+copyright 2008-2014 Benoit Pin - Centre de recherche en informatique - MINES ParisTech
+http://plinn.org
+Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
 
 var FilmSlider;
@@ -333,10 +331,10 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 		this.cartSlide.style.visibility='hidden';
 		
 		
-		var metadataButton = this.buttons.edit_metadata
+		var metadataButton = this.buttons.edit_metadata;
 		if (metadataButton) {
 			var metadataEditLink = metadataButton.parentNode;
-			metadataEditLink.href = canonicalImgUrl + '/photo_edit_form'
+			metadataEditLink.href = canonicalImgUrl + '/photo_edit_form';
 		}
 		
 
@@ -360,11 +358,8 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 				case 4 :
 					hideProgressImage();
 					if (req.status === '200') { thisFS.populateViewer(req); }
-					// else
-					//	//window.location.href = target.href;
-					//	console.error(ajaxUrl);
-
-			};
+					break;
+			}
 		};
 
 		req.open("GET", ajaxUrl, true);
@@ -376,13 +371,14 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 		var newClasses = [];
 		var name, i;
 
-		for (i in classes) {
+		for (i=0 ; i<classes.length ;  i++) {
 			name = classes[i];
-			if (name === 'displayed') { continue; }
-			else { newClasses.push(name); }
+			if (name !== 'displayed') {
+				newClasses.push(name);
+			}
 		}
 		
-		this.selectedSlide.className = newClasses.join(' ')
+		this.selectedSlide.className = newClasses.join(' ');
 		
 		// hightlight new displayed slide
 		this.selectedSlide = target;
@@ -395,21 +391,22 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 
 FilmSlider.prototype.toolbarClickHandler = function(evt) {
 	var target = getTargetedObject(evt);
+	var button, link, url;
 	if(target.tagName === 'IMG' && target.getAttribute('name')) {
 		switch(target.getAttribute('name')) {
 			case 'previous' :
 				disableDefault(evt);
 				disablePropagation(evt);
-				var button = target;
-				var link = button.parentNode;
+				button = target;
+				link = button.parentNode;
 				link.blur();
 				this.loadSibling(true);
 				break;
 			case 'next' : 
 				disableDefault(evt);
 				disablePropagation(evt);
-				var button = target;
-				var link = button.parentNode;
+				button = target;
+				link = button.parentNode;
 				link.blur();
 				this.loadSibling(false);
 				break;
@@ -424,7 +421,7 @@ FilmSlider.prototype.toolbarClickHandler = function(evt) {
 					return;
 				}
 				var main = document.getElementById('photo_viewer');
-				var url = target.parentNode.href;
+				url = target.parentNode.href;
 				url = url.substring(0, url.length - '/zoom_view'.length);
 				var margins = {'top':0, 'right':-1, 'bottom':0, 'left':0};
 				this.mosaique = new Mosaique(main, url, margins);
@@ -434,12 +431,12 @@ FilmSlider.prototype.toolbarClickHandler = function(evt) {
 			case 'toggle_selection':
 				disableDefault(evt);
 				disablePropagation(evt);
-				var button = target;
-				var link = button.parentNode;
+				button = target;
+				link = button.parentNode;
 				link.blur();
 				
 				var req = new XMLHttpRequest();
-				var url = link.href;
+				url = link.href;
 				req.open("POST", url, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 				req.send("ajax=1");
@@ -469,8 +466,8 @@ FilmSlider.prototype.toolbarClickHandler = function(evt) {
 			case 'show_buyable':
 				disableDefault(evt);
 				disablePropagation(evt);
-				var button = target;
-				var link = button.parentNode;
+				button = target;
+				link = button.parentNode;
 				link.blur();
 				var slide = this.cartSlide;
 				slide.innerHTML = '';
@@ -537,7 +534,7 @@ else if (browser.isIE6up) {
 }
 
 FilmSlider.prototype.keyDownHandler = function(evt) {
-	var evt = getEventObject(evt);
+	evt = getEventObject(evt);
 	switch (evt.keyCode) {
 		case keyLeft :
 			this.loadSibling(true);
@@ -554,7 +551,7 @@ FilmSlider.prototype.keyDownHandler = function(evt) {
 FilmSlider.prototype.keyPressHandler = function(evt) {
 	var target = getTargetedObject(evt);
 	if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') { return; }
-	var evt = getEventObject(evt);
+	evt = getEventObject(evt);
 	var charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
 	switch(charPress) {
 		case 'f':
@@ -566,7 +563,8 @@ FilmSlider.prototype.keyPressHandler = function(evt) {
 
 FilmSlider.prototype.populateViewer = function(req) {
 	var elements = req.responseXML.documentElement.childNodes;
-	for(var i=0 ; i < elements.length ; i++ ) {
+	var i;
+	for(i=0 ; i < elements.length ; i++ ) {
 		element = elements[i];
 		switch (element.nodeName) {
 			case 'fragment' :
@@ -622,8 +620,7 @@ FilmSlider.prototype.slideShowNext = function() {
 	else {
 		var row = this.slideShowSlide.parentNode.parentNode;
 		var first = row.firstChild;
-		if (first.nodeType===3)
-			first = first.nextSibling;
+		if (first.nodeType===3) { first = first.nextSibling; }
 		this.pendingSlideShowSlide = first.getElementsByTagName('a')[0];
 		return this.pendingSlideShowSlide.href;
 	}
@@ -653,7 +650,7 @@ FilmSlider.prototype.slideShowImageLoaded = function() {
 
 FilmSlider.prototype.stopSlideShow = function() {
 	raiseMouseEvent(this.slideShowSlide, 'click');
-	var index = parseInt(this.selectedSlide.getAttribute('portfolio:position'));
+	var index = parseInt(this.selectedSlide.getAttribute('portfolio:position'), 10);
 	this.centerSlide(index);
 };
 
@@ -665,7 +662,7 @@ function Point(x, y) {
 }
 Point.prototype.diff = function(point) { return new Point(this.x - point.x, this.y - point.y); };
 Point.prototype.add = function(point) { return new Point(this.x + point.x, this.y + point.y); };
-Point.prototype.mul = function(k) { return new Point(this.x * k, this.y *k)};
+Point.prototype.mul = function(k) { return new Point(this.x * k, this.y *k); };
 Point.prototype.toString = function() { return "(" + String(this.x) + ", " + String(this.y) + ")"; };
 
-})();
+}());
