@@ -333,7 +333,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 		this.cartSlide.style.visibility='hidden';
 		
 		
-		var metadataButton = this.buttons['edit_metadata']
+		var metadataButton = this.buttons.edit_metadata
 		if (metadataButton) {
 			var metadataEditLink = metadataButton.parentNode;
 			metadataEditLink.href = canonicalImgUrl + '/photo_edit_form'
@@ -559,7 +559,7 @@ FilmSlider.prototype.keyPressHandler = function(evt) {
 	switch(charPress) {
 		case 'f':
 		case 'F':
-			raiseMouseEvent(this.buttons['full_screen'], 'click');
+			raiseMouseEvent(this.buttons.full_screen, 'click');
 			break;
 	}
 };
@@ -574,9 +574,9 @@ FilmSlider.prototype.populateViewer = function(req) {
 				if (dest) { dest.innerHTML = element.firstChild.nodeValue; }
 				break;
 			case 'imageattributes' :
-				var link = this.buttons['back_to_portfolio'].parentNode;
+				var link = this.buttons.back_to_portfolio.parentNode;
 				link.href = element.getAttribute('backToContextUrl');
-				link = this.buttons['show_buyable'].parentNode;
+				link = this.buttons.show_buyable.parentNode;
 				var buyable = element.getAttribute('buyable');
 				if(buyable === 'True') { link.className = null; }
 				else if(buyable === 'False') { link.className = 'hidden'; }
