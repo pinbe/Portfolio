@@ -86,7 +86,9 @@
       </div>
       <br clear="all"/>
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
-      <script type="text/javascript" tal:content="python:'''
+      <script type="text/javascript"
+              tal:condition="dropable"
+              tal:content="python:'''
       (function(){
         var lb = document.getElementById('lightbox');
         var uploadUrl = absolute_url() + '/put_upload';
