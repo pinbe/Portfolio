@@ -1,5 +1,5 @@
 /*
-* © 2008 Benoît Pin – Centre de recherche en informatique – École des mines de Paris
+* © 2008-2014 Benoît Pin – Centre de recherche en informatique – MINES ParisTech
 * http://plinn.org
 * Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 * 
@@ -36,10 +36,16 @@ FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 	
 	this.buttons = new Array();
 	this.toolbar = toolbar;
-	var bcElements = breadcrumbs.getElementsByTagName('a');
-	this.lastBCElement = bcElements[bcElements.length-1];
-	var imgSrcParts = image.src.split('/');
-	this.lastBCElement.innerHTML = imgSrcParts[imgSrcParts.length-2];
+	if (breadcrumbs) {
+		var bcElements = breadcrumbs.getElementsByTagName('a');
+		this.lastBCElement = bcElements[bcElements.length-1];
+		var imgSrcParts = image.src.split('/');
+		this.lastBCElement.innerHTML = imgSrcParts[imgSrcParts.length-2];
+		this.hasBreadcrumbs = true;
+	}
+	else {
+		this.hasBreadcrumbs = false;
+	}
 	
 	var buttons = toolbar.getElementsByTagName('img');
 	var b, name;
@@ -589,7 +595,7 @@ FilmSlider.prototype.populateViewer = function(req) {
 		switch (element.nodeName) {
 			case 'fragment' :
 				var dest = document.getElementById(element.getAttribute('id'));
-				dest.innerHTML = element.firstChild.nodeValue;
+				if (dest) { dest.innerHTML = element.firstChild.nodeValue; }
 				break;
 			case 'imageattributes' :
 				var link = this.buttons['back_to_portfolio'].parentNode;
@@ -601,8 +607,8 @@ FilmSlider.prototype.populateViewer = function(req) {
 				else if(buyable == 'False')
 					link.className = 'hidden';
 				this.image.alt = element.getAttribute('alt');
-				this.lastBCElement.href = element.getAttribute('lastBcUrl');
-				this.lastBCElement.innerHTML = element.getAttribute('img_id');
+				this.updateBreadcrumbs(element.getAttribute('lastBcUrl'),
+									   element.getAttribute('img_id'));
 				break;
 		}
 	}
@@ -618,6 +624,13 @@ FilmSlider.prototype.refreshImage = function() {
 		this.image.parentNode.className = 'selected';
 	else
 		this.image.parentNode.className = '';
+};
+
+FilmSlider.prototype.updateBreadcrumbs = function(url, title) {
+	if (this.hasBreadcrumbs) {
+		this.lastBCElement.href = element.getAttribute('lastBcUrl');
+		this.lastBCElement.innerHTML = element.getAttribute('img_id');
+	}
 };
 
 FilmSlider.prototype.startSlideShow = function() {
