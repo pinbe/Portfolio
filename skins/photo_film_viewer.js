@@ -17,6 +17,7 @@ var DEFAULT_IMAGE_SIZES = [500, 600, 800];
 FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 	var thisSlider = this;
 	this.filmBar = filmBar;
+	this.filmBarWidth = getObjectWidth(this.filmBar);
 	var film = filmBar.firstChild;
 	if (film.nodeType === 3) { film = film.nextSibling; }
 	this.film = film;
@@ -78,13 +79,8 @@ FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 
 
 FilmSlider.prototype.resizeSlider = function(evt) {
-	var filmBarWidth = getObjectWidth(this.filmBar);
-	if (!filmBarWidth) {
-		var thisSlider = this;
-		addListener(window, 'load', function(evt){thisSlider.resizeSlider(evt);});
-		return;
-	}
-	
+	var filmBarWidth = this.filmBarWidth;
+	if (!filmBarWidth) { return; }
 	var filmWidth = this.slideSize * this.filmLength;
 	var sliderRatio = this.sliderRatio =  filmBarWidth / filmWidth;
 	var sliderWidth = filmBarWidth * sliderRatio;
@@ -108,6 +104,39 @@ FilmSlider.prototype.resizeSlider = function(evt) {
 		this.selectedSlide = this.filmBar.getElementsByTagName('img')[this.center].parentNode;
 		this.initialized = true;
 	}
+};
+
+FilmSlider.prototype._checkSizeAfterLoad = function(evt) {
+	this._barSizes = [];
+	this.filmBarWidth = this._barSizes[this._barSizes.length] = getObjectWidth(this.filmBar);
+	this.resizeSlider();
+	var self = this;
+	this._checkSizeIntervalId = setInterval(function(evt){self._checkSize(evt);}, 25);
+	setTimeout(function(evt){self._checkSizeStability();}, 250);
+};
+
+FilmSlider.prototype._checkSize = function(evt) {
+	this._barSizes[this._barSizes.length] = getObjectWidth(this.filmBar);
+	if (this._barSizes.length >= 2 &&
+		this._barSizes[this._barSizes.length-2] !== this._barSizes[this._barSizes.length-1]) {
+		this.filmBarWidth = this._barSizes[this._barSizes.length-1];
+		this.initialized = false;
+		this.resizeSlider();
+	}
+};
+
+FilmSlider.prototype._checkSizeStability = function(evt) {
+	var self = this;
+	var i;
+	for (i=0 ; i<this._barSizes.length - 1 ; i++) {
+		if (this._barSizes[i] !== this._barSizes[i+1]) {
+			this._barSizes = [];
+			setTimeout(function(evt){self._checkSizeStability();}, 250);
+			return;
+		}
+	}
+	clearInterval(this._checkSizeIntervalId);
+	delete this._barSizes, this._checkSizeIntervalId;
 };
 
 FilmSlider.prototype.fitToScreen = function(evt) {
@@ -216,6 +245,7 @@ FilmSlider.prototype.addEventListeners = function() {
 	addListener(this.filmBar, 'click', function(evt){thisSlider.thumbnailClickHandler(evt);});
 	addListener(this.toolbar, 'click', function(evt){thisSlider.toolbarClickHandler(evt);});
 	addListener(window, 'load', function(evt){thisSlider.fitToScreen(evt);});
+	addListener(window, 'load', function(evt){thisSlider._checkSizeAfterLoad(evt);});
 	
 	// dd listeners
 	addListener(this.slider, 'mousedown', this.ddHandlers.down);
