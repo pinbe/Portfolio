@@ -136,7 +136,8 @@ FilmSlider.prototype._checkSizeStability = function(evt) {
 		}
 	}
 	clearInterval(this._checkSizeIntervalId);
-	delete this._barSizes, this._checkSizeIntervalId;
+	delete this._barSizes;
+	delete this._checkSizeIntervalId;
 };
 
 FilmSlider.prototype.fitToScreen = function(evt) {
