@@ -262,7 +262,7 @@ div.lightbox {
 
 /* slide del */
 .lightbox .slide-del {
-  margin-left:200px;
+  margin-left:<dtml-var expr="slide_size - 22">px;
   margin-top:5px;
   width:18px;
   height:19px;
