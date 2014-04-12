@@ -86,18 +86,22 @@
       </div>
       <br clear="all"/>
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
+      <script type="text/javascript" tal:condition="not:dropable">
+        new Lightbox(document.getElementById('lightbox'));
+      </script>
       <script type="text/javascript"
               tal:condition="dropable"
-              tal:content="python:'''
+              tal:content="structure python:'''
       (function(){
         var lb = document.getElementById('lightbox');
-        var uploadUrl = absolute_url() + '/put_upload';
         new Lightbox(lb);
+        var uploadUrl = '%(putUrl)s';
         var options = {'slideSize' : %(slideSize)d,
                        'thumbnailSize' : %(thumbnailSize)d};
         new DDImageUploader(lb, uploadUrl, options);
       })();
-      ''' % {'slideSize' : portal_object.slide_size,
+      ''' % {'putUrl' : '%s/put_upload' % here.absolute_url(),
+             'slideSize' : portal_object.slide_size,
              'thumbnailSize' : portal_object.thumb_size}">
       </script>
     </div>
