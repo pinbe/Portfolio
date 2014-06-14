@@ -129,8 +129,8 @@ table.metadata_category select:focus {
   background: &dtml-portfolio_slide_background;;
   color: &dtml-fontColor;;
   display:block;
-  width: <dtml-var expr="thumb_size + 16">px;/*&dtml-slide_size;px;*/
-  height: 256px;
+  width: <dtml-var expr="thumb_size + 16">px;
+  height: <dtml-var expr="thumb_size + 102">px;
   display:block;
   text-align:center;
   float:left;
