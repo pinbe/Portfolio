@@ -153,7 +153,7 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
 	@memoizedmethod()
 	def DateTimeOriginal(self) :
 		""" return DateTimeOriginal exif tag value or created """
-		dto = self.getXmpValue('exif:DateTimeOriginal')
+		dto = self.getXmpValue('exif:DateTimeOriginal') or self.getXmpValue('xmp:CreateDate')
 		if dto :
 			return DateTime(dto)
 		else :
