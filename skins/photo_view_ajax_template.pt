@@ -7,8 +7,8 @@
            xmlns:metal="http://xml.zope.org/namespaces/metal">
   <div metal:use-macro="here/main_template_macros/macros/global_defines" tal:omit-tag=""/>
   <imageattributes tal:attributes="alt here/Title;
-                                   backToContextUrl options/backToContextUrl;
-                                   lastBcUrl options/lastBcUrl;
+                                   back_to_context_url options/backToContextUrl;
+                                   last_bc_url options/lastBcUrl;
                                    img_id imgId;
                                    buyable options/buyable"/>
   <fragment id="image_metadata"><span tal:replace="structure string:&lt;![CDATA[" />

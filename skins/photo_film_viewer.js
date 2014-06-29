@@ -604,13 +604,13 @@ FilmSlider.prototype.populateViewer = function(req) {
 				break;
 			case 'imageattributes' :
 				var link = this.buttons.back_to_portfolio.parentNode;
-				link.href = element.getAttribute('backToContextUrl');
+				link.href = element.getAttribute('back_to_context_url');
 				link = this.buttons.show_buyable.parentNode;
 				var buyable = element.getAttribute('buyable');
 				if(buyable === 'True') { link.className = null; }
 				else if(buyable === 'False') { link.className = 'hidden'; }
 				this.image.alt = element.getAttribute('alt');
-				this.updateBreadcrumbs(element.getAttribute('lastBcUrl'),
+				this.updateBreadcrumbs(element.getAttribute('last_bc_url'),
 									   element.getAttribute('img_id'));
 				break;
 		}
