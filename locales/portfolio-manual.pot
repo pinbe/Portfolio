@@ -14,3 +14,7 @@ msgstr ""
 
 msgid "You don't have any album yet."
 msgstr ""
+
+# date et heure de prise de vue
+msgid "%m/%d/%Y %H:%M:%S"
+msgstr ""

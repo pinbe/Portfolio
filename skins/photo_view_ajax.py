@@ -21,5 +21,4 @@ else :
 	buyable = False
 
 options['buyable'] = buyable
-
 return context.photo_view_ajax_template(**options)

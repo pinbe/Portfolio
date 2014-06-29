@@ -1,38 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <fragments i18n:domain="portfolio"
-           tal:define="imgId here/getId"
-            xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-            xmlns:tal="http://xml.zope.org/namespaces/tal">
+           tal:define="imgId here/getId;
+                       translate nocall:modules/Products/Portfolio/utils/translate;
+                        _ python:lambda msg : translate(msg, here)"
+           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           xmlns:tal="http://xml.zope.org/namespaces/tal"
+           xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <div metal:use-macro="here/main_template_macros/macros/global_defines" tal:omit-tag=""/>
   <imageattributes tal:attributes="alt here/Title;
                                    backToContextUrl options/backToContextUrl;
                                    lastBcUrl options/lastBcUrl;
                                    img_id imgId;
                                    buyable options/buyable"/>
   <fragment id="image_metadata"><span tal:replace="structure string:&lt;![CDATA[" />
-    <span tal:define="title here/Title" tal:condition="title" tal:omit-tag="">
-      <span class="photographer" tal:define="creator here/Creator" tal:content="python:'%s :' % creator" tal:condition="creator">Benoît PIN</span>
-      <span class="title_summary" tal:content="title"></span>
-    </span>
-    <div class="description" tal:content="here/Description"></div>
-    <div tal:define="keywords here/Subject" tal:condition="keywords">
-      <h4 i18n:translate="">Keywords</h4>
-      <ul class="keywords"
-          tal:define="portal_url here/portal_url;
-                      mq nocall:modules/ZTUtils/make_query;
-                      kwurl python:lambda k: '%s/search?%s' % (portal_url, mq(Subject=k, portal_type=['Photo']))">
-        <li tal:repeat="k keywords"><a tal:content="k" tal:attributes="href python:kwurl(k)">bla</a></li>
-      </ul>
-    </div>
-    <div><span i18n:translate="" tal:omit-tag="">reference:</span> <span tal:replace="imgId">bidule.jpg</span></div>
-    <div tal:define="rights here/Rights"
-         tal:content="python:rights.startswith('©') and rights or '© %s' % rights"></div>
-    <div tal:define="ViewRawImage python:modules['Products.Portfolio.permissions'].ViewRawImage;
-                     mtool here/portal_membership"
-         tal:condition="python:mtool.checkPermission(ViewRawImage, here)" style="font-weight:bold; margin-top:1em"
-         i18n:domain="portfolio">
-         <a tal:attributes="href string:${here/absolute_url}/photo_download" i18n:translate="">download picture</a>
-    </div>
-         
+    <div metal:use-macro="here/photo_view/macros/image_metadata">image metadata</div>
   <span tal:replace="structure string:]]>" /></fragment>
   <fragment id="BC_Object_URL" tal:content="options/lastBcUrl"></fragment>
+  <tal:block tal:define="dummy python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')"/>
 </fragments>

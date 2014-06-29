@@ -1,108 +1,83 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Sun Jun 29 07:16:48 2014\n"
-"PO-Revision-Date: 2014-06-29 07:19+0200\n"
-"Last-Translator:  Benoît PIN\n"
-"Language-Team: CRI http://cri.ensmp.fr\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"Language-Code: fr\n"
-"Language-Name: French\n"
-"Preferred-Encodings: utf-8 latin1\n"
-"Domain: plinn\n"
-"X-Is-Fallback-For: fr-fr, fr-be fr-ca fr-lu fr-mc fr-ch\n"
-
 #: o/ImageManipulationTool.py:40
 msgid "Processor"
-msgstr "Processeur"
+msgstr ""
 
 #: o/ImageManipulationTool.py:56
 msgid "Process started."
-msgstr "Processus démarré"
+msgstr ""
 
 #: o/ImageManipulationTool.py:64
 msgid "Process stopped."
-msgstr "Processus arrêté"
+msgstr ""
 
 #: o/skins/add_to_cart.py:20 o/skins/my_cart.py:73
 msgid "You must enter an integer for quantity (found: %s)"
-msgstr "Vous devez entrer un nombre entier pour la quantité (trouvé : %s)"
+msgstr ""
 
 #: o/skins/add_to_cart.py:23 o/skins/my_cart.py:75
 msgid "You must enter a positive value for quantity (found: %s)"
-msgstr "Vous devez entrer un nombre positif pour la quantité (trouvé : %s)"
+msgstr ""
 
 #: o/skins/add_to_cart.py:49 o/skins/my_cart.py:85
 msgid "Only %d available copies of this photo in this size."
-msgstr "Seulement %s tirages encore disponibles pour cette photo à ce format."
+msgstr ""
 
 #: o/skins/add_to_cart.py:51 o/skins/my_cart.py:87
 msgid "Only one last available copy of this photo in this size."
-msgstr "Plus qu'un dernier tirage disponible pour cette photo à ce format."
+msgstr ""
 
 #: o/skins/add_to_cart.py:53
 msgid "No more available copy of this photo in this size."
-msgstr "Plus aucun tirage disponible pour cette photo à ce format."
+msgstr ""
 
 #: o/skins/add_to_cart.py:62
 msgid ""
 "Your cart is locked:\n"
 "please complete your current order first."
 msgstr ""
-"Votre panier est vérouillé :\n"
-"veuillez d'abord solder votre commande."
 
-# from portfolio-manual
 #: o/skins/add_to_cart.py:72 o/skins/add_to_cart.py:74
 msgid "Added to cart."
-msgstr "Ajouté au panier."
+msgstr ""
 
-# from portfolio-manual
 #: o/skins/add_to_selection.py:37
 msgid "%s added to selection."
-msgstr "%s ajoutée à la sélection."
+msgstr ""
 
 #: o/skins/add_to_selection.py:39
 msgid "This %s is already in the selection."
-msgstr "Cette %s est déjà dans la sélection."
+msgstr ""
 
-# from portfolio-manual
 #: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:47
 #: o/skins/photo_layout_macros.pt:49 o/skins/photo_view.pt:91
 #: o/skins/photo_view.pt:94
 msgid "Add to cart"
-msgstr "Ajouter au panier"
+msgstr ""
 
 #: o/skins/get_slide_buyable_items.pt:27
 msgid "quantity:"
-msgstr "quantité :"
+msgstr ""
 
 #: o/skins/get_slide_buyable_items.pt:34
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #: o/skins/lightbox_save_control.py:10
 msgid "No photo selected."
-msgstr "Aucune photo sélectionnée."
+msgstr ""
 
 #: o/skins/lightbox_save_control.py:21
 msgid "You must enter a title."
-msgstr "Vous devez entrer un titre."
+msgstr ""
 
 #: o/skins/lightbox_save_control.py:27
 msgid "Lightbox created."
-msgstr "Table lumineuse créée."
+msgstr ""
 
 #. Default: ""
 #: o/skins/lightbox_view_template.pt:19
 msgid "lightbox_selected_explanations"
 msgstr ""
-"Cette table lumineuse est sélectionnée : les images que vous sélectionnerez "
-"à présent seront automatiquement sauvegardées à cet endroit."
 
 #: o/skins/lightbox_view_template.pt:22 o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
@@ -110,350 +85,303 @@ msgstr ""
 
 #: o/skins/metadata_edit_form_macros.pt:258
 msgid "Save"
-msgstr "Enregistrer"
+msgstr ""
 
 #: o/skins/my_cart.py:58
 msgid "Order >>"
-msgstr "Commander >>"
+msgstr ""
 
 #: o/skins/my_cart.py:60
 msgid "Shipping >>"
-msgstr "Livraison >>"
+msgstr ""
 
 #: o/skins/my_cart.py:89
 msgid "No more available copy of this photo and in this size."
-msgstr "Plus aucun tirage disponible pour cette photo à ce format."
+msgstr ""
 
 #: o/skins/my_cart.py:138 o/skins/my_cart_template.pt:113
 msgid "My cart"
-msgstr "Mon panier"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:26
 msgid "Image"
-msgstr "Image"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:27
 msgid "Printing format and type"
-msgstr "Format d'impression et type de support"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:28
 msgid "Quantity"
-msgstr "Quantité"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:29
 msgid "Amount (incl tax)"
-msgstr "Prix (TTC)"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:53
 msgid "refresh amount"
-msgstr "actualiser le montant"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:59
 msgid "delete"
-msgstr "supprimer"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:69
 msgid "Prints"
-msgstr "Tirages"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:70
 msgid "Total"
-msgstr "Total"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:80 o/skins/sell_macros.pt:16
 msgid "Shipping"
-msgstr "Livraison"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:85
 msgid "VAT"
-msgstr "TVA"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:90
 msgid "Total amount to pay"
-msgstr "Montant total à payer"
+msgstr ""
 
 #: o/skins/my_cart_template.pt:114
 msgid "Your cart is currently empty."
-msgstr "Votre panier est actuellement vide."
+msgstr ""
 
 #: o/skins/photo_info.pt:9
 msgid "Preview:"
-msgstr "Aperçu :"
+msgstr ""
 
 #: o/skins/photo_info.pt:18 o/skins/save_as_lightbox_template.pt:15
 msgid "Title"
-msgstr "Titre"
+msgstr ""
 
 #: o/skins/photo_info.pt:22
 msgid "Type"
-msgstr "Type"
+msgstr ""
 
 #: o/skins/photo_info.pt:26
 msgid "Created"
-msgstr "Créé"
+msgstr ""
 
 #: o/skins/photo_info.pt:30
 msgid "Modified"
-msgstr "Modifié"
+msgstr ""
 
 #: o/skins/photo_info.pt:34
 msgid "Dimensions"
-msgstr "Dimensions"
+msgstr ""
 
-# from portfolio-manual
 #: o/skins/photo_layout_macros.pt:32 o/skins/photo_layout_macros.pt:34
 msgid "Add to selection"
-msgstr "Ajouter à la sélection"
+msgstr ""
 
-# from portfolio-manual
 #: o/skins/photo_layout_macros.pt:39 o/skins/photo_layout_macros.pt:41
 msgid "Remove to selection"
-msgstr "Retirer de la sélection"
+msgstr ""
 
 #: o/skins/photo_layout_macros.pt:54 o/skins/photo_layout_macros.pt:56
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
-msgstr "Supprimer"
+msgstr ""
 
 #: o/skins/photo_layout_macros.pt:65 o/skins/photo_layout_macros.pt:68
 msgid "Hide for anonymous"
-msgstr "Masquer pour les anonymes"
+msgstr ""
 
 #: o/skins/photo_layout_macros.pt:76 o/skins/photo_layout_macros.pt:79
 msgid "Show for anonymous"
-msgstr "Montrer aux anonymes"
+msgstr ""
 
 #: o/skins/photo_medium.pt:37 o/skins/photo_medium.pt:38
 msgid "previous"
-msgstr "précédente"
+msgstr ""
 
 #: o/skins/photo_medium.pt:44 o/skins/photo_medium.pt:45
 msgid "next"
-msgstr "suivante"
+msgstr ""
 
 #: o/skins/photo_medium.pt:52
 msgid "zoom in"
-msgstr "zoom avant"
+msgstr ""
 
 #: o/skins/photo_medium.pt:52
 msgid "zoom out"
-msgstr "zoom arrière"
+msgstr ""
 
 #: o/skins/photo_view.pt:31
 msgid "Empty image: upload an image file in \"Edit\" tab."
-msgstr "Image vide : envoyer un fichier d'image dans l'onglet « Modifier »."
+msgstr ""
 
 #: o/skins/photo_view.pt:46 o/skins/photo_view.pt:49
 msgid "Previous"
-msgstr "Précédente"
+msgstr ""
 
 #: o/skins/photo_view.pt:52 o/skins/photo_view.pt:55
 msgid "Next"
-msgstr "Suivante"
+msgstr ""
 
 #: o/skins/photo_view.pt:58
 msgid "slide show"
-msgstr "diaporama"
+msgstr ""
 
 #: o/skins/photo_view.pt:69 o/skins/photo_view.pt:72
 msgid "Back to portfolio..."
-msgstr "Retour à la collection"
+msgstr ""
 
 #: o/skins/photo_view.pt:75 o/skins/photo_view.pt:77
 msgid "Full screen (f)"
-msgstr "Plein écran (f)"
+msgstr ""
 
 #: o/skins/photo_view.pt:99 o/skins/photo_view.pt:104
 msgid "Edit metadata"
-msgstr "Modifier les métadonnées"
+msgstr ""
 
 #: o/skins/photo_view.pt:116 o/skins/photo_view_ajax_template.pt:18
 msgid "Keywords"
-msgstr "Mots-clefs"
+msgstr ""
 
 #: o/skins/photo_view.pt:123 o/skins/photo_view_ajax_template.pt:26
 msgid "reference:"
-msgstr "référence :"
+msgstr ""
 
 #: o/skins/photo_view.pt:129 o/skins/photo_view_ajax_template.pt:33
 msgid "download picture"
-msgstr "télécharger l'image"
+msgstr ""
 
 #: o/skins/portfolio_presentation_template.pt:22
 msgid "Delete presentation"
-msgstr "Supprimer la présentation"
+msgstr ""
 
 #: o/skins/save_as_lightbox_template.pt:12
 msgid "Save current selection as lightbox"
-msgstr "Enregistrer la sélection dans une table lumineuse"
+msgstr ""
 
 #: o/skins/save_as_lightbox_template.pt:21
 msgid "Description"
-msgstr "Description"
+msgstr ""
 
 #: o/skins/selection_view.py:64 o/skins/selection_view.py:66
 #: o/skins/selection_view_template.pt:18 o/skins/selectioncontext.py:115
 #: o/skins/selectioncontext.py:117
 msgid "My selection"
-msgstr "Ma sélection"
+msgstr ""
 
 #: o/skins/selection_view_template.pt:23
 msgid "You are editing this ligthbox:"
-msgstr "Vous éditez cette table lumineuse :"
+msgstr ""
 
 #: o/skins/selection_view_template.pt:30
 msgid "Save as..."
-msgstr "Enregistrer sous..."
+msgstr ""
 
 #: o/skins/selection_view_template.pt:33
 msgid "${please_login} if you want to save this selection."
-msgstr "Si vous souhaiter enregistrer cette sélection, ${please_login}"
+msgstr ""
 
 #. Default: "Please log in"
 #: o/skins/selection_view_template.pt:34
 msgid "login_to_save_seletion"
-msgstr "veuillez vous connecter."
+msgstr ""
 
 #: o/skins/selection_view_template.pt:38
 msgid "Empty selection."
-msgstr "Sélection vide."
+msgstr ""
 
 #: o/skins/sell_macros.pt:14
 msgid "Cart"
-msgstr "Panier"
+msgstr ""
 
 #: o/skins/sell_macros.pt:15
 msgid "Authentication"
-msgstr "Identification"
+msgstr ""
 
 #: o/skins/sell_macros.pt:17
 msgid "Payment"
-msgstr "Paiement"
+msgstr ""
 
 #: o/skins/sell_macros.pt:18
 msgid "Confirmation"
-msgstr "Confirmation"
+msgstr ""
 
 #: o/skins/shipping_set_control.py:8
 msgid "Please enter a name."
-msgstr "Veuillez entrer un nom."
+msgstr ""
 
 #: o/skins/shipping_set_control.py:9
 msgid "Please enter an address."
-msgstr "Veuillez entrer une adresse."
+msgstr ""
 
 #: o/skins/shipping_set_control.py:10
 msgid "Please enter a city."
-msgstr "Veuillez entrer une ville."
+msgstr ""
 
 #: o/skins/shipping_set_control.py:11
 msgid "Please enter zip code."
-msgstr "Veuillez entrer un code postal."
+msgstr ""
 
 #: o/skins/shipping_set_control.py:12
 msgid "Please enter a country."
-msgstr "Veuillez entrer un pays."
+msgstr ""
 
 #: o/skins/shipping_set_control.py:27
 msgid "No cart found. Your session may have expired."
-msgstr "Pas de panier trouvé. Votre session a peut-être expirée."
+msgstr ""
 
 #: o/skins/shipping_set_control.py:30
 msgid "Shipping informations saved."
-msgstr "Informations de livraison enregistrées."
+msgstr ""
 
 #: o/skins/shipping_template.pt:14
 msgid "Please set shipping informations"
-msgstr "Veuillez remplir les informations de livraison."
+msgstr ""
 
 #: o/skins/shipping_template.pt:19 o/skins/shipping_template.pt:60
 msgid "Validate >>"
-msgstr "Valider >>"
+msgstr ""
 
 #: o/skins/shipping_template.pt:23
 msgid "Fullname"
-msgstr "Nom complet"
+msgstr ""
 
 #: o/skins/shipping_template.pt:29
 msgid "Address"
-msgstr "Adresse"
+msgstr ""
 
 #: o/skins/shipping_template.pt:36
 msgid "City"
-msgstr "Ville"
+msgstr ""
 
 #: o/skins/shipping_template.pt:42
 msgid "Zip code"
-msgstr "Code postal"
+msgstr ""
 
 #: o/skins/shipping_template.pt:48
 msgid "Country"
-msgstr "Pays"
+msgstr ""
 
 #: o/skins/zoom_view.pt:32
 msgid "back"
-msgstr "retour"
+msgstr ""
 
+# from portfolio-manual
 msgid "not saved yet"
-msgstr "pas encore enregistrée"
+msgstr ""
 
 msgid "Load in my selection"
-msgstr "Charger dans ma sélection"
+msgstr ""
 
 msgid "Unload from my selection"
-msgstr "Décharger de ma sélection"
+msgstr ""
 
 msgid "My albums"
-msgstr "Mes collections"
+msgstr ""
 
 msgid "You don't have any album yet."
-msgstr "Vous n'avez pas encore de collection."
+msgstr ""
 
-# Date et heure de prise de vue
 msgid "%m/%d/%Y %H:%M:%S"
-msgstr "%d/%m/%Y %H:%M:%S"
-
-#~ msgid "If a file already exists"
-#~ msgstr "Si un fichier existe déjà"
-
-#~ msgid "overwrite"
-#~ msgstr "écraser"
-
-#~ msgid "rename"
-#~ msgstr "renommer"
-
-#~ msgid "stopped"
-#~ msgstr "arrêté"
-
-#~ msgid "queue size:"
-#~ msgstr "taille de la file :"
-
-#~ msgid "Stop"
-#~ msgstr "Arrêter"
-
-#~ msgid "Start"
-#~ msgstr "Démarrer"
-
-#~ msgid "Processor status"
-#~ msgstr "État du processus"
-
-#~ msgid "status:"
-#~ msgstr "état :"
-
-#~ msgid "running"
-#~ msgstr "en cours d'exécution"
-
-#~ msgid "Total amount"
-#~ msgstr "Montant total à payer"
-
-#~ msgid "order_summary"
-#~ msgstr "Récapitulatif"
-
-#~ msgid "Secured payment"
-#~ msgstr "Paiement sécurisé"
-
-#~ msgid "Order >>"
-#~ msgstr "Commander >>"
-
-#~ msgid "Order saved. Please log in to continue."
-#~ msgstr "Commande enregistrée. Veuillez vous authentifier pour continuer."
+msgstr ""
