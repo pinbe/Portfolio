@@ -1,4 +1,6 @@
-<html xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:metal="http://xml.zope.org/namespaces/metal">
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <head>
     <title>Display macros for arbitrary set of photos</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -10,8 +12,7 @@
                      dropable python:True if mayBeDropable and dropable else False"
          i18n:domain="portfolio">
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
-      <div id="lightbox"
-           tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
+      <div id="lightbox" tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
         <span tal:repeat="info infos" tal:omit-tag="">
           <span tal:define="size info/thumbSize;
                             margin_top python:(slide_size - size['height']) / 2;
@@ -21,63 +22,75 @@
                                 name info/cmf_uid"
                 metal:define-macro="thumbnail">
             <a class="slide" tal:attributes="href info/href; title info/title">
-              <img border="0" tal:attributes="src info/thumbUrl;
-                                 alt info/title;
-                                 height size/height;
-                                 width size/width;
-                                 style string:margin-top : ${margin_top}px ;;margin-left:${margin_left}px;"/>
+              <img tal:attributes="src info/thumbUrl;
+                                   alt info/title;
+                                   height size/height;
+                                   width size/width;
+                                   style string:margin-top : ${margin_top}px ;;margin-left:${margin_left}px;"/>
             </a>
             <tal:block tal:condition="python:features.has_key('select')">
               <span class="button slide-select" tal:condition="not:selected">
-                <a name="add_to_selection" title="Add to selection" i18n:attributes="title"
-                   tal:attributes="href python:features['select'](info['o'], False)">
-                  <img tal:attributes="src string:${portal_url}/transparent.gif" height="17" width="12"
-                       alt="Add to selection" i18n:attributes="alt"/>
-                  </a>
+                <a name="add_to_selection" title="Add to selection"
+                   tal:attributes="href python:features['select'](info['o'], False)"
+                   i18n:attributes="title">
+                  <img tal:attributes="src string:${portal_url}/transparent.gif"
+                       height="17" width="12" alt="Add to selection"
+                       i18n:attributes="alt"/>
+                </a>
               </span>
               <span class="button slide-deselect" tal:condition="selected">
-                <a name="remove_to_selection" title="Remove to selection" i18n:attributes="title"
-                   tal:attributes="href python:features['select'](info['o'], True)">
-                  <img tal:attributes="src string:${portal_url}/transparent.gif" height="17" width="12"
-                       alt="Remove to selection" i18n:attributes="alt"/>
-                  </a>
+                <a name="remove_to_selection" title="Remove to selection"
+                   tal:attributes="href python:features['select'](info['o'], True)"
+                   i18n:attributes="title">
+                  <img height="17" width="12" alt="Remove to selection"
+                       tal:attributes="src string:${portal_url}/transparent.gif"
+                       i18n:attributes="alt"/>
+                </a>
               </span>
             </tal:block>
             <span class="button slide-cart" tal:condition="python:info.get('buyable')">
-              <a name="add_to_cart" title="Add to cart" i18n:attributes="title"
-                 tal:attributes="href python:features['cart'](info['o'])">
-                <img tal:attributes="src string:${portal_url}/transparent.gif" height="17" width="20"
-                     alt="Add to cart" i18n:attributes="alt"/>
-                </a>
+              <a name="add_to_cart" title="Add to cart"
+                 tal:attributes="href python:features['cart'](info['o'])"
+                 i18n:attributes="title">
+                <img height="17" width="20" alt="Add to cart"
+                     tal:attributes="src string:${portal_url}/transparent.gif"
+                     i18n:attributes="alt"/>
+              </a>
             </span>
             <span class="button slide-del" tal:condition="python:features.has_key('del')">
-              <a title="Delete" i18n:attributes="title"
-                 tal:attributes="href python:features['del'](info['o'])">
-                <img tal:attributes="src string:${portal_url}/transparent.gif" height="19" width="18"
-                     alt="Delete" i18n:attributes="alt"/>
-                </a>
+              <a title="Delete"
+                 tal:attributes="href python:features['del'](info['o'])"
+                 i18n:attributes="title">
+                <img height="19" width="18" alt="Delete"
+                     tal:attributes="src string:${portal_url}/transparent.gif"
+                     i18n:attributes="alt"/>
+              </a>
             </span>
             <tal:block tal:condition="features/hideAnonymous|nothing">
-              <span class="button slide-hide" tal:condition="not:info/hiddenForAnonymous"
+              <span class="button slide-hide"
                     tal:define="mtop python:margin_top + 4;
                                 mleft python:margin_left + size['width'] - 17"
+                    tal:condition="not:info/hiddenForAnonymous"
                     tal:attributes="style python:'margin-top:%dpx;; margin-left:%dpx' % (mtop, mleft)">
-                <a title="Hide for anonymous" i18n:attributes="title"
-                   name="hide_for_anonymous"
-                   tal:attributes="href string:${info/href}/hideForAnonymous">
-                  <img tal:attributes="src string:${portal_url}/transparent.gif" height="15" width="16"
-                       alt="Hide for anonymous" i18n:attributes="alt"/>
+                <a title="Hide for anonymous" name="hide_for_anonymous"
+                   tal:attributes="href string:${info/href}/hideForAnonymous"
+                   i18n:attributes="title">
+                  <img height="15" width="16" alt="Hide for anonymous"
+                       tal:attributes="src string:${portal_url}/transparent.gif"
+                       i18n:attributes="alt"/>
                 </a>
               </span>
-              <span class="button slide-show" tal:condition="info/hiddenForAnonymous"
+              <span class="button slide-show"
                     tal:define="mtop python:margin_top + 4;
                                 mleft python:margin_left + size['width'] - 17"
+                    tal:condition="info/hiddenForAnonymous"
                     tal:attributes="style python:'margin-top:%dpx;; margin-left:%dpx' % (mtop, mleft)">
-                <a title="Show for anonymous" i18n:attributes="title"
-                   name="show_for_anonymous"
-                   tal:attributes="href string:${info/href}/resetHide">
-                  <img tal:attributes="src string:${portal_url}/transparent.gif" height="15" width="16"
-                       alt="Show for anonymous" i18n:attributes="alt"/>
+                <a title="Show for anonymous" name="show_for_anonymous"
+                   tal:attributes="href string:${info/href}/resetHide"
+                   i18n:attributes="title">
+                  <img height="15" width="16" alt="Show for anonymous"
+                       tal:attributes="src string:${portal_url}/transparent.gif"
+                       i18n:attributes="alt"/>
                 </a>
               </span>
             </tal:block>
@@ -92,73 +105,68 @@
       <script type="text/javascript"
               tal:condition="dropable"
               tal:content="structure python:'''
-      (function(){
-        var lb = document.getElementById('lightbox');
-        new Lightbox(lb);
-        var uploadUrl = '%(putUrl)s';
-        var options = {'slideSize' : %(slideSize)d,
-                       'thumbnailSize' : %(thumbnailSize)d};
-        new DDImageUploader(lb, uploadUrl, options);
-      })();
-      ''' % {'putUrl' : '%s/put_upload' % here.absolute_url(),
-             'slideSize' : portal_object.slide_size,
-             'thumbnailSize' : portal_object.thumb_size}">
+              (function(){
+                var lb = document.getElementById('lightbox');
+                new Lightbox(lb);
+                var uploadUrl = '%(putUrl)s';
+                var options = {'slideSize' : %(slideSize)d,
+                               'thumbnailSize' : %(thumbnailSize)d};
+                new DDImageUploader(lb, uploadUrl, options);
+              })();
+              ''' % {'putUrl' : '%s/put_upload' % here.absolute_url(),
+                     'slideSize' : portal_object.slide_size,
+                     'thumbnailSize' : portal_object.thumb_size}">
       </script>
     </div>
-
-
     <div metal:define-macro="film_bar" tal:omit-tag="">
       <div id="film_bar">
         <table cellspacing="0">
           <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10">
             <td tal:repeat="info contextInfos/infos">
-                <a href="." tal:attributes="href info/href;
-                                            class info/className;
-                                            portfolio:position info/index"
-                  ><img 
-                     tal:define="size info/thumbSize;
+              <a tal:attributes="href info/href;
+                                 class info/className;
+                                 portfolio:position info/index">
+                <img tal:define="size info/thumbSize;
                                  margin_top python:(slide_size - size['height']) / 2"
-                     tal:attributes="src    info/src;
-                                     alt    info/title;
+                     tal:attributes="src info/src;
+                                     alt info/title;
                                      height size/height;
-                                     width  size/width;
-                                     style  string:margin-top : ${margin_top}px ;"/></a>
+                                     width size/width;
+                                     style string:margin-top : ${margin_top}px ;"/>
+              </a>
             </td>
           </tr>
         </table>
       </div>
       <div class="jsslider">
-        <span id="slider"></span>
+        <span id="slider"/>
       </div>
-      <script type="text/javascript" tal:content="python:'''
-          var startSlideShow, slideShowNext, stopSlideShow;
-          (function(){
-            
-            var ctxInfos = {'filmLength': %(filmLength)s
-                           ,'center': %(center)s
-                           ,'slideSize': %(slideSize)d
-                           ,'ctxUrlTranslation' : [%(reBaseCtxUrl)s, %(canonicalUrl)s]
-                           };
-            var fs = new FilmSlider(document.getElementById('film_bar'),
-                           document.getElementById('slider'),
-                           ctxInfos,
-                           document.getElementById('medium_image').getElementsByTagName('img')[0],
-                           document.getElementById('image_toolbar'),
-                           document.getElementById('Breadcrumbs'));
-            startSlideShow = function() {return fs.startSlideShow();};
-            stopSlideShow = function() {return fs.stopSlideShow();};
-            slideShowPrevious = function() {return fs.slideShowPrevious();};
-            slideShowNext = function() {return fs.slideShowNext();};
-            slideShowImageLoaded = function() {return fs.slideShowImageLoaded();};
-          })();
-          ''' % {'filmLength': len(contextInfos['infos'])
-                ,'center': index
-                ,'slideSize': portal_object.thumb_size/2 + 11
-                ,'reBaseCtxUrl':contextInfos['reBaseCtxUrl']
-                ,'canonicalUrl':contextInfos['canonicalUrl']
-                }">
+      <script type="text/javascript"
+              tal:content="python:'''
+              var startSlideShow, slideShowNext, stopSlideShow;
+              (function(){
+                var ctxInfos = {'filmLength': %(filmLength)s,
+                                'center': %(center)s,
+                                'slideSize': %(slideSize)d,
+                                'ctxUrlTranslation' : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
+              var fs = new FilmSlider(document.getElementById('film_bar'),
+                                      document.getElementById('slider'),
+                                      ctxInfos,
+                                      document.getElementById('medium_image').getElementsByTagName('img')[0],
+                                      document.getElementById('image_toolbar'),
+                                      document.getElementById('Breadcrumbs'));
+              startSlideShow = function() {return fs.startSlideShow();};
+              stopSlideShow = function() {return fs.stopSlideShow();};
+              slideShowPrevious = function() {return fs.slideShowPrevious();};
+              slideShowNext = function() {return fs.slideShowNext();};
+              slideShowImageLoaded = function() {return fs.slideShowImageLoaded();};
+              })();
+              ''' % {'filmLength' : len(contextInfos['infos']),
+                     'center' : index,
+                     'slideSize' : portal_object.thumb_size/2 + 11,
+                     'reBaseCtxUrl' : contextInfos['reBaseCtxUrl'],
+                     'canonicalUrl' : contextInfos['canonicalUrl']}">
       </script>
     </div>
-
   </body>
 </html>
