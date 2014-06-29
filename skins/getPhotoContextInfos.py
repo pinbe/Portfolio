@@ -3,9 +3,11 @@ from ZTUtils import make_query as mq
 from Products.CMFCore.utils import getToolByName
 pptool = getToolByName(context, 'portal_photo_print', None)
 uidtool = getToolByName(context, 'portal_uidhandler')
+utool = getToolByName(context, 'portal_url')
+portal = utool.getPortalObject()
 form = context.REQUEST.form
 portfolio = context.getParentNode()
-bsize = form.get('b_size',20)
+bsize = portal.getProperty('default_batch_size', 20)
 
 infos = []
 index = 0

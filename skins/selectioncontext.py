@@ -2,7 +2,6 @@
 from Products.CMFCore.utils import getToolByName
 from Products.Portfolio.utils import translate
 def _(message) : return translate(message, context).encode('utf-8')
-bsize = 20
 options = {}
 
 uidh = getToolByName(context, 'portal_uidhandler')
@@ -16,6 +15,7 @@ portalDepth = len(portal.getPhysicalPath())
 req = context.REQUEST
 toUrl = req.physicalPathToURL
 resp = req.RESPONSE
+bsize = portal.getProperty('default_batch_size', 20)
 
 if traverse_subpath[-1] == 'photo_view_ajax' :
     photoSubPath = traverse_subpath[:-1]
