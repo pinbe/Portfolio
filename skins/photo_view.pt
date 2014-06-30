@@ -111,7 +111,8 @@
                     <span class="photographer" tal:define="creator here/Creator" tal:content="python:'%s :' % creator" tal:condition="creator">Benoît PIN</span>
                     <span class="title_summary" tal:content="title"></span>
                   </span>
-                  <div tal:content="python:here.DateTimeOriginal().strftime(_('%m/%d/%Y %H:%M:%S'))"></div>
+                  <div tal:condition="here/showDateTimeOriginal|nothing"
+                       tal:content="python:here.DateTimeOriginal().strftime(_('%m/%d/%Y %H:%M:%S'))"></div>
                   <div class="description" tal:content="here/Description"></div>
                   <div tal:define="keywords here/Subject" tal:condition="keywords">
                     <h4 i18n:translate="">Keywords</h4>
