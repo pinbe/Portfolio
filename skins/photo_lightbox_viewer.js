@@ -1,9 +1,7 @@
 /*
-* © 2008 Benoît Pin – Centre de recherche en informatique – École des mines de Paris
+* 2008-2014 Benoit Pin - MINES ParisTech
 * http://plinn.org
 * Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-* 
-* 
 */
 
 
@@ -21,22 +19,23 @@ Lightbox = function(grid) {
 		addListener(this.grid, 'mouseover', function(evt){thisLightbox.mouseOverHandler(evt);});
 		addListener(this.grid, 'mouseout', function(evt){thisLightbox.mouseOutHandler(evt);});
 	}
-}
+};
 
 Lightbox.prototype.mouseClickHandler = function(evt) {
 	var target = getTargetedObject(evt);
-	if (target.tagName == 'IMG') {
+	if (target.tagName === 'IMG') {
 		var img = target;
 		var link =  target.parentNode;
 		var button =  link.parentNode;
 		var slide = button.parentNode;
-		if (link.tagName == 'A') {
+		var req, url;
+		if (link.tagName === 'A') {
 			switch(link.getAttribute('name')) {
 				case 'add_to_selection':
 					disableDefault(evt);
 					link.blur();
-					var req = new XMLHttpRequest();
-					var url = link.href;
+					req = new XMLHttpRequest();
+					url = link.href;
 					req.open("POST", url, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 					req.send("ajax=1");
@@ -52,8 +51,8 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 				case 'remove_to_selection':
 					disableDefault(evt);
 					link.blur();
-					var req = new XMLHttpRequest();
-					var url = link.href;
+					req = new XMLHttpRequest();
+					url = link.href;
 					req.open("POST", url, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 					req.send("ajax=1");
@@ -72,8 +71,8 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 				case 'hide_for_anonymous':
 					disableDefault(evt);
 					link.blur();
-					var req = new XMLHttpRequest();
-					var url = link.href;
+					req = new XMLHttpRequest();
+					url = link.href;
 					req.open("POST", url, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 					req.send(null);
@@ -87,8 +86,8 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 				case 'show_for_anonymous':
 					disableDefault(evt);
 					link.blur();
-					var req = new XMLHttpRequest();
-					var url = link.href;
+					req = new XMLHttpRequest();
+					url = link.href;
 					req.open("POST", url, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 					req.send(null);
@@ -105,23 +104,23 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 
 Lightbox.prototype.mouseOverHandler = function(evt) {
 	var target = getTargetedObject(evt);
-	if (target.tagName=='AREA') {
+	if (target.tagName==='AREA') {
 		var slide = target.parentNode.parentNode;
-		if(reSelected.test(slide.className))
-			slide.className = 'slide_over_selected';
-		else
-			slide.className = 'slide_over';
+		if(reSelected.test(slide.className)) {
+			slide.className = 'slide_over_selected';}
+		else {
+			slide.className = 'slide_over';}
 	}
 };
 
 Lightbox.prototype.mouseOutHandler = function(evt) {
 	var target = getTargetedObject(evt);
-	if (target.tagName=='AREA') {
+	if (target.tagName==='AREA') {
 		var slide = target.parentNode.parentNode;
-		if(reSelected.test(slide.className))
-			slide.className = 'selected';
-		else
-			slide.className = undefined;
+		if(reSelected.test(slide.className)) {
+			slide.className = 'selected';}
+		else {
+			slide.className = undefined;}
 	}
 };
 
@@ -129,14 +128,15 @@ var _outlineSelectedSlide;
 if (browser.isGecko) {
 	_outlineSelectedSlide = function(slide) {
 		slide.className = 'selected';
-	}
+	};
 }
 else {
 	_outlineSelectedSlide = function(slide) {
-		if (slide.className)
-			if (!reSelected.test(slide.className))
+		if (slide.className &&
+			!reSelected.test(slide.className)) {
 				slide.className = slide.className + ' selected';
-	}
+		}
+	};
 }
 
 })();
