@@ -66,6 +66,9 @@
                      i18n:attributes="alt"/>
               </a>
             </span>
+            <span class="button cb">
+              <input type="checkbox" />
+            </span>
             <tal:block tal:condition="features/hideAnonymous|nothing">
               <span class="button slide-hide"
                     tal:define="mtop python:margin_top + 4;

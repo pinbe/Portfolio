@@ -13,6 +13,7 @@ var reSelected = /.*selected.*/;
 
 Lightbox = function(grid) {
 	this.grid = grid;
+	this.lastCBChecked = undefined;
 	thisLightbox = this;
 	addListener(this.grid, 'click', function(evt){thisLightbox.mouseClickHandler(evt);});
 	if (!browser.isGecko){
@@ -99,6 +100,15 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 					break;
 			}
 		}
+	} else if(target.tagName === 'INPUT' && target.type === 'checkbox') {
+		var cb = target;
+		if (cb.checked) {
+			cb.setAttribute('checked', 'checked');
+		}
+		else {
+			cb.removeAttribute('checked');
+		}
+		this.selectCBRange(evt);
 	}
 };
 
@@ -124,6 +134,47 @@ Lightbox.prototype.mouseOutHandler = function(evt) {
 	}
 };
 
+Lightbox.prototype.getCBIndex = function(cb) {
+	if (!this.cbIndex) {
+		// build checkbox index
+		this.cbIndex = [];
+		var i, node, c;
+		var nodes = this.grid.childNodes;
+		for (i=0 ; i<nodes.length ; i++) {
+			node = nodes[i];
+			if (node.nodeName === 'SPAN') {
+				c = node.getElementsByTagName('input')[0];
+				c.index = this.cbIndex.length;
+				this.cbIndex[this.cbIndex.length] = c;
+			}
+		}
+	}
+	return cb.index;
+};
+
+Lightbox.prototype.selectCBRange = function(evt) {
+	var target = getTargetedObject(evt);
+	evt = getEventObject(evt);
+	var shift = evt.shiftKey;
+	if (shift && this.lastCBChecked) {
+		var from = this.getCBIndex(this.lastCBChecked);
+		var to = this.getCBIndex(target);
+		var start = Math.min(from, to);
+		var stop = Math.max(from, to);
+		var i;
+		for (i=start ; i<stop ; i++ ) {
+			this.cbIndex[i].setAttribute('checked', 'checked');
+		}
+	}
+	else if (target.checked) {
+		this.lastCBChecked = target;
+	}
+	else {
+		this.lastCBChecked = undefined;
+	}
+};
+
+
 var _outlineSelectedSlide;
 if (browser.isGecko) {
 	_outlineSelectedSlide = function(slide) {
@@ -139,4 +190,4 @@ else {
 	};
 }
 
-})();
+}());

@@ -276,6 +276,16 @@ div.lightbox {
   background: url(&dtml-portal_url;/slide-del-btn.png);
 }
 
+/* slide checkbox */
+.lightbox .cb {
+	margin-left: <dtml-var expr="slide_size - 22">px;
+	margin-top: 5px;
+}
+
+.lightbox .cb input[checked] {
+	visibility: visible;
+}
+
 
 .lightbox .slide-hide,
 .lightbox .slide-show {
