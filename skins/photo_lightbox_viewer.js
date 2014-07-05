@@ -182,7 +182,6 @@ Lightbox.prototype.deleteSelection = function() {
 };
 
 Lightbox.prototype._removeSelection = function() {
-	console.info('_removeSelection');
 	var i, e, slide;
 	var toRemove = [];
 	for (i=0 ; i<this.form.elements.length ; i++) {
