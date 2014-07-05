@@ -174,10 +174,11 @@ div.lightbox {
 }
 
 .lightbox span {
-    width: &dtml-slide_size;px;
-    height: &dtml-slide_size;px;
-    display:block;
-    float:left;
+  width: &dtml-slide_size;px;
+  height: &dtml-slide_size;px;
+  display:block;
+  float:left;
+  transition: width 1s, opacity 0.5s;
 }
 
 .lightbox a.slide {
@@ -280,12 +281,21 @@ div.lightbox {
 .lightbox .cb {
 	margin-left: <dtml-var expr="slide_size - 22">px;
 	margin-top: 5px;
+	width:auto;
+	height:auto;
 }
 
 .lightbox .cb input[checked] {
 	visibility: visible;
 }
 
+.lightbox .zero_opacity {
+	opacity:0;
+}
+
+.lightbox .zero_width {
+	width:0;
+}
 
 .lightbox .slide-hide,
 .lightbox .slide-show {

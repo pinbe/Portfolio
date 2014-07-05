@@ -14,11 +14,24 @@ var reSelected = /.*selected.*/;
 Lightbox = function(grid) {
 	this.grid = grid;
 	this.lastCBChecked = undefined;
+	this.form = undefined;
+	var parent = this.grid.parentNode;
+	while(parent) {
+		parent = parent.parentNode;
+		if (parent.tagName === 'FORM') {
+			this.form = parent;
+			break;
+		}
+		else if (parent.tagName === 'BODY') {
+			break;
+		}
+	}
 	thisLightbox = this;
 	addListener(this.grid, 'click', function(evt){thisLightbox.mouseClickHandler(evt);});
-	if (!browser.isGecko){
-		addListener(this.grid, 'mouseover', function(evt){thisLightbox.mouseOverHandler(evt);});
-		addListener(this.grid, 'mouseout', function(evt){thisLightbox.mouseOutHandler(evt);});
+	if (this.form) {
+		var fm = new FormManager(this.form);
+		fm.onBeforeSubmit = function(fm_, evt) {return thisLightbox.onBeforeSubmit(fm_, evt);};
+		fm.onResponseLoad = function(req) {return thisLightbox.onResponseLoad(req);};
 	}
 };
 
@@ -112,26 +125,77 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 	}
 };
 
-Lightbox.prototype.mouseOverHandler = function(evt) {
-	var target = getTargetedObject(evt);
-	if (target.tagName==='AREA') {
-		var slide = target.parentNode.parentNode;
-		if(reSelected.test(slide.className)) {
-			slide.className = 'slide_over_selected';}
-		else {
-			slide.className = 'slide_over';}
+Lightbox.prototype.onBeforeSubmit = function(fm, evt) {
+	switch(fm.submitButton.name) {
+		case 'delete' :
+			this.hideSelection();
+			break;
 	}
 };
 
-Lightbox.prototype.mouseOutHandler = function(evt) {
-	var target = getTargetedObject(evt);
-	if (target.tagName==='AREA') {
-		var slide = target.parentNode.parentNode;
-		if(reSelected.test(slide.className)) {
-			slide.className = 'selected';}
-		else {
-			slide.className = undefined;}
+Lightbox.prototype.onResponseLoad = function(req) {
+	switch(req.responseXML.documentElement.nodeName) {
+		case 'deleted' :
+			this.deleteSelection();
+			break;
+		case 'error' :
+			this.showSelection();
+			break;
 	}
+};
+
+Lightbox.prototype.hideSelection = function() {
+	var i, e, slide;
+	for (i=0 ; i<this.form.elements.length ; i++) {
+		e = this.form.elements[i];
+		if (e.type === 'checkbox' && e.checked) {
+			slide = e.parentNode.parentNode;
+			slide.classList.add('zero_opacity');
+		}
+	}
+};
+
+Lightbox.prototype.showSelection = function() {
+	var i, e, slide;
+	for (i=0 ; i<this.form.elements.length ; i++) {
+		e = this.form.elements[i];
+		if (e.type === 'checkbox' && e.checked) {
+			slide = e.parentNode.parentNode;
+			slide.classList.remove('zero_opacity');
+		}
+	}
+};
+
+Lightbox.prototype.deleteSelection = function() {
+	var i, e, slide;
+	for (i=0 ; i<this.form.elements.length ; i++) {
+		e = this.form.elements[i];
+		if (e.type === 'checkbox' && e.checked) {
+			slide = e.parentNode.parentNode;
+			slide.classList.add('zero_width');
+		}
+	}
+	var self = this;
+	// if you change this, delay you should also change this css rule :
+	// .lightbox span { transition: width 1s
+	setTimeout(function(){self._removeSelection();}, 1000);
+};
+
+Lightbox.prototype._removeSelection = function() {
+	console.info('_removeSelection');
+	var i, e, slide;
+	var toRemove = [];
+	for (i=0 ; i<this.form.elements.length ; i++) {
+		e = this.form.elements[i];
+		if (e.type === 'checkbox' && e.checked) {
+			toRemove.push(e.parentNode.parentNode);
+		}
+	}
+	for (i=0 ; i<toRemove.length ; i++) {
+		slide = toRemove[i];
+		slide.parentNode.removeChild(slide);
+	}
+	this.cbIndex = undefined;
 };
 
 Lightbox.prototype.getCBIndex = function(cb) {

@@ -67,7 +67,8 @@
               </a>
             </span>
             <span class="button cb">
-              <input type="checkbox" />
+              <input type="checkbox" name="uids:list"
+                     tal:attributes="value info/cmf_uid"/>
             </span>
             <tal:block tal:condition="features/hideAnonymous|nothing">
               <span class="button slide-hide"

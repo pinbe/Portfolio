@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Sun Jun 29 07:19:35 2014\n"
+"POT-Creation-Date: Sat Jul  5 14:18:53 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -79,8 +79,8 @@ msgid "This %s is already in the selection."
 msgstr ""
 
 #: o/skins/get_slide_buyable_items.pt:21
-#: o/skins/photo_layout_macros.pt:47
-#: o/skins/photo_layout_macros.pt:49
+#: o/skins/photo_layout_macros.pt:52
+#: o/skins/photo_layout_macros.pt:55
 #: o/skins/photo_view.pt:91
 #: o/skins/photo_view.pt:94
 msgid "Add to cart"
@@ -160,6 +160,8 @@ msgstr ""
 
 #: o/skins/my_cart_template.pt:59
 #: o/skins/my_cart_template.pt:59
+#: o/skins/portfolio_view.pt:71
+#: o/skins/portfolio_view.pt:71
 msgid "delete"
 msgstr ""
 
@@ -213,29 +215,29 @@ msgstr ""
 msgid "Dimensions"
 msgstr ""
 
-#: o/skins/photo_layout_macros.pt:32
-#: o/skins/photo_layout_macros.pt:34
+#: o/skins/photo_layout_macros.pt:33
+#: o/skins/photo_layout_macros.pt:36
 msgid "Add to selection"
 msgstr ""
 
-#: o/skins/photo_layout_macros.pt:39
-#: o/skins/photo_layout_macros.pt:41
+#: o/skins/photo_layout_macros.pt:42
+#: o/skins/photo_layout_macros.pt:45
 msgid "Remove to selection"
 msgstr ""
 
-#: o/skins/photo_layout_macros.pt:54
-#: o/skins/photo_layout_macros.pt:56
+#: o/skins/photo_layout_macros.pt:61
+#: o/skins/photo_layout_macros.pt:64
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
 msgstr ""
 
-#: o/skins/photo_layout_macros.pt:65
-#: o/skins/photo_layout_macros.pt:68
+#: o/skins/photo_layout_macros.pt:79
+#: o/skins/photo_layout_macros.pt:82
 msgid "Hide for anonymous"
 msgstr ""
 
-#: o/skins/photo_layout_macros.pt:76
-#: o/skins/photo_layout_macros.pt:79
+#: o/skins/photo_layout_macros.pt:92
+#: o/skins/photo_layout_macros.pt:95
 msgid "Show for anonymous"
 msgstr ""
 
@@ -290,19 +292,28 @@ msgstr ""
 msgid "Edit metadata"
 msgstr ""
 
-#: o/skins/photo_view.pt:116
-#: o/skins/photo_view_ajax_template.pt:18
+#: o/skins/photo_view.pt:118
 msgid "Keywords"
 msgstr ""
 
-#: o/skins/photo_view.pt:123
-#: o/skins/photo_view_ajax_template.pt:26
+#: o/skins/photo_view.pt:125
 msgid "reference:"
 msgstr ""
 
-#: o/skins/photo_view.pt:129
-#: o/skins/photo_view_ajax_template.pt:33
+#: o/skins/photo_view.pt:131
 msgid "download picture"
+msgstr ""
+
+#: o/skins/portfolio_edit_form.py:13
+msgid "Photo deleted."
+msgstr ""
+
+#: o/skins/portfolio_edit_form.py:15
+msgid "Deleted photos."
+msgstr ""
+
+#: o/skins/portfolio_edit_form.py:18
+msgid "Nothing to delete."
 msgstr ""
 
 #: o/skins/portfolio_presentation_template.pt:22
