@@ -160,6 +160,10 @@ table.metadata_category select:focus {
   font-size: &dtml-fontSmallSize;;
 }
 
+#lightbox_toolbar {
+	text-align: right;
+}
+
 div.lightbox {
   /* The lightbox itself.
      Force this div to fit grid
