@@ -47,6 +47,14 @@ DDImageUploader.prototype.beforeUpload = function(slide) {
 	this.uploadedSlide = slide;
 	this.previewImg = slide.img;
 	this.progressBar = slide.progressBar;
+	this.scrollToSlide(slide);
+};
+
+DDImageUploader.prototype.scrollToSlide = function(slide) {
+	var slideHeight = slide.offsetHeight;
+	var slideOffsetTop = slide.getElementsByClassName('slide')[0].offsetTop;
+	var to = slideOffsetTop - getWindowHeight() + slideHeight;
+	window.scroll(0, to);
 };
 
 DDImageUploader.prototype.uploadCompleteHandlerCB = function(req) {
@@ -175,6 +183,5 @@ DDImageUploader.prototype.previewUploadedImage = function(slide) {
 	};
 	reader.readAsDataURL(slide.file);
 };
-
 
 }());
