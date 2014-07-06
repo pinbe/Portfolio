@@ -1,7 +1,7 @@
 ##parameters=portfolio
 from Products.Plinn.PloneMisc import Batch
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import ReviewPortalContent
+from Products.CMFCore.permissions import ReviewPortalContent, ModifyPortalContent
 mtool = getToolByName(context, 'portal_membership')
 pptool = getToolByName(context, 'portal_photo_print', None)
 uidtool = getToolByName(context, 'portal_uidhandler')
@@ -18,6 +18,8 @@ features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.absolute_url()
 
 if mtool.checkPermission(ReviewPortalContent, context) :
     features['hideAnonymous'] = True
+if mtool.checkPermission(ModifyPortalContent, context) :
+    features['checkbox'] = True
 
 req = context.REQUEST
 pho_start = req.get('pho_start', 0)

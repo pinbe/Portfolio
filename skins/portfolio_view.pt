@@ -67,7 +67,9 @@
                      features batchInfos/features"
          tal:omit-tag="">
       <form tal:attributes="action string:${here/absolute_url}/portfolio_edit_form" method="post">
-        <div id="image_toolbar" class="image_toolbar">
+        <div id="image_toolbar" class="image_toolbar"
+             tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
+             tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
           <input type="image" width="17" height="27" alt="delete" title="delete"
                  name="delete"
                  tal:attributes="src string:$portal_url/trash_btn.gif"
