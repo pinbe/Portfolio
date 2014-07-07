@@ -104,14 +104,16 @@
       <br clear="all"/>
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
       <script type="text/javascript" tal:condition="not:dropable">
-        new Lightbox(document.getElementById('lightbox'));
+        new Lightbox(document.getElementById('lightbox'),
+                     document.getElementById('lightbox_toolbar'));
       </script>
       <script type="text/javascript"
               tal:condition="dropable"
               tal:content="structure python:'''
               (function(){
                 var lb = document.getElementById('lightbox');
-                new Lightbox(lb);
+                new Lightbox(lb,
+                             document.getElementById('lightbox_toolbar'));
                 var uploadUrl = '%(putUrl)s';
                 var options = {'slideSize' : %(slideSize)d,
                                'thumbnailSize' : %(thumbnailSize)d};

@@ -11,8 +11,14 @@ var Lightbox;
 
 var reSelected = /.*selected.*/;
 
-Lightbox = function(grid) {
+Lightbox = function(grid, toolbar) {
+	var self = this;
 	this.grid = grid;
+	this.toolbar = toolbar;
+	if (toolbar) {
+		this.toolbarFixed = false;
+		addListener(window, 'scroll', function(evt){self.windowScrollHandler(evt);});
+	}
 	this.lastCBChecked = undefined;
 	this.form = undefined;
 	var parent = this.grid.parentNode;
@@ -26,12 +32,24 @@ Lightbox = function(grid) {
 			break;
 		}
 	}
-	thisLightbox = this;
-	addListener(this.grid, 'click', function(evt){thisLightbox.mouseClickHandler(evt);});
+	addListener(this.grid, 'click', function(evt){self.mouseClickHandler(evt);});
 	if (this.form) {
 		var fm = new FormManager(this.form);
-		fm.onBeforeSubmit = function(fm_, evt) {return thisLightbox.onBeforeSubmit(fm_, evt);};
-		fm.onResponseLoad = function(req) {return thisLightbox.onResponseLoad(req);};
+		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
+		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
+	}
+};
+
+Lightbox.prototype.windowScrollHandler = function(evt) {
+	if (this.toolbar.offsetTop < window.scrollY && !this.toolbarFixed) {
+		console.log('this.toolbar.offsetTop', this.toolbar.offsetTop);
+		this.toolbarFixed = true;
+		this.backThreshold = this.toolbar.offsetTop;
+		this.switchToolBarPositioning(true);
+	}
+	else if (this.toolbarFixed && window.scrollY < this.backThreshold) {
+		this.toolbarFixed = false;
+		this.switchToolBarPositioning(false);
 	}
 };
 
@@ -143,6 +161,27 @@ Lightbox.prototype.onResponseLoad = function(req) {
 			break;
 	}
 };
+
+Lightbox.prototype.switchToolBarPositioning = function(fixed) {
+	var tbs = this.toolbar.style;
+	if (fixed) {
+		this.toolbar.defaultCssText = this.toolbar.style.cssText;
+		tbs.width = String(this.toolbar.offsetWidth) + 'px';
+		tbs.height = String(this.toolbar.offsetHeight) + 'px';
+		tbs.position = 'fixed';
+		tbs.top = '0';
+		this.toolbarPlaceholder = document.createElement('div');
+		var phs = this.toolbarPlaceholder.style;
+		phs.cssText = tbs.cssText;
+		phs.position = 'relative';
+		this.toolbar.parentNode.insertBefore(this.toolbarPlaceholder, this.toolbar);
+	}
+	else {
+		this.toolbarPlaceholder.parentNode.removeChild(this.toolbarPlaceholder);
+		tbs.cssText = this.toolbar.defaultCssText;
+	}
+};
+
 
 Lightbox.prototype.hideSelection = function() {
 	var i, e, slide;
