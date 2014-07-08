@@ -345,8 +345,12 @@ div.lightbox {
   background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;
   position:relative;
   z-index:3;
-  font-size:27px;
+  font-size:12px;
   white-space:nowrap;
+}
+
+.image_toolbar span {
+	vertical-align:9px;
 }
 
 /*

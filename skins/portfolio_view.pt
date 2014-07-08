@@ -70,6 +70,14 @@
         <div id="lightbox_toolbar" class="image_toolbar"
              tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
              tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
+          <span>
+            <span i18n:translate="" tal:omit-tag="">sort:</span>
+            <select name="sort">
+              <option value="position" i18n:translate="">manual</option>
+              <option value="DateTimeOriginal" i18n:translate="">shooting</option>
+              <option value="modified" i18n:translate="">modification</option>
+            </select>
+          </span>
           <input type="image" width="17" height="27" alt="delete" title="delete"
                  name="delete"
                  tal:attributes="src string:$portal_url/trash_btn.gif"
