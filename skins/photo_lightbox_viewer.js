@@ -169,6 +169,7 @@ Lightbox.prototype.onResponseLoad = function(req) {
 			break;
         case 'sorted' :
             this.fm.submitButton = undefined;
+            this.refreshGrid();
             break;
 	}
 };
@@ -285,6 +286,48 @@ Lightbox.prototype.selectCBRange = function(evt) {
 	else {
 		this.lastCBChecked = undefined;
 	}
+};
+
+Lightbox.prototype.refreshGrid = function() {
+	if (!this.uidIndex) {
+		// build checkbox index
+		this.uidIndex = {};
+		var i, node, length=0;
+		var nodes = this.grid.childNodes;
+		for (i=0 ; i<nodes.length ; i++) {
+			node = nodes[i];
+			if (node.nodeName === 'SPAN') {
+				this.uidIndex[node.name] = node;
+				length++;
+			}
+		}
+		this.uidIndex.length = length;
+	}
+	var req = new XMLHttpRequest();
+	self = this;
+	req.onreadystatechange = function() {
+		switch (req.readyState) {
+			case 1 :
+				showProgressImage();
+				break;
+			case 4 :
+				hideProgressImage();
+				if (req.status === 200) {
+					self._refreshGrid(req)
+				}
+				break;
+		}
+	};
+	
+	var url = absolute_url() +
+			  '/portfolio_thumbnails_tail?start:int=0&size:int=' +
+			  this.uidIndex.length;
+	req.open('GET', url, true);
+	req.send();
+};
+
+Lightbox.prototype._refreshGrid = function(req) {
+	console.log(req);
 };
 
 
