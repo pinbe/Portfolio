@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Sat Jul  5 14:18:53 2014\n"
-"PO-Revision-Date: 2014-07-05 14:19+0200\n"
+"POT-Creation-Date: Tue Jul  8 18:30:13 2014\n"
+"PO-Revision-Date: 2014-07-08 18:31+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -148,7 +148,7 @@ msgstr "Prix (TTC)"
 msgid "refresh amount"
 msgstr "actualiser le montant"
 
-#: o/skins/my_cart_template.pt:59 o/skins/portfolio_view.pt:71
+#: o/skins/my_cart_template.pt:59 o/skins/portfolio_view.pt:81
 msgid "delete"
 msgstr "supprimer"
 
@@ -279,21 +279,37 @@ msgstr "référence :"
 msgid "download picture"
 msgstr "télécharger l'image"
 
-#: o/skins/portfolio_edit_form.py:13
+#: o/skins/portfolio_edit_form.py:17
 msgid "Photo deleted."
 msgstr "Photo supprimée."
 
-#: o/skins/portfolio_edit_form.py:15
+#: o/skins/portfolio_edit_form.py:19
 msgid "Deleted photos."
 msgstr "Photos supprimées."
 
-#: o/skins/portfolio_edit_form.py:18
+#: o/skins/portfolio_edit_form.py:22
 msgid "Nothing to delete."
 msgstr "Rien à supprimer."
 
 #: o/skins/portfolio_presentation_template.pt:22
 msgid "Delete presentation"
 msgstr "Supprimer la présentation"
+
+#: o/skins/portfolio_view.pt:74
+msgid "sorting:"
+msgstr "tri :"
+
+#: o/skins/portfolio_view.pt:76
+msgid "manual"
+msgstr "manuel"
+
+#: o/skins/portfolio_view.pt:77
+msgid "shooting"
+msgstr "prise de vue"
+
+#: o/skins/portfolio_view.pt:78
+msgid "modification"
+msgstr "modification"
 
 #: o/skins/save_as_lightbox_template.pt:12
 msgid "Save current selection as lightbox"

@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Sat Jul  5 14:18:53 2014\n"
+"POT-Creation-Date: Tue Jul  8 18:30:13 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -160,8 +160,8 @@ msgstr ""
 
 #: o/skins/my_cart_template.pt:59
 #: o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:71
-#: o/skins/portfolio_view.pt:71
+#: o/skins/portfolio_view.pt:81
+#: o/skins/portfolio_view.pt:81
 msgid "delete"
 msgstr ""
 
@@ -304,20 +304,36 @@ msgstr ""
 msgid "download picture"
 msgstr ""
 
-#: o/skins/portfolio_edit_form.py:13
+#: o/skins/portfolio_edit_form.py:17
 msgid "Photo deleted."
 msgstr ""
 
-#: o/skins/portfolio_edit_form.py:15
+#: o/skins/portfolio_edit_form.py:19
 msgid "Deleted photos."
 msgstr ""
 
-#: o/skins/portfolio_edit_form.py:18
+#: o/skins/portfolio_edit_form.py:22
 msgid "Nothing to delete."
 msgstr ""
 
 #: o/skins/portfolio_presentation_template.pt:22
 msgid "Delete presentation"
+msgstr ""
+
+#: o/skins/portfolio_view.pt:74
+msgid "sorting:"
+msgstr ""
+
+#: o/skins/portfolio_view.pt:76
+msgid "manual"
+msgstr ""
+
+#: o/skins/portfolio_view.pt:77
+msgid "shooting"
+msgstr ""
+
+#: o/skins/portfolio_view.pt:78
+msgid "modification"
 msgstr ""
 
 #: o/skins/save_as_lightbox_template.pt:12

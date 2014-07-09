@@ -8,11 +8,11 @@ uidtool = getToolByName(context, 'portal_uidhandler')
 
 features = {}
 def toggleSelection(o, selected) :
-	if selected :
-		return '%s/remove_to_selection' % o.absolute_url()
-	else :
-		return '%s/add_to_selection' % o.absolute_url()
-	
+    if selected :
+        return '%s/remove_to_selection' % o.absolute_url()
+    else :
+        return '%s/add_to_selection' % o.absolute_url()
+    
 features['select'] = toggleSelection
 features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.absolute_url()
 
@@ -23,8 +23,12 @@ if mtool.checkPermission(ModifyPortalContent, context) :
 
 req = context.REQUEST
 pho_start = req.get('pho_start', 0)
-batch = Batch(portfolio.listNearestFolderContents(contentFilter={'portal_type' : ['Photo']}, sorted=True),
-			  context.default_batch_size, pho_start, orphan=5, quantumleap=1, b_start_str='pho_start')
+sort_on, sort_order = context.getDefaultSorting()
+contentFilter = {'portal_type' : ['Photo'],
+                 'sort_on' : sort_on,
+                 'sort_order' : sort_order}
+batch = Batch(portfolio.listCatalogedContents(contentFilter=contentFilter),
+              context.default_batch_size, pho_start, orphan=5, quantumleap=1, b_start_str='pho_start')
 
 
 infos = []
@@ -33,36 +37,36 @@ selDict = sd.get('objects_selection_dict', {})
 cart = sd.get('cart', None)
 
 for p in batch :
-	className = ''
-	uid = getattr(p, 'cmf_uid', None)
-	if uid is not None :
-		uid = uid()
-	absUrl = p.absolute_url()
-	selected = selDict.has_key(uid)
-	hiddenForAnonymous = p.hiddenForAnonymous()
-	if pptool :
-		buyable = bool(pptool.getPrintingOptionsFor(p))
-		if cart and cart.locked :
-			buyable = False
-	else :
-		buyable = False
-	
-	if selected :
-		className = 'selected'
-	if hiddenForAnonymous :
-		className = 'hidden-slide'
-	
-	d = {'href'		: absUrl
-		,'thumbUrl'	: '%s/getThumbnail' % absUrl
-		,'thumbSize': p.getThumbnailSize()
-		,'title'	: ('%s - %s' % (p.Title(), p.Description())).strip(' -')
-		,'selected'	: selected
-		,'hiddenForAnonymous' : hiddenForAnonymous
-		,'cmf_uid'	: uidtool.register(p)
-		,'buyable'  : buyable
-		,'className': className
-		,'o'		: p
-		}
-	infos.append(d)
+    className = ''
+    uid = getattr(p, 'cmf_uid', None)
+    # if uid is not None :
+    #     uid = uid()
+    absUrl = p.getURL()
+    selected = selDict.has_key(uid)
+    hiddenForAnonymous = p.hiddenForAnonymous
+    if pptool :
+        buyable = bool(pptool.getPrintingOptionsFor(p))
+        if cart and cart.locked :
+            buyable = False
+    else :
+        buyable = False
+    
+    if selected :
+        className = 'selected'
+    if hiddenForAnonymous :
+        className = 'hidden-slide'
+    
+    d = {'href'     : absUrl
+        ,'thumbUrl' : '%s/getThumbnail' % absUrl
+        ,'thumbSize': p.getThumbnailSize
+        ,'title'    : ('%s - %s' % (p.Title, p.Description)).strip(' -')
+        ,'selected' : selected
+        ,'hiddenForAnonymous' : hiddenForAnonymous
+        ,'cmf_uid'  : uidtool.register(p)
+        ,'buyable'  : buyable
+        ,'className': className
+        ,'o'        : p
+        }
+    infos.append(d)
 
 return {'infos':infos, 'batch':batch, 'features':features}

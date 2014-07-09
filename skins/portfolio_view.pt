@@ -71,12 +71,15 @@
              tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
              tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
           <span>
-            <span i18n:translate="" tal:omit-tag="">sort:</span>
-            <select name="sort">
+            <span i18n:translate="" tal:omit-tag="">sorting:</span>
+            <select name="sorting">
               <option value="position" i18n:translate="">manual</option>
               <option value="DateTimeOriginal" i18n:translate="">shooting</option>
               <option value="modified" i18n:translate="">modification</option>
             </select>
+            <noscript>
+              <input type="submit" name="set_sorting" value="ok"/>
+            </noscript>
           </span>
           <input type="image" width="17" height="27" alt="delete" title="delete"
                  name="delete"
