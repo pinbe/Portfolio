@@ -9,12 +9,12 @@ uidtool = getToolByName(context, 'portal_uidhandler')
 features = {}
 def toggleSelection(o, selected) :
     if selected :
-        return '%s/remove_to_selection' % o.absolute_url()
+        return '%s/remove_to_selection' % o.getURL()
     else :
-        return '%s/add_to_selection' % o.absolute_url()
+        return '%s/add_to_selection' % o.getURL()
     
 features['select'] = toggleSelection
-features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.absolute_url()
+features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.getURL()
 
 if mtool.checkPermission(ReviewPortalContent, context) :
     features['hideAnonymous'] = True
@@ -45,7 +45,7 @@ for p in batch :
     selected = selDict.has_key(uid)
     hiddenForAnonymous = p.hiddenForAnonymous
     if pptool :
-        buyable = bool(pptool.getPrintingOptionsFor(p))
+        buyable = bool(pptool.getPrintingOptionsFor(p.getObject()))
         if cart and cart.locked :
             buyable = False
     else :
