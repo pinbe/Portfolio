@@ -1,0 +1,10 @@
+<metal:block metal:use-macro="here/main_template_macros/macros/global_defines" />
+<thumbnails tal:define="infos options/infos;
+                 slide_size portal_object/slide_size;
+                 features options/features"
+     >
+  <div metal:use-macro="here/photo_layout_macros/macros/thumbnails">
+    thumbnails
+  </div>
+</thumbnails>
+<tal:block tal:define="global dummy python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')" />
