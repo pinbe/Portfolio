@@ -289,20 +289,6 @@ Lightbox.prototype.selectCBRange = function(evt) {
 };
 
 Lightbox.prototype.refreshGrid = function() {
-	if (!this.uidIndex) {
-		// build checkbox index
-		this.uidIndex = {};
-		var i, node, length=0;
-		var nodes = this.grid.childNodes;
-		for (i=0 ; i<nodes.length ; i++) {
-			node = nodes[i];
-			if (node.nodeName === 'SPAN') {
-				this.uidIndex[node.name] = node;
-				length++;
-			}
-		}
-		this.uidIndex.length = length;
-	}
 	var req = new XMLHttpRequest();
 	self = this;
 	req.onreadystatechange = function() {
@@ -321,13 +307,18 @@ Lightbox.prototype.refreshGrid = function() {
 	
 	var url = absolute_url() +
 			  '/portfolio_thumbnails_tail?start:int=0&size:int=' +
-			  this.uidIndex.length;
+			  this.grid.children.length;
 	req.open('GET', url, true);
 	req.send();
 };
 
 Lightbox.prototype._refreshGrid = function(req) {
-	console.log(req);
+    var doc = req.responseXML.documentElement;
+    var i;
+    var slides = this.grid.children;
+    for (i=0 ; i<doc.children.length ; i++) {
+        this.grid.replaceChild(getCopyOfNode(doc.children[i]), slides[i]);
+    }
 };
 
 
