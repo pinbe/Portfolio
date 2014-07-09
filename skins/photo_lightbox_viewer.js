@@ -169,6 +169,7 @@ Lightbox.prototype.onResponseLoad = function(req) {
 			break;
         case 'sorted' :
             this.fm.submitButton = undefined;
+            break;
 	}
 };
 
