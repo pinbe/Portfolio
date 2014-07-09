@@ -13,7 +13,7 @@
          i18n:domain="portfolio">
       <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
       <div id="lightbox" tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
-        <span tal:repeat="info infos" tal:omit-tag="">
+        <span metal:define-macro="thumbnails" tal:repeat="info infos" tal:omit-tag="">
           <span tal:define="size info/thumbSize;
                             margin_top python:(slide_size - size['height']) / 2;
                             margin_left python:(slide_size - size['width']) / 2;
