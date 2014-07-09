@@ -32,5 +32,5 @@ if fg('set_sorting') :
     if not fg('ajax') :
         return context.setRedirect(context, 'object/view')
     else :
-        return '<done/>'
+        return '<sorted/>'
 return '<error/>'
