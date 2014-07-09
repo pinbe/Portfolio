@@ -14,6 +14,7 @@ var reSelected = /.*selected.*/;
 Lightbox = function(grid, toolbar) {
 	var self = this;
 	this.grid = grid;
+    this.lastSlide = this.grid.children[this.grid.children.length-1];
 	this.toolbar = toolbar;
 	if (toolbar) {
 		this.toolbarFixed = false;
@@ -51,6 +52,9 @@ Lightbox.prototype.windowScrollHandler = function(evt) {
 		this.toolbarFixed = false;
 		this.switchToolBarPositioning(false);
 	}
+    if (window.scrollY > this.lastSlide.firstElementChild.offsetTop - getWindowHeight()) {
+        console.log('À boire !');
+    }
 };
 
 Lightbox.prototype.mouseClickHandler = function(evt) {
