@@ -28,7 +28,7 @@ if fg('delete.x') or form.has_key('delete') :
     else :
         return '<deleted>%s</deleted>' % msg
 if fg('set_sorting') :
-    context.setDefaultSorting(fg('sorting'), False)
+    context.setDefaultSorting(fg('sort_on'), False)
     if not fg('ajax') :
         return context.setRedirect(context, 'object/view')
     else :

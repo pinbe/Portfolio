@@ -69,4 +69,9 @@ for p in batch :
         }
     infos.append(d)
 
-return {'infos':infos, 'batch':batch, 'features':features}
+return {'infos':infos,
+        'batch':batch,
+        'features':features,
+        'sorting' : {'sort_on' : sort_on,
+                     'sort_order' : sort_order}
+        }

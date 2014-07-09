@@ -72,10 +72,14 @@
              tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
           <span>
             <span i18n:translate="" tal:omit-tag="">sorting:</span>
-            <select name="sorting">
-              <option value="position" i18n:translate="">manual</option>
-              <option value="DateTimeOriginal" i18n:translate="">shooting</option>
-              <option value="modified" i18n:translate="">modification</option>
+            <select tal:define="sort_on batchInfos/sorting/sort_on"
+                    name="sort_on">
+              <option tal:attributes="selected python:sort_on=='position'"
+                      value="position" i18n:translate="">manual</option>
+              <option tal:attributes="selected python:sort_on=='DateTimeOriginal'"
+                      value="DateTimeOriginal" i18n:translate="">shooting</option>
+              <option tal:attributes="selected python:sort_on=='modified'"
+                      value="modified" i18n:translate="">modification</option>
             </select>
             <noscript>
               <input type="submit" name="set_sorting" value="ok"/>
