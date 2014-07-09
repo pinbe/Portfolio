@@ -34,7 +34,8 @@ Lightbox = function(grid, toolbar) {
 	}
 	addListener(this.grid, 'click', function(evt){self.mouseClickHandler(evt);});
 	if (this.form) {
-		var fm = new FormManager(this.form);
+		var fm = this.fm = new FormManager(this.form);
+        addListener(this.form, 'change', function(evt){self.onChangeHandler(evt);});
 		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
 		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
 	}
@@ -42,7 +43,6 @@ Lightbox = function(grid, toolbar) {
 
 Lightbox.prototype.windowScrollHandler = function(evt) {
 	if (this.toolbar.offsetTop < window.scrollY && !this.toolbarFixed) {
-		console.log('this.toolbar.offsetTop', this.toolbar.offsetTop);
 		this.toolbarFixed = true;
 		this.backThreshold = this.toolbar.offsetTop;
 		this.switchToolBarPositioning(true);
@@ -143,6 +143,14 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 	}
 };
 
+Lightbox.prototype.onChangeHandler = function(evt) {
+    var target = getTargetedObject(evt);
+    if (target.name === 'sort_on') {
+        this.fm.submitButton = {'name' : 'set_sorting', 'value' : 'ok'};
+        this.fm.submit(evt);
+    }
+};
+
 Lightbox.prototype.onBeforeSubmit = function(fm, evt) {
 	switch(fm.submitButton.name) {
 		case 'delete' :
@@ -159,6 +167,8 @@ Lightbox.prototype.onResponseLoad = function(req) {
 		case 'error' :
 			this.showSelection();
 			break;
+        case 'sorted' :
+            this.fm.submitButton = undefined;
 	}
 };
 
