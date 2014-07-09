@@ -1,10 +1,7 @@
 /*
-* © 2009 Luxia SAS. All rights reserved.
-* Contributors
-* — Benoît Pin <pinbe@luxia.fr>
-* 
-* 
-* 
+* 2009 Benoit Pin - MINES ParisTech
+* http://plinn.org
+* Licence GPL
 */
 
 

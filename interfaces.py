@@ -15,4 +15,4 @@ from zope.interface import Interface
 
 
 class IPhoto(Interface) :
-	"Base class for Cliché™ aware photo"
+	"Base class for Plinn aware photo"
