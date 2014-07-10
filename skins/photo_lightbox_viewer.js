@@ -23,7 +23,8 @@ Lightbox = function(grid, toolbar, complete) {
 		addListener(window, 'scroll', function(evt){self.windowScrollToolbarlHandler(evt);});
 	}
 	addListener(window, 'scroll', function(evt){self.windowScrollGridHandler(evt);});
-	addListener(window, 'load', function(evt){ self.windowScrollGridHandler();});
+	// addListener(window, 'load', function(evt){ self.windowScrollGridHandler();});
+	registerStartupFunction(function(){ self.windowScrollGridHandler();});
 	this.lastCBChecked = undefined;
 	this.form = undefined;
 	var parent = this.grid.parentNode;
