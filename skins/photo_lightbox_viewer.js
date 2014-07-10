@@ -53,7 +53,7 @@ Lightbox.prototype.windowScrollHandler = function(evt) {
 		this.switchToolBarPositioning(false);
 	}
     if (window.scrollY > this.lastSlide.firstElementChild.offsetTop - getWindowHeight()) {
-        console.log('À boire !');
+        this.fetchTail();
     }
 };
 
@@ -317,6 +317,40 @@ Lightbox.prototype.refreshGrid = function() {
 };
 
 Lightbox.prototype._refreshGrid = function(req) {
+    var doc = req.responseXML.documentElement;
+    var i;
+    var slides = this.grid.children;
+    for (i=0 ; i<doc.children.length ; i++) {
+        this.grid.replaceChild(getCopyOfNode(doc.children[i]), slides[i]);
+    }
+};
+
+Lightbox.prototype.fetchTail = function() {
+	var req = new XMLHttpRequest();
+	self = this;
+	req.onreadystatechange = function() {
+		switch (req.readyState) {
+			case 1 :
+				showProgressImage();
+				break;
+			case 4 :
+				hideProgressImage();
+				if (req.status === 200) {
+					self._appendTail(req)
+				}
+				break;
+		}
+	};
+	
+	var url = absolute_url() +
+			  '/portfolio_thumbnails_tail?start:int=' +
+              String(this.grid.children.length + 1 ) +
+              '&size:int=10';
+	req.open('GET', url, true);
+	req.send();
+};
+
+Lightbox.prototype._appendTail = function(req) {
     var doc = req.responseXML.documentElement;
     var i;
     var slides = this.grid.children;

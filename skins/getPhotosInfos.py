@@ -1,4 +1,4 @@
-##parameters=portfolio
+##parameters=portfolio, pho_start=None, batch_size=None
 from Products.Plinn.PloneMisc import Batch
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ReviewPortalContent, ModifyPortalContent
@@ -22,13 +22,14 @@ if mtool.checkPermission(ModifyPortalContent, context) :
     features['checkbox'] = True
 
 req = context.REQUEST
-pho_start = req.get('pho_start', 0)
+pho_start = pho_start if pho_start is not None else 0
+batch_size = batch_size if batch_size is not None else context.default_batch_size
 sort_on, sort_order = context.getDefaultSorting()
 contentFilter = {'portal_type' : ['Photo'],
                  'sort_on' : sort_on,
                  'sort_order' : sort_order}
 batch = Batch(portfolio.listCatalogedContents(contentFilter=contentFilter),
-              context.default_batch_size, pho_start, orphan=5, quantumleap=1, b_start_str='pho_start')
+              batch_size, pho_start, orphan=5, quantumleap=1, b_start_str='pho_start')
 
 
 infos = []
