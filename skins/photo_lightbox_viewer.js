@@ -59,12 +59,12 @@ Lightbox.prototype._buildSlidesIndex = function() {
 };
 
 Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
-	if (this.toolbar.offsetTop < window.scrollY && !this.toolbarFixed) {
+	if (this.toolbar.offsetTop < getWindowScrollY() && !this.toolbarFixed) {
 		this.toolbarFixed = true;
 		this.backThreshold = this.toolbar.offsetTop;
 		this.switchToolBarPositioning(true);
 	}
-	else if (this.toolbarFixed && window.scrollY < this.backThreshold) {
+	else if (this.toolbarFixed && getWindowScrollY() < this.backThreshold) {
 		this.toolbarFixed = false;
 		this.switchToolBarPositioning(false);
 	}
@@ -72,7 +72,9 @@ Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
 Lightbox.prototype.windowScrollGridHandler = function(evt) {
 	if (!this.complete &&
 		!this.fetchingDisabled &&
-		window.scrollY > this.lastSlide.firstElementChild.offsetTop - getWindowHeight()) {
+		getWindowScrollY() >
+			(this.lastSlide.firstElementChild || this.lastSlide.children[0]).offsetTop
+			 - getWindowHeight()) {
 		this.fetchingDisabled = true;
 		this.fetchTail();
 	}
@@ -322,7 +324,7 @@ Lightbox.prototype.refreshGrid = function() {
 			case 4 :
 				hideProgressImage();
 				if (req.status === 200) {
-					self._refreshGrid(req)
+					self._refreshGrid(req);
 				}
 				break;
 		}
@@ -353,7 +355,7 @@ Lightbox.prototype._refreshGrid = function(req) {
 
 Lightbox.prototype.fetchTail = function() {
 	var req = new XMLHttpRequest();
-	self = this;
+	var self = this;
 	req.onreadystatechange = function() {
 		switch (req.readyState) {
 			case 1 :
@@ -362,7 +364,7 @@ Lightbox.prototype.fetchTail = function() {
 			case 4 :
 				hideProgressImage();
 				if (req.status === 200) {
-					self._appendTail(req)
+					self._appendTail(req);
 				}
 				break;
 		}
