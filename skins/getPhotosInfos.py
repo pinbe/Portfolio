@@ -29,7 +29,7 @@ contentFilter = {'portal_type' : ['Photo'],
                  'sort_on' : sort_on,
                  'sort_order' : sort_order}
 batch = Batch(portfolio.listCatalogedContents(contentFilter=contentFilter),
-              batch_size, pho_start, orphan=5, quantumleap=1, b_start_str='pho_start')
+              batch_size, pho_start, quantumleap=1, b_start_str='pho_start')
 
 
 infos = []

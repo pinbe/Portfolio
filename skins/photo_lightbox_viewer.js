@@ -338,10 +338,14 @@ Lightbox.prototype.refreshGrid = function() {
 Lightbox.prototype._refreshGrid = function(req) {
 	var doc = req.responseXML.documentElement;
 	var i, node;
+	var j = 0;
 	for (i=0 ; i<doc.childNodes.length ; i++) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
-			this.slides[i] = this.grid.replaceChild(getCopyOfNode(node), this.slides[i]);
+			node = getCopyOfNode(node);
+			this.grid.replaceChild(node, this.slides[j]);
+			this.slides[j] = node;
+			j++;
 		}
 	}
 	this.cbIndex = undefined;
