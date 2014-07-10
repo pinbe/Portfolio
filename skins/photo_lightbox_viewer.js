@@ -14,18 +14,9 @@ var reSelected = /.*selected.*/;
 Lightbox = function(grid, toolbar, complete) {
 	var self = this;
 	this.grid = grid;
-	this.slides = [];
-	var node, i;
-	for (i=0 ; i<this.grid.childNodes.length ; i++) {
-		node = this.grid.childNodes[i];
-		if (node.nodeType === 1) { // is element
-			this.slides.push(node);
-		}
-	}
-	this.lastSlide = this.slides[this.slides.length-1];
+	this._buildSlidesIndex(); // set this.slides and this.lastSlide;
 	this.fetchingDisabled = false;
 	this.complete = complete;
-	console.log('complete:', complete)
 	this.toolbar = toolbar;
 	if (toolbar) {
 		this.toolbarFixed = false;
@@ -53,6 +44,18 @@ Lightbox = function(grid, toolbar, complete) {
 		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
 		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
 	}
+};
+
+Lightbox.prototype._buildSlidesIndex = function() {
+	this.slides = [];
+	var node, i;
+	for (i=0 ; i<this.grid.childNodes.length ; i++) {
+		node = this.grid.childNodes[i];
+		if (node.nodeType === 1) { // is element
+			this.slides.push(node);
+		}
+	}
+	this.lastSlide = this.slides[this.slides.length-1];
 };
 
 Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
@@ -255,7 +258,7 @@ Lightbox.prototype.deleteSelection = function() {
 };
 
 Lightbox.prototype._removeSelection = function() {
-	var i, e, slide;
+	var i, e;
 	var toRemove = [];
 	for (i=0 ; i<this.form.elements.length ; i++) {
 		e = this.form.elements[i];
@@ -264,10 +267,11 @@ Lightbox.prototype._removeSelection = function() {
 		}
 	}
 	for (i=0 ; i<toRemove.length ; i++) {
-		slide = toRemove[i];
-		slide.parentNode.removeChild(slide);
+		this.grid.removeChild(toRemove[i]);
 	}
+	this._buildSlidesIndex();
 	this.cbIndex = undefined;
+	this.windowScrollGridHandler();
 };
 
 Lightbox.prototype.getCBIndex = function(cb) {
@@ -275,14 +279,11 @@ Lightbox.prototype.getCBIndex = function(cb) {
 		// build checkbox index
 		this.cbIndex = [];
 		var i, node, c;
-		var nodes = this.grid.childNodes;
-		for (i=0 ; i<nodes.length ; i++) {
-			node = nodes[i];
-			if (node.nodeName === 'SPAN') {
-				c = node.getElementsByTagName('input')[0];
-				c.index = this.cbIndex.length;
-				this.cbIndex[this.cbIndex.length] = c;
-			}
+		for (i=0 ; i<this.slides.length ; i++) {
+			node = this.slides[i];
+			c = node.getElementsByTagName('input')[0];
+			c.index = this.cbIndex.length;
+			this.cbIndex.push(c);
 		}
 	}
 	return cb.index;
@@ -343,6 +344,7 @@ Lightbox.prototype._refreshGrid = function(req) {
 			this.slides[i] = this.grid.replaceChild(getCopyOfNode(node), this.slides[i]);
 		}
 	}
+	this.cbIndex = undefined;
 };
 
 Lightbox.prototype.fetchTail = function() {
@@ -372,18 +374,23 @@ Lightbox.prototype.fetchTail = function() {
 
 Lightbox.prototype._appendTail = function(req) {
 	var doc = req.responseXML.documentElement;
-	var i, node;
+	var i, node, c;
 	for (i=0 ; i<doc.childNodes.length ; i++) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			this.lastSlide = this.grid.appendChild(getCopyOfNode(node));
 			this.slides.push(this.lastSlide);
+			if (this.cbIndex) {
+				c = this.lastSlide.getElementsByTagName('input')[0];
+				c.index = this.cbIndex.length;
+				this.cbIndex.push(c);
+				
+			}
 		}
 	}
 	this.fetchingDisabled = false;
 	if (doc.getAttribute('nomore')) {
 		this.complete = true;
-		console.info('complete');
 	}
 	this.windowScrollGridHandler();
 };
