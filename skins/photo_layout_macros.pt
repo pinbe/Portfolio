@@ -104,9 +104,12 @@
       <noscript>
         <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
       </noscript>
-      <script type="text/javascript" tal:condition="not:dropable">
-        new Lightbox(document.getElementById('lightbox'),
-                     document.getElementById('lightbox_toolbar'));
+      <script type="text/javascript" tal:condition="not:dropable"
+              tal:content="structure python:'''
+              new Lightbox(document.getElementById('lightbox'),
+                           document.getElementById('lightbox_toolbar'),
+                           %s);
+                           ''' % ('true' if not batch.next else 'false')">
       </script>
       <script type="text/javascript"
               tal:condition="dropable"
@@ -114,7 +117,8 @@
               (function(){
                 var lb = document.getElementById('lightbox');
                 new Lightbox(lb,
-                             document.getElementById('lightbox_toolbar'));
+                             document.getElementById('lightbox_toolbar'),
+                             %(complete)s);
                 var uploadUrl = '%(putUrl)s';
                 var options = {'slideSize' : %(slideSize)d,
                                'thumbnailSize' : %(thumbnailSize)d};
@@ -122,7 +126,8 @@
               })();
               ''' % {'putUrl' : '%s/put_upload' % here.absolute_url(),
                      'slideSize' : portal_object.slide_size,
-                     'thumbnailSize' : portal_object.thumb_size}">
+                     'thumbnailSize' : portal_object.thumb_size,
+                     'complete': 'true' if not batch.next else 'false'}">
       </script>
     </div>
     <div metal:define-macro="film_bar" tal:omit-tag="">

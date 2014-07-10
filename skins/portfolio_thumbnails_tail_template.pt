@@ -2,6 +2,7 @@
 <thumbnails tal:define="infos options/infos;
                  slide_size portal_object/slide_size;
                  features options/features"
+     tal:attributes="nomore python:'nomore' if not options['batch'].next else nothing"
      >
   <div metal:use-macro="here/photo_layout_macros/macros/thumbnails">
     thumbnails

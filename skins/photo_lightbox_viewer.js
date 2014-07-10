@@ -11,15 +11,20 @@ var Lightbox;
 
 var reSelected = /.*selected.*/;
 
-Lightbox = function(grid, toolbar) {
+Lightbox = function(grid, toolbar, complete) {
 	var self = this;
 	this.grid = grid;
-    this.lastSlide = this.grid.children[this.grid.children.length-1];
+	this.lastSlide = this.grid.children[this.grid.children.length-1];
+	this.fetchingDisabled = false;
+	this.complete = complete;
+	console.log('complete:', complete)
 	this.toolbar = toolbar;
 	if (toolbar) {
 		this.toolbarFixed = false;
-		addListener(window, 'scroll', function(evt){self.windowScrollHandler(evt);});
+		addListener(window, 'scroll', function(evt){self.windowScrollToolbarlHandler(evt);});
 	}
+	addListener(window, 'scroll', function(evt){self.windowScrollGridHandler(evt);});
+	addListener(window, 'load', function(evt){ self.windowScrollGridHandler();});
 	this.lastCBChecked = undefined;
 	this.form = undefined;
 	var parent = this.grid.parentNode;
@@ -36,13 +41,13 @@ Lightbox = function(grid, toolbar) {
 	addListener(this.grid, 'click', function(evt){self.mouseClickHandler(evt);});
 	if (this.form) {
 		var fm = this.fm = new FormManager(this.form);
-        addListener(this.form, 'change', function(evt){self.onChangeHandler(evt);});
+		addListener(this.form, 'change', function(evt){self.onChangeHandler(evt);});
 		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
 		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
 	}
 };
 
-Lightbox.prototype.windowScrollHandler = function(evt) {
+Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
 	if (this.toolbar.offsetTop < window.scrollY && !this.toolbarFixed) {
 		this.toolbarFixed = true;
 		this.backThreshold = this.toolbar.offsetTop;
@@ -52,16 +57,21 @@ Lightbox.prototype.windowScrollHandler = function(evt) {
 		this.toolbarFixed = false;
 		this.switchToolBarPositioning(false);
 	}
-    if (window.scrollY > this.lastSlide.firstElementChild.offsetTop - getWindowHeight()) {
-        this.fetchTail();
-    }
+};
+Lightbox.prototype.windowScrollGridHandler = function(evt) {
+	if (!this.complete &&
+		!this.fetchingDisabled &&
+		window.scrollY > this.lastSlide.firstElementChild.offsetTop - getWindowHeight()) {
+		this.fetchingDisabled = true;
+		this.fetchTail();
+	}
 };
 
 Lightbox.prototype.mouseClickHandler = function(evt) {
 	var target = getTargetedObject(evt);
 	if (target.tagName === 'IMG') {
 		var img = target;
-		var link =  target.parentNode;
+		var link =	target.parentNode;
 		var button =  link.parentNode;
 		var slide = button.parentNode;
 		var req, url;
@@ -148,11 +158,11 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 };
 
 Lightbox.prototype.onChangeHandler = function(evt) {
-    var target = getTargetedObject(evt);
-    if (target.name === 'sort_on') {
-        this.fm.submitButton = {'name' : 'set_sorting', 'value' : 'ok'};
-        this.fm.submit(evt);
-    }
+	var target = getTargetedObject(evt);
+	if (target.name === 'sort_on') {
+		this.fm.submitButton = {'name' : 'set_sorting', 'value' : 'ok'};
+		this.fm.submit(evt);
+	}
 };
 
 Lightbox.prototype.onBeforeSubmit = function(fm, evt) {
@@ -171,10 +181,10 @@ Lightbox.prototype.onResponseLoad = function(req) {
 		case 'error' :
 			this.showSelection();
 			break;
-        case 'sorted' :
-            this.fm.submitButton = undefined;
-            this.refreshGrid();
-            break;
+		case 'sorted' :
+			this.fm.submitButton = undefined;
+			this.refreshGrid();
+			break;
 	}
 };
 
@@ -317,12 +327,12 @@ Lightbox.prototype.refreshGrid = function() {
 };
 
 Lightbox.prototype._refreshGrid = function(req) {
-    var doc = req.responseXML.documentElement;
-    var i;
-    var slides = this.grid.children;
-    for (i=0 ; i<doc.children.length ; i++) {
-        this.grid.replaceChild(getCopyOfNode(doc.children[i]), slides[i]);
-    }
+	var doc = req.responseXML.documentElement;
+	var i;
+	var slides = this.grid.children;
+	for (i=0 ; i<doc.children.length ; i++) {
+		this.grid.replaceChild(getCopyOfNode(doc.children[i]), slides[i]);
+	}
 };
 
 Lightbox.prototype.fetchTail = function() {
@@ -344,19 +354,25 @@ Lightbox.prototype.fetchTail = function() {
 	
 	var url = absolute_url() +
 			  '/portfolio_thumbnails_tail?start:int=' +
-              String(this.grid.children.length + 1 ) +
-              '&size:int=10';
+			  String(this.grid.children.length + 1 ) +
+			  '&size:int=10';
 	req.open('GET', url, true);
 	req.send();
 };
 
 Lightbox.prototype._appendTail = function(req) {
-    var doc = req.responseXML.documentElement;
-    var i;
-    var slides = this.grid.children;
-    for (i=0 ; i<doc.children.length ; i++) {
-        this.grid.replaceChild(getCopyOfNode(doc.children[i]), slides[i]);
-    }
+	var doc = req.responseXML.documentElement;
+	var i;
+	var slides = this.grid.children;
+	for (i=0 ; i<doc.children.length ; i++) {
+		this.lastSlide = this.grid.appendChild(getCopyOfNode(doc.children[i]));
+	}
+	this.fetchingDisabled = false;
+	if (doc.getAttribute('nomore')) {
+		this.complete = true;
+		console.info('complete');
+	}
+	this.windowScrollGridHandler();
 };
 
 
