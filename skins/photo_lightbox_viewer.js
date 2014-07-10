@@ -14,7 +14,15 @@ var reSelected = /.*selected.*/;
 Lightbox = function(grid, toolbar, complete) {
 	var self = this;
 	this.grid = grid;
-	this.lastSlide = this.grid.children[this.grid.children.length-1];
+	this.slides = [];
+	var node, i;
+	for (i=0 ; i<this.grid.childNodes.length ; i++) {
+		node = this.grid.childNodes[i];
+		if (node.nodeType === 1) { // is element
+			this.slides.push(node);
+		}
+	}
+	this.lastSlide = this.slides[this.slides.length-1];
 	this.fetchingDisabled = false;
 	this.complete = complete;
 	console.log('complete:', complete)
@@ -321,17 +329,19 @@ Lightbox.prototype.refreshGrid = function() {
 	
 	var url = absolute_url() +
 			  '/portfolio_thumbnails_tail?start:int=0&size:int=' +
-			  this.grid.children.length;
+			  this.slides.length;
 	req.open('GET', url, true);
 	req.send();
 };
 
 Lightbox.prototype._refreshGrid = function(req) {
 	var doc = req.responseXML.documentElement;
-	var i;
-	var slides = this.grid.children;
-	for (i=0 ; i<doc.children.length ; i++) {
-		this.grid.replaceChild(getCopyOfNode(doc.children[i]), slides[i]);
+	var i, node;
+	for (i=0 ; i<doc.childNodes.length ; i++) {
+		node = doc.childNodes[i];
+		if (node.nodeType === 1) {
+			this.slides[i] = this.grid.replaceChild(getCopyOfNode(node), this.slides[i]);
+		}
 	}
 };
 
@@ -354,7 +364,7 @@ Lightbox.prototype.fetchTail = function() {
 	
 	var url = absolute_url() +
 			  '/portfolio_thumbnails_tail?start:int=' +
-			  String(this.grid.children.length + 1 ) +
+			  String(this.slides.length + 1 ) +
 			  '&size:int=10';
 	req.open('GET', url, true);
 	req.send();
@@ -362,10 +372,13 @@ Lightbox.prototype.fetchTail = function() {
 
 Lightbox.prototype._appendTail = function(req) {
 	var doc = req.responseXML.documentElement;
-	var i;
-	var slides = this.grid.children;
-	for (i=0 ; i<doc.children.length ; i++) {
-		this.lastSlide = this.grid.appendChild(getCopyOfNode(doc.children[i]));
+	var i, node;
+	for (i=0 ; i<doc.childNodes.length ; i++) {
+		node = doc.childNodes[i];
+		if (node.nodeType === 1) {
+			this.lastSlide = this.grid.appendChild(getCopyOfNode(node));
+			this.slides.push(this.lastSlide);
+		}
 	}
 	this.fetchingDisabled = false;
 	if (doc.getAttribute('nomore')) {
