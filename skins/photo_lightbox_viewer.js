@@ -373,7 +373,7 @@ Lightbox.prototype.fetchTail = function() {
 	
 	var url = absolute_url() +
 			  '/portfolio_thumbnails_tail?start:int=' +
-			  String(this.slides.length + 1 ) +
+			  String(this.slides.length) +
 			  '&size:int=10';
 	req.open('GET', url, true);
 	req.send();
