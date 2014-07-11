@@ -73,11 +73,16 @@ FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 					   'out' :	function(evt){thisSlider.mouseOutHandler(evt);}
 					  };
 
-	this.resizeSlider();
+	if (browser.isMobile) {
+		this.rail.className = 'hidden';
+	}
+	else { 
+		this.resizeSlider();
+	}
 	this.addEventListeners();
 };
 
-
+if (!browser.isMobile) {
 FilmSlider.prototype.resizeSlider = function(evt) {
 	var filmBarWidth = this.filmBarWidth;
 	if (!filmBarWidth) { return; }
@@ -105,6 +110,11 @@ FilmSlider.prototype.resizeSlider = function(evt) {
 		this.initialized = true;
 	}
 };
+}
+
+else {
+	FilmSlider.prototype.resizeSlider = function(evt) {};
+}
 
 FilmSlider.prototype._checkSizeAfterLoad = function(evt) {
 	this._barSizes = [];
@@ -260,6 +270,11 @@ FilmSlider.prototype.addEventListeners = function() {
 	}
 	else if (browser.isIE6up) {
 		addListener(this.filmBar, 'mousewheel', function(evt){thisSlider.mouseWheelHandler(evt);});
+	}
+	if (browser.isMobile) {
+		this.filmBar.addEventListener('touchstart', function(evt){thisSlider.touchStartHandler(evt);}, false);
+		this.filmBar.addEventListener('touchmove', function(evt){thisSlider.touchMoveHandler(evt);}, false);
+		this.filmBar.addEventListener('touchend', function(evt){thisSlider.touchEndHandler(evt);}, false);
 	}
 	
 	addListener(document, 'keydown', function(evt){thisSlider.keyDownHandler(evt);});
@@ -563,6 +578,21 @@ else if (browser.isIE6up) {
 		this.setSliderPosition(pos);
 	};
 }
+
+FilmSlider.prototype.touchStartHandler = function(evt) {
+	this.filmStartX = parseInt(this.film.style.left, 10);
+	this.touchStartX = evt.pageX;
+};
+
+FilmSlider.prototype.touchMoveHandler = function(evt) {
+	var delta = this.touchStartX - evt.pageX;
+	this.film.style.left = String(this.filmStartX - delta) + 'px';
+};
+
+FilmSlider.prototype.touchEndHandler = function(evt) {
+	this.touchStartX = undefined;
+};
+
 
 FilmSlider.prototype.keyDownHandler = function(evt) {
 	evt = getEventObject(evt);

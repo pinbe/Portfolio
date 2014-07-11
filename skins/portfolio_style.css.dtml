@@ -364,7 +364,7 @@ div.lightbox {
   overflow:hidden;
   position:relative;
   width:100%;
-  height: <dtml-var expr="thumb_size/2 + 12">px;;
+  height: <dtml-var expr="thumb_size/2 + 12">px;
 }
 
 #film_bar table {
@@ -378,8 +378,8 @@ div.lightbox {
 }
 
 #film_bar a {
-  width: <dtml-var expr="thumb_size/2 + 10">px;;
-  height: <dtml-var expr="thumb_size/2 + 10">px;;
+  width: <dtml-var expr="thumb_size/2 + 10">px;
+  height: <dtml-var expr="thumb_size/2 + 10">px;
   display:block;
   text-align:center;
   vertical-align:middle;
@@ -428,7 +428,7 @@ div.lightbox {
 }
 
 #cart_slide[id] {
-  background:no-repeat url(&dtml-portal_url;/cart-slide-background.png);;
+  background:no-repeat url(&dtml-portal_url;/cart-slide-background.png);
 }
 
 .wdgt-buyable-items {
@@ -484,7 +484,7 @@ input.add-to-cart-btn {
   border:none;
   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=scale src='&dtml-portal_url;/add_to_cart.png');
   left:<dtml-var expr="slide_size - 47">px;
-  top:2.5em;;
+  top:2.5em;
 }
 
 input.add-to-cart-btn[class] {
