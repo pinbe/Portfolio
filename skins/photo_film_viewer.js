@@ -617,6 +617,7 @@ FilmSlider.prototype.touchStartHandler = function(evt) {
 };
 
 FilmSlider.prototype.touchMoveHandler = function(evt) {
+	disableDefault(evt);
 	var delta = this.touchStartX - evt.pageX;
 	var posX = this.filmStartX - delta;
 	this.setFilmPosition(posX);
