@@ -114,7 +114,14 @@ if (!browser.isMobile) {
 
 else {
 	// pas de barre de scroll horizontal pour les tablettes
-	FilmSlider.prototype.resizeSlider = function(evt) {};
+	FilmSlider.prototype.resizeSlider = function(evt) {
+		this.filmMaxX = - (getObjectWidth(this.film) - this.filmBarWidth);
+		if (!this.initialized) {
+			this.centerSlide(this.center);
+			this.selectedSlide = this.filmBar.getElementsByTagName('img')[this.center].parentNode;
+			this.initialized = true;
+		}
+	};
 }
 
 FilmSlider.prototype._checkSizeAfterLoad = function(evt) {
@@ -201,15 +208,25 @@ FilmSlider.prototype.getBestFitSize = function(ratio) {
 	return DEFAULT_IMAGE_SIZES[i];
 };
 
-FilmSlider.prototype.centerSlide = function(slideIndex) {
-	if (this.sliderRatio > 1) { return; }
-	var filmBarWidth = getObjectWidth(this.filmBar);
-	var x = slideIndex * this.slideSize;
-	x = x - (filmBarWidth - this.slideSize) / 2.0;
-	x = x * this.sliderSpeedRatio;
-	var p = new Point( -x, 0 );
-	this.setSliderPosition(p);
-};
+if (!browser.isMobile) {
+	FilmSlider.prototype.centerSlide = function(slideIndex) {
+		if (this.sliderRatio > 1) { return; }
+		var filmBarWidth = getObjectWidth(this.filmBar);
+		var x = slideIndex * this.slideSize;
+		x = x - (filmBarWidth - this.slideSize) / 2.0;
+		x = x * this.sliderSpeedRatio;
+		var p = new Point( -x, 0 );
+		this.setSliderPosition(p);
+	};
+}
+else {
+	FilmSlider.prototype.centerSlide = function(slideIndex) {
+		var filmBarWidth = getObjectWidth(this.filmBar);
+		var x = slideIndex * this.slideSize;
+		x = x - (filmBarWidth - this.slideSize) / 2.0;
+		this.setFilmPosition(-x);
+	};
+}
 
 FilmSlider.prototype.setSliderPosition = function(point) {
 	if(point.x < 0) { point.x = 0; }
@@ -218,9 +235,18 @@ FilmSlider.prototype.setSliderPosition = function(point) {
 	this.setFilmPosition(point);
 };
 
-FilmSlider.prototype.setFilmPosition = function(point) {
-	this.film.style.left = point.x / this.sliderSpeedRatio + 'px';
-};
+if (!browser.isMobile) {
+	FilmSlider.prototype.setFilmPosition = function(point) {
+		this.film.style.left = point.x / this.sliderSpeedRatio + 'px';
+	};
+}
+else {
+	FilmSlider.prototype.setFilmPosition = function(x) {
+		x = Math.min(0, x);
+		x = Math.max(this.filmMaxX, x);
+		this.film.style.left = String(x) + 'px';
+	};
+}
 
 FilmSlider.prototype.getSliderPosition = function() {
 	var x = parseInt(this.slider.style.left, 10);
@@ -592,8 +618,8 @@ FilmSlider.prototype.touchStartHandler = function(evt) {
 
 FilmSlider.prototype.touchMoveHandler = function(evt) {
 	var delta = this.touchStartX - evt.pageX;
-	var posX = Math.min(0, this.filmStartX - delta);
-	this.film.style.left = String(posX) + 'px';
+	var posX = this.filmStartX - delta;
+	this.setFilmPosition(posX);
 };
 
 FilmSlider.prototype.touchEndHandler = function(evt) {
