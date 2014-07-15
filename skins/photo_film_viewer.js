@@ -113,6 +113,7 @@ FilmSlider.prototype.resizeSlider = function(evt) {
 }
 
 else {
+	// pas de barre de scroll horizontal pour les tablettes
 	FilmSlider.prototype.resizeSlider = function(evt) {};
 }
 
@@ -158,7 +159,12 @@ FilmSlider.prototype.fitToScreen = function(evt) {
 
 FilmSlider.prototype._fitToScreen = function(evt) {
 	var wh = getWindowHeight();
+	if (!browser.isMobile) {
 	var rb = getObjectTop(this.rail) + getObjectHeight(this.rail); // rail bottom
+	}
+	else {
+		var rb = getObjectTop(this.filmBar) + getObjectHeight(this.filmBar); // film bottom
+	}
 	var delta = wh - rb;
 	var sh = getObjectHeight(this.stretchable);
 	var newSize = sh + delta;
