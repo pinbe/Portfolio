@@ -614,6 +614,7 @@ else if (browser.isIE6up) {
 FilmSlider.prototype.touchStartHandler = function(evt) {
 	this.filmStartX = parseInt(this.film.style.left, 10);
 	this.touchStartX = evt.changedTouches[0].screenX;
+	this.touchStartTime = (new Date()).getTime();
 };
 
 FilmSlider.prototype.touchMoveHandler = function(evt) {
@@ -621,11 +622,36 @@ FilmSlider.prototype.touchMoveHandler = function(evt) {
 	var delta = this.touchStartX - evt.changedTouches[0].screenX;
 	var posX = this.filmStartX - delta;
 	this.setFilmPosition(posX);
+    this.lastMoveTime = (new Date()).getTime();
 };
 
 FilmSlider.prototype.touchEndHandler = function(evt) {
-	if (evt.changedTouches[0].screenX !== this.touchStartX) {
+    var x = evt.changedTouches[0].screenX;
+	var delta = x - this.touchStartX;
+	if (delta) {
 		disableDefault(evt);
+        var now = (new Date()).getTime();
+        if (now - this.lastMoveTime < 100) {
+            // au delà de 100 ms de maintient, on annule l'inertie
+    		var speed = delta / (now - this.touchStartTime)
+    		var x0 = parseInt(this.film.style.left, 10);
+    		var t0 = (new Date()).getTime();
+    		var d = 500; // milisecondes
+            var delta = 0;
+            var dt = 25
+    		var self = this;
+	
+    		function animate() {
+                // inertie
+    			var t = (new Date()).getTime() - t0;
+    			if (t < d) {
+    				setTimeout(animate, dt);
+        			delta = delta + (1-t/d) * speed * dt; // décelleration linéaire
+        			self.setFilmPosition(x0 + delta);
+    			}
+    		}
+    		animate();
+        }
 	}
 	this.touchStartX = undefined;
 };
