@@ -613,17 +613,20 @@ else if (browser.isIE6up) {
 
 FilmSlider.prototype.touchStartHandler = function(evt) {
 	this.filmStartX = parseInt(this.film.style.left, 10);
-	this.touchStartX = evt.pageX;
+	this.touchStartX = evt.changedTouches[0].screenX;
 };
 
 FilmSlider.prototype.touchMoveHandler = function(evt) {
 	disableDefault(evt);
-	var delta = this.touchStartX - evt.pageX;
+	var delta = this.touchStartX - evt.changedTouches[0].screenX;
 	var posX = this.filmStartX - delta;
 	this.setFilmPosition(posX);
 };
 
 FilmSlider.prototype.touchEndHandler = function(evt) {
+	if (evt.changedTouches[0].screenX !== this.touchStartX) {
+		disableDefault(evt);
+	}
 	this.touchStartX = undefined;
 };
 
