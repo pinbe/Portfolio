@@ -722,8 +722,8 @@ FilmSlider.prototype.refreshImage = function() {
 
 FilmSlider.prototype.updateBreadcrumbs = function(url, title) {
 	if (this.hasBreadcrumbs) {
-		this.lastBCElement.href = element.getAttribute('lastBcUrl');
-		this.lastBCElement.innerHTML = element.getAttribute('img_id');
+		this.lastBCElement.href = url;
+		this.lastBCElement.innerHTML = title;
 	}
 };
 
