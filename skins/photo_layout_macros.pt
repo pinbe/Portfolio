@@ -133,14 +133,15 @@
     <div metal:define-macro="film_bar" tal:omit-tag="">
       <div id="film_bar">
         <table cellspacing="0">
-          <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10">
+          <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10;
+                          blank_img string:$portal_url/transparent.gif">
             <td tal:repeat="info contextInfos/infos">
               <a tal:attributes="href info/href;
                                  class info/className;
                                  portfolio:position info/index">
                 <img tal:define="size info/thumbSize;
                                  margin_top python:(slide_size - size['height']) / 2"
-                     tal:attributes="src info/src;
+                     tal:attributes="src python:info['src'] if info['displayed'] else blank_img;
                                      alt info/title;
                                      height size/height;
                                      width size/width;

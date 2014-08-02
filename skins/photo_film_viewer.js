@@ -5,6 +5,7 @@ Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
 
 var FilmSlider;
+var s;
 
 (function(){
 
@@ -16,6 +17,7 @@ var DEFAULT_IMAGE_SIZES = [500, 600, 800];
 
 FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 	var thisSlider = this;
+	s = this;
 	this.filmBar = filmBar;
 	this.filmBarWidth = getObjectWidth(this.filmBar);
 	var film = filmBar.firstChild;
@@ -289,6 +291,7 @@ FilmSlider.prototype.addEventListeners = function() {
 	addListener(this.toolbar, 'click', function(evt){thisSlider.toolbarClickHandler(evt);});
 	addListener(window, 'load', function(evt){thisSlider.fitToScreen(evt);});
 	addListener(window, 'load', function(evt){thisSlider._checkSizeAfterLoad(evt);});
+	addListener(window, 'load', function(evt){thisSlider.startThumbnailsLoadQueue(evt);});
 	
 	// dd listeners
 	addListener(this.slider, 'mousedown', this.ddHandlers.down);
@@ -726,6 +729,42 @@ FilmSlider.prototype.updateBreadcrumbs = function(url, title) {
 		this.lastBCElement.innerHTML = title;
 	}
 };
+
+FilmSlider.prototype.startThumbnailsLoadQueue = function(evt) {
+	var thumbnails = this.film.getElementsByTagName('img');
+	this.thumbnailsLoadingOrder = [];
+	var leftSize = this.center;
+	var rightSize = thumbnails.length - this.center - 1;
+	var i;
+	for (i=1 ; i<=Math.min(leftSize, rightSize) ; i++) {
+		this.thumbnailsLoadingOrder.push(thumbnails[this.center + i]);
+		this.thumbnailsLoadingOrder.push(thumbnails[this.center - i]);
+	}
+	if (leftSize > rightSize) {
+		for (i = this.center - rightSize - 1 ; i >= 0 ; i--) {
+			console.log(i);
+			this.thumbnailsLoadingOrder.push(thumbnails[i]);
+		}
+	}
+	else if (leftSize < rightSize) {
+		for (i = this.center + leftSize ; i < thumbnails.length ; i++) {
+			this.thumbnailsLoadingOrder.push(thumbnails[i]);
+		}
+	}
+	var next = this.thumbnailsLoadingOrder.shift();
+	var self = this;
+	addListener(next, 'load', function(evt){self._loadNextThumb(evt);});
+	next.src = next.parentNode.href + '/getThumbnail';
+};
+
+FilmSlider.prototype._loadNextThumb = function(evt) {
+	var next = this.thumbnailsLoadingOrder.shift();
+	if (!next) {return;}
+	var self = this;
+	addListener(next, 'load', function(evt){self._loadNextThumb(evt);});
+	next.src = next.parentNode.href + '/getThumbnail';
+};
+
 
 FilmSlider.prototype.startSlideShow = function() {
 	this.slideShowSlide = this.pendingSlideShowSlide = this.selectedSlide;
