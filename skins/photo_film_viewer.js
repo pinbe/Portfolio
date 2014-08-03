@@ -5,7 +5,7 @@ Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
 
 var FilmSlider;
-
+var s;
 (function(){
 
 var keyLeft = 37, keyRight = 39;
@@ -16,6 +16,7 @@ var DEFAULT_IMAGE_SIZES = [500, 600, 800];
 
 FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 	var thisSlider = this;
+	s = this;
 	this.filmBar = filmBar;
 	this.filmBarWidth = getObjectWidth(this.filmBar);
 	var film = filmBar.firstChild;
@@ -186,6 +187,7 @@ FilmSlider.prototype._fitToScreen = function(evt) {
 		var src = this.image.src.replace(imgRequestedSize, 'size=' + bestFitSize);
 		this.pendingImage.src = src;
 	}
+	this.shrinkImage(this.image);
 };
 
 FilmSlider.prototype.getBestFitSize = function(ratio) {
@@ -208,6 +210,27 @@ FilmSlider.prototype.getBestFitSize = function(ratio) {
 		}
 	}
 	return DEFAULT_IMAGE_SIZES[i];
+};
+
+FilmSlider.prototype.shrinkImage = function(img) {
+	var dispWidth = parseInt(this.stretchable.style.width);
+	var imgWidth = img.width;
+	var dispHeight = parseInt(this.stretchable.style.height);
+	var imgHeight = img.height;
+	var ratio;
+
+	if (imgHeight > dispHeight) {
+		ratio = dispHeight / imgHeight;
+		imgWidth = imgWidth * ratio;
+		imgHeight = dispHeight;
+	}
+	if (imgWidth > dispWidth) {
+		ratio = dispWidth / imgWidth;
+		imgHeight = imgHeight * ratio;
+		imgWidth = dispWidth;
+	}
+	img.width = imgWidth;
+	img.height = imgHeight;
 };
 
 if (!browser.isMobile) {
@@ -721,10 +744,27 @@ FilmSlider.prototype.populateViewer = function(req) {
 };
 
 FilmSlider.prototype.refreshImage = function() {
+	var dispWidth = getObjectWidth(this.stretchable);
+	var imgWidth = this.pendingImage.width;
+	var dispHeight = getObjectHeight(this.stretchable);
+	var imgHeight = this.pendingImage.height;
+	var ratio;
+
+	if (imgHeight > dispHeight) {
+		ratio = dispHeight / imgHeight;
+		imgWidth = imgWidth * ratio;
+		imgHeight = dispHeight;
+	}
+	if (imgWidth > dispWidth) {
+		ratio = dispWidth / imgWidth;
+		imgHeight = imgHeight * ratio;
+		imgWidth = dispWidth;
+	}
+	
 	this.image.style.visibility = 'hidden';
 	this.image.src = this.pendingImage.src;
-	this.image.width = this.pendingImage.width;
-	this.image.height = this.pendingImage.height;
+	this.image.width = imgWidth;
+	this.image.height = imgHeight;
 	this.image.style.visibility = 'visible';
 	if (this.selectedSlideInSelection) { this.image.parentNode.className = 'selected'; }
 	else { this.image.parentNode.className = ''; }
