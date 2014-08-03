@@ -146,10 +146,11 @@ FilmSlider.prototype._checkSize = function(evt) {
 FilmSlider.prototype._checkSizeStability = function(evt) {
 	var self = this;
 	var i;
+	var checkAgain = function(evt){self._checkSizeStability();};
 	for (i=0 ; i<this._barSizes.length - 1 ; i++) {
 		if (this._barSizes[i] !== this._barSizes[i+1]) {
 			this._barSizes = [];
-			setTimeout(function(evt){self._checkSizeStability();}, 250);
+			setTimeout(checkAgain, 250);
 			return;
 		}
 	}
@@ -166,11 +167,12 @@ FilmSlider.prototype.fitToScreen = function(evt) {
 
 FilmSlider.prototype._fitToScreen = function(evt) {
 	var wh = getWindowHeight();
+	var rb;
 	if (!browser.isMobile) {
-		var rb = getObjectTop(this.rail) + getObjectHeight(this.rail); // rail bottom
+		rb = getObjectTop(this.rail) + getObjectHeight(this.rail); // rail bottom
 	}
 	else {
-		var rb = getObjectTop(this.filmBar) + getObjectHeight(this.filmBar); // film bottom
+		rb = getObjectTop(this.filmBar) + getObjectHeight(this.filmBar); // film bottom
 	}
 	var delta = wh - rb;
 	var sh = getObjectHeight(this.stretchable);
@@ -630,36 +632,36 @@ FilmSlider.prototype.touchMoveHandler = function(evt) {
 	var delta = this.touchStartX - evt.changedTouches[0].screenX;
 	var posX = this.filmStartX - delta;
 	this.setFilmPosition(posX);
-    this.lastMoveTime = (new Date()).getTime();
+	this.lastMoveTime = (new Date()).getTime();
 };
 
 FilmSlider.prototype.touchEndHandler = function(evt) {
-    var x = evt.changedTouches[0].screenX;
+	var x = evt.changedTouches[0].screenX;
 	var delta = x - this.touchStartX;
 	if (delta) {
 		disableDefault(evt);
-        var now = (new Date()).getTime();
-        if (now - this.lastMoveTime < 100) {
-            // au delà de 100 ms de maintient, on annule l'inertie
-    		var speed = delta / (now - this.touchStartTime)
-    		var x0 = parseInt(this.film.style.left, 10);
-    		var t0 = (new Date()).getTime();
-    		var d = 500; // milisecondes
-            var delta = 0;
-            var dt = 25
-    		var self = this;
+		var now = (new Date()).getTime();
+		if (now - this.lastMoveTime < 100) {
+			// au delà de 100 ms de maintient, on annule l'inertie
+			var speed = delta / (now - this.touchStartTime);
+			var x0 = parseInt(this.film.style.left, 10);
+			var t0 = (new Date()).getTime();
+			var d = 500; // milisecondes
+			delta = 0;
+			var dt = 25;
+			var self = this;
 	
-    		function animate() {
-                // inertie
-    			var t = (new Date()).getTime() - t0;
-    			if (t < d) {
-    				setTimeout(animate, dt);
-        			delta = delta + (1-t/d) * speed * dt; // décelleration linéaire
-        			self.setFilmPosition(x0 + delta);
-    			}
-    		}
-    		animate();
-        }
+			var animate = function() {
+				// inertie
+				var t = (new Date()).getTime() - t0;
+				if (t < d) {
+					setTimeout(animate, dt);
+					delta = delta + (1-t/d) * speed * dt; // décelleration linéaire
+					self.setFilmPosition(x0 + delta);
+				}
+			};
+			animate();
+		}
 	}
 	this.touchStartX = undefined;
 };
