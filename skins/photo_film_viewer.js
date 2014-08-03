@@ -5,7 +5,6 @@ Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
 
 var FilmSlider;
-var s;
 
 (function(){
 
@@ -17,7 +16,6 @@ var DEFAULT_IMAGE_SIZES = [500, 600, 800];
 
 FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
 	var thisSlider = this;
-	s = this;
 	this.filmBar = filmBar;
 	this.filmBarWidth = getObjectWidth(this.filmBar);
 	var film = filmBar.firstChild;
@@ -357,6 +355,18 @@ FilmSlider.prototype.mouseOutHandler = function(evt) {
 	}
 };
 
+FilmSlider.prototype.translateImgUrl = function(url) {
+	var canonicalImgUrl;
+	if (this.ctxUrlTranslation[0]) {
+		canonicalImgUrl = url.replace(this.ctxUrlTranslation[0],
+									  this.ctxUrlTranslation[1]);
+	}
+	else {
+		canonicalImgUrl = url;
+	}
+	return canonicalImgUrl;
+};
+
 FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 	var target = getTargetedObject(evt);
 	while (target.tagName !== 'A' && target !== this.filmBar) { target = target.parentNode; }
@@ -373,12 +383,7 @@ FilmSlider.prototype.thumbnailClickHandler = function(evt) {
 		history.pushState(target.href, '', target.href);
 		
 		var imgBaseUrl = target.href;
-		var canonicalImgUrl;
-		if (this.ctxUrlTranslation[0]) {
-			canonicalImgUrl = imgBaseUrl.replace(this.ctxUrlTranslation[0],
-												 this.ctxUrlTranslation[1]);
-		}
-		else { canonicalImgUrl = imgBaseUrl; }
+		var canonicalImgUrl = this.translateImgUrl(imgBaseUrl);
 		
 		var ajaxUrl = imgBaseUrl + '/photo_view_ajax';
 		var thisFS = this;
@@ -732,6 +737,7 @@ FilmSlider.prototype.updateBreadcrumbs = function(url, title) {
 
 FilmSlider.prototype.startThumbnailsLoadQueue = function(evt) {
 	var thumbnails = this.film.getElementsByTagName('img');
+	if (thumbnails.length === 1) { return; }
 	this.thumbnailsLoadingOrder = [];
 	var leftSize = this.center;
 	var rightSize = thumbnails.length - this.center - 1;
@@ -754,7 +760,7 @@ FilmSlider.prototype.startThumbnailsLoadQueue = function(evt) {
 	var next = this.thumbnailsLoadingOrder.shift();
 	var self = this;
 	addListener(next, 'load', function(evt){self._loadNextThumb(evt);});
-	next.src = next.parentNode.href + '/getThumbnail';
+	next.src = this.translateImgUrl(next.parentNode.href) + '/getThumbnail';
 };
 
 FilmSlider.prototype._loadNextThumb = function(evt) {
@@ -762,7 +768,7 @@ FilmSlider.prototype._loadNextThumb = function(evt) {
 	if (!next) {return;}
 	var self = this;
 	addListener(next, 'load', function(evt){self._loadNextThumb(evt);});
-	next.src = next.parentNode.href + '/getThumbnail';
+	next.src = this.translateImgUrl(next.parentNode.href) + '/getThumbnail';
 };
 
 

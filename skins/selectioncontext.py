@@ -82,8 +82,9 @@ for i, uid in enumerate(selection) :
     d = {'src': '%s/getThumbnail' % b.getURL()
         ,'href': toUrl(path)
         ,'thumbSize': size
-        ,'title' : b.Title
-        ,'className': className
+        ,'title' : b.Description
+        ,'className' : className
+        ,'displayed' : uid == photouid
         , 'index': i
         }
     infos.append(d)

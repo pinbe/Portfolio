@@ -137,8 +137,9 @@
                           blank_img string:$portal_url/transparent.gif">
             <td tal:repeat="info contextInfos/infos">
               <a tal:attributes="href info/href;
+                                 title info/title;
                                  class info/className;
-                                 portfolio:position info/index">
+                                 portfolio:position info/index;">
                 <img tal:define="size info/thumbSize;
                                  margin_top python:(slide_size - size['height']) / 2"
                      tal:attributes="src python:info['src'] if info['displayed'] else blank_img;

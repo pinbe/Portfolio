@@ -36,7 +36,7 @@ for i, p in enumerate(portfolio.listNearestFolderContents(contentFilter={'portal
 	d = {'src': '%s/getThumbnail' % purl
 		,'href': purl
 		,'thumbSize':size
-		,'title' : p.Title()
+		,'title' : p.Description()
 		,'displayed' : p == context
 		,'className': (selected and 'selected' or '') + ((p == context) and ' displayed' or '')
 		, 'index': i

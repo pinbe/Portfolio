@@ -71,8 +71,9 @@ for i, uid in enumerate(lightboxUids) :
     d = {'src': '%s/getThumbnail' % b.getURL()
         ,'href': href
         ,'thumbSize': size
-        ,'title' : b.Title
+        ,'title' : b.Description
         ,'className': className
+        ,'displayed' : uid == photouid
         , 'index': i
         }
     infos.append(d)
