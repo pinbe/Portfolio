@@ -750,12 +750,11 @@ FilmSlider.prototype.startThumbnailsLoadQueue = function(evt) {
 	}
 	if (leftSize > rightSize) {
 		for (i = this.center - rightSize - 1 ; i >= 0 ; i--) {
-			console.log(i);
 			this.thumbnailsLoadingOrder.push(thumbnails[i]);
 		}
 	}
 	else if (leftSize < rightSize) {
-		for (i = this.center + leftSize ; i < thumbnails.length ; i++) {
+		for (i = this.center + leftSize + 1 ; i < thumbnails.length ; i++) {
 			this.thumbnailsLoadingOrder.push(thumbnails[i]);
 		}
 	}
