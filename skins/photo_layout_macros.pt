@@ -25,7 +25,7 @@
                                    alt info/title;
                                    height size/height;
                                    width size/width;
-                                   style string:margin-top : ${margin_top}px ;;margin-left:${margin_left}px;"/>
+                                   style string:margin-top:${margin_top}px;; margin-left:${margin_left}px;"/>
             </a>
             <tal:block tal:condition="python:features.has_key('select')">
               <span class="button slide-select" tal:condition="not:selected">
