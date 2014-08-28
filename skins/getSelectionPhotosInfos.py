@@ -1,4 +1,4 @@
-##parameters=
+##parameters=pho_start=None, batch_size=None
 from Products.CMFCore.utils import getToolByName
 from Products.Plinn.PloneMisc import Batch
 from Products.Portfolio.utils import translate
@@ -27,9 +27,10 @@ else :
 		req.SESSION.set('lightboxpath', None)
 		selection = req.SESSION.get('objects_selection', [])
 
-start = req.get('b_start', 0)
+
+start = pho_start if pho_start is not None else 0
 brains = [uidh.getBrain(uid) for uid in selection]
-batch = Batch(brains, context.default_batch_size, start, orphan=1, quantumleap=1)#, b_start_str='pho_start')
+batch = Batch(brains, batch_size, start, quantumleap=1)
 cart = req.SESSION.get('cart', None)
 
 infos = []
@@ -59,34 +60,6 @@ features = {}
 features['del'] = lambda b : '%s/remove_to_selection' % b.getURL()
 features['cart'] = lambda b : '%s/get_slide_buyable_items' % b.getURL()
 
-# breadcrumbs customization
-if selectionIsLightbox :
-	lastBcTitle = '%s (%s)' % (_('My selection'), lightbox.title_or_id())
-else :
-	lastBcTitle = _('My selection')
-breadcrumbs = [
-	{ 'id'		: 'root'
-	, 'title'	: portal.title
-	, 'url'	   : portal_url},
-	
-	{'id'		: 'selection_view'
-	 ,'title'	: lastBcTitle
-	 , 'url'	: '%s/selection_view' % portal_url}
-	]
-
-
-options = {}
-options['infos'] = infos
-options['batch'] = batch
-options['features'] = features
-
-options['container_type'] = 'selection'
-options['selectionIsLightbox'] = selectionIsLightbox
-options['breadcrumbs'] = breadcrumbs
-
-if selectionIsLightbox :
-	options['lightbox'] = lightbox
-else :
-	options['selectionName'] = 'not saved yet'
-
-return context.selection_view_template(**options)
+return {'infos' : infos,
+        'batch' : batch,
+        'features' : features}

@@ -8,4 +8,7 @@ elif container_type == 'lightbox' :
     options.update(context.getLightboxPhotosInfos(context,
                                           pho_start=start,
                                           batch_size=size))
+elif container_type == 'selection' :
+    options.update(context.getSelectionPhotosInfos(pho_start=start,
+                                                   batch_size=size))
 return context.portfolio_thumbnails_tail_template(**options)
