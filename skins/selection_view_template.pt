@@ -25,6 +25,7 @@
 			   	 tal:content="options/lightbox/title_or_id">lightbox url</a>
 			</div>
       <div metal:use-macro="here/photo_layout_macros/macros/grid"></div>
+      <br clear="all"/>
 			<form tal:attributes="action string:$portal_url/save_as_lightbox_form"
 						tal:condition="python:not isAnon and not options['selectionIsLightbox'] and len(batch)">
 				<input type="submit" value="Save as..." name="saveas" i18n:attributes="value"/>
