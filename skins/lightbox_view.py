@@ -1,6 +1,4 @@
 ##parameters=load='',unload='',**kw
-from Products.CMFCore.utils import getToolByName
-from Products.Plinn.PloneMisc import Batch
 options = {}
 buttons = []
 lightboxSelected = False
