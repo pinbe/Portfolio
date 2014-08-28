@@ -108,8 +108,10 @@
               tal:content="structure python:'''
               new Lightbox(document.getElementById('lightbox'),
                            document.getElementById('lightbox_toolbar'),
-                           %s);
-                           ''' % ('true' if not batch.next else 'false')">
+                           %(complete)s,
+                           '%(container_type)s');
+                           ''' % {'complete' : 'true' if not batch.next else 'false',
+                                  'container_type' : options.get('container_type', 'portfolio')}">
       </script>
       <script type="text/javascript"
               tal:condition="dropable"
@@ -118,7 +120,8 @@
                 var lb = document.getElementById('lightbox');
                 new Lightbox(lb,
                              document.getElementById('lightbox_toolbar'),
-                             %(complete)s);
+                             %(complete)s,
+                             '%(container_type)s');
                 var uploadUrl = '%(putUrl)s';
                 var options = {'slideSize' : %(slideSize)d,
                                'thumbnailSize' : %(thumbnailSize)d};
@@ -127,7 +130,8 @@
               ''' % {'putUrl' : '%s/put_upload' % here.absolute_url(),
                      'slideSize' : portal_object.slide_size,
                      'thumbnailSize' : portal_object.thumb_size,
-                     'complete': 'true' if not batch.next else 'false'}">
+                     'complete': 'true' if not batch.next else 'false',
+                     'container_type' : options.get('container_type', 'portfolio')}">
       </script>
     </div>
     <div metal:define-macro="film_bar" tal:omit-tag="">

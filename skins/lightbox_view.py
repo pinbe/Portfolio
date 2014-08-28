@@ -69,5 +69,6 @@ options['batch'] = batch
 options['features'] = features
 options['buttons'] = buttons
 options['lightboxSelected'] = lightboxSelected
+options['container_type'] = 'lightbox'
 
 return context.lightbox_view_template(**options)

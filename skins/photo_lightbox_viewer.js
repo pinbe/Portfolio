@@ -11,12 +11,13 @@ var Lightbox;
 
 var reSelected = /.*selected.*/;
 
-Lightbox = function(grid, toolbar, complete) {
+Lightbox = function(grid, toolbar, complete, container_type) {
 	var self = this;
 	this.grid = grid;
 	this._buildSlidesIndex(); // set this.slides and this.lastSlide;
 	this.fetchingDisabled = false;
 	this.complete = complete;
+	this.container_type = container_type;
 	this.toolbar = toolbar;
 	if (toolbar) {
 		this.toolbarFixed = false;
@@ -374,7 +375,9 @@ Lightbox.prototype.fetchTail = function() {
 	var url = absolute_url() +
 			  '/portfolio_thumbnails_tail?start:int=' +
 			  String(this.slides.length) +
-			  '&size:int=10';
+			  '&size:int=10' +
+			  '&container_type=' +
+			  this.container_type;
 	req.open('GET', url, true);
 	req.send();
 };
