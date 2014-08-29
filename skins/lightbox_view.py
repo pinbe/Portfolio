@@ -2,7 +2,6 @@
 from Products.Portfolio.utils import translate
 _ = lambda msg : translate(msg, context)
 options = {}
-buttons = []
 
 sd = context.session_data_manager.getSessionData(create = 1)
 path  = context.getPhysicalPath()
@@ -14,22 +13,21 @@ fg = form.get
 sessionpath = sd.get('lightboxpath', None)
 lightboxSelected = False
 if sessionpath == path :
-	lightboxSelected = True
-	buttons.append({'name': 'unload', 'value': 'Unload from my selection'})
-else :
-	buttons.append({'name':'load', 'value': 'Load in my selection'})
+    lightboxSelected = True
 
 # form processing
 if fg('load') :
-	sd.set('lightboxpath', path)
-	selection = context.getUidList()
-	sd.set('objects_selection', selection)
-	sd.set('objects_selection_dict', dict([(uid, True) for uid in selection]))
+    sd.set('lightboxpath', path)
+    selection = context.getUidList()
+    sd.set('objects_selection', selection)
+    sd.set('objects_selection_dict', dict([(uid, True) for uid in selection]))
+    lightboxSelected = True
 
 elif fg('unload') :
-	sd.set('lightboxpath', None)
-	sd.set('objects_selection', [])
-	sd.set('objects_selection_dict', {})
+    sd.set('lightboxpath', None)
+    sd.set('objects_selection', [])
+    sd.set('objects_selection_dict', {})
+    lightboxSelected = False
 
 elif fg('delete.x') or form.has_key('delete') :
     uids = fg('uids', [])
@@ -62,6 +60,11 @@ elif fg('delete.x') or form.has_key('delete') :
     else :
         context.setStatus(True, msg)
 
+buttons=[]
+if lightboxSelected :
+    buttons.append({'name': 'unload', 'value': 'Unload from my selection'})
+else :
+    buttons.append({'name':'load', 'value': 'Load in my selection'})
 
 options['buttons'] = buttons
 options['lightboxSelected'] = lightboxSelected
