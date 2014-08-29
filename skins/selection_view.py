@@ -46,9 +46,9 @@ if fg('delete.x') or form.has_key('delete') :
             selection.remove(uid)
             if selectionIsLightbox :
                 lightbox.remove(uid)
-            sd['objects_selection'] = selection
-            sd['objects_selection_dict'] = selDict
             rmCpt = rmCpt + 1
+    sd['objects_selection'] = selection
+    sd['objects_selection_dict'] = selDict
         
     # ui feedback message
     if rmCpt :
