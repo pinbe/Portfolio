@@ -200,6 +200,9 @@ Lightbox.prototype.onResponseLoad = function(req) {
 			this.fm.submitButton = undefined;
 			this.refreshGrid();
 			break;
+		default :
+			this.fm.loadResponse(req);
+			break;
 	}
 };
 
