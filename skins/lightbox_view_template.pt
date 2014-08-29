@@ -18,18 +18,27 @@
     <div metal:fill-slot="main" tal:omit-tag="" i18n:domain="portfolio">
       <em tal:condition="options/lightboxSelected" i18n:translate="lightbox_selected_explanations"></em>
       <form tal:attributes="action string:${here/absolute_url}/lightbox_view" tal:condition="options/buttons">
+        <div id="lightbox_toolbar" class="image_toolbar"
+             tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
+             tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
+          <input type="image" width="17" height="27" alt="delete" title="delete"
+                 name="delete"
+                 tal:attributes="src string:$portal_url/trash_btn.gif"
+                 i18n:attributes="alt;title"/>
+          <br/>
+        </div>
         <span tal:repeat="button options/buttons" tal:omit-tag="">
           <input type="submit" tal:attributes="name button/name; value button/value" i18n:attributes="value"/>
         </span>
-      </form>
-      <div tal:define="batch options/batch;
-                       infos options/infos;
-                       features options/features"
-           tal:omit-tag="">
-        <div metal:use-macro="here/photo_layout_macros/macros/grid">
-          affichage grille
+        <div tal:define="batch options/batch;
+                         infos options/infos;
+                         features options/features"
+             tal:omit-tag="">
+          <div metal:use-macro="here/photo_layout_macros/macros/grid">
+            affichage grille
+          </div>
         </div>
-      </div>
+      </form>
       <br clear="all"/>
     </div>
   </body>

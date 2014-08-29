@@ -74,12 +74,29 @@ msgstr ""
 msgid "Lightbox created."
 msgstr ""
 
+#: o/skins/lightbox_view.py:53
+msgid "Photo removed."
+msgstr ""
+
+#: o/skins/lightbox_view.py:55
+msgid "Removed photos."
+msgstr ""
+
+#: o/skins/lightbox_view.py:57
+msgid "Nothing to remove."
+msgstr ""
+
 #. Default: ""
 #: o/skins/lightbox_view_template.pt:19
 msgid "lightbox_selected_explanations"
 msgstr ""
 
-#: o/skins/lightbox_view_template.pt:22 o/skins/selection_view_template.pt:20
+#: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
+#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
+msgid "delete"
+msgstr ""
+
+#: o/skins/lightbox_view_template.pt:31 o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -121,11 +138,6 @@ msgstr ""
 
 #: o/skins/my_cart_template.pt:53
 msgid "refresh amount"
-msgstr ""
-
-#: o/skins/my_cart_template.pt:59 o/skins/portfolio_view.pt:88
-#: o/skins/selection_view_template.pt:31
-msgid "delete"
 msgstr ""
 
 #: o/skins/my_cart_template.pt:69

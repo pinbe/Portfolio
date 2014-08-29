@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Fri Aug 29 10:44:06 2014\n"
+"POT-Creation-Date: Fri Aug 29 13:55:35 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -106,12 +106,35 @@ msgstr ""
 msgid "Lightbox created."
 msgstr ""
 
+#: o/skins/lightbox_view.py:53
+msgid "Photo removed."
+msgstr ""
+
+#: o/skins/lightbox_view.py:55
+msgid "Removed photos."
+msgstr ""
+
+#: o/skins/lightbox_view.py:57
+msgid "Nothing to remove."
+msgstr ""
+
 #: o/skins/lightbox_view_template.pt:19
 #. Default: ""
 msgid "lightbox_selected_explanations"
 msgstr ""
 
-#: o/skins/lightbox_view_template.pt:22
+#: o/skins/lightbox_view_template.pt:24
+#: o/skins/lightbox_view_template.pt:24
+#: o/skins/my_cart_template.pt:59
+#: o/skins/my_cart_template.pt:59
+#: o/skins/portfolio_view.pt:88
+#: o/skins/portfolio_view.pt:88
+#: o/skins/selection_view_template.pt:31
+#: o/skins/selection_view_template.pt:31
+msgid "delete"
+msgstr ""
+
+#: o/skins/lightbox_view_template.pt:31
 #: o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
@@ -156,15 +179,6 @@ msgstr ""
 #: o/skins/my_cart_template.pt:53
 #: o/skins/my_cart_template.pt:53
 msgid "refresh amount"
-msgstr ""
-
-#: o/skins/my_cart_template.pt:59
-#: o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88
-#: o/skins/portfolio_view.pt:88
-#: o/skins/selection_view_template.pt:31
-#: o/skins/selection_view_template.pt:31
-msgid "delete"
 msgstr ""
 
 #: o/skins/my_cart_template.pt:69

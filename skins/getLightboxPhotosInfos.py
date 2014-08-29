@@ -42,7 +42,7 @@ for index, b in enumerate(batch) :
 	infos.append(d)
 
 features = {}
-features['del'] = lambda b: '%s/remove_to_lightbox?uid=%s' % (lightboxUrl, b.cmf_uid)
+features['checkbox'] = True
 features['cart'] = lambda b : '%s/get_slide_buyable_items' % b.getURL()
 
 return {'infos' : infos,

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Fri Aug 29 10:44:06 2014\n"
-"PO-Revision-Date: 2014-08-29 10:45+0200\n"
+"POT-Creation-Date: Fri Aug 29 13:55:35 2014\n"
+"PO-Revision-Date: 2014-08-29 13:56+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -97,6 +97,18 @@ msgstr "Vous devez entrer un titre."
 msgid "Lightbox created."
 msgstr "Table lumineuse créée."
 
+#: o/skins/lightbox_view.py:53
+msgid "Photo removed."
+msgstr "Photo retirée."
+
+#: o/skins/lightbox_view.py:55
+msgid "Removed photos."
+msgstr "Photos retirées."
+
+#: o/skins/lightbox_view.py:57
+msgid "Nothing to remove."
+msgstr "Rien à retirer."
+
 #. Default: ""
 #: o/skins/lightbox_view_template.pt:19
 msgid "lightbox_selected_explanations"
@@ -104,7 +116,12 @@ msgstr ""
 "Cette table lumineuse est sélectionnée : les images que vous sélectionnerez "
 "à présent seront automatiquement sauvegardées à cet endroit."
 
-#: o/skins/lightbox_view_template.pt:22 o/skins/selection_view_template.pt:20
+#: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
+#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
+msgid "delete"
+msgstr "supprimer"
+
+#: o/skins/lightbox_view_template.pt:31 o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -147,11 +164,6 @@ msgstr "Prix (TTC)"
 #: o/skins/my_cart_template.pt:53
 msgid "refresh amount"
 msgstr "actualiser le montant"
-
-#: o/skins/my_cart_template.pt:59 o/skins/portfolio_view.pt:88
-#: o/skins/selection_view_template.pt:31
-msgid "delete"
-msgstr "supprimer"
 
 #: o/skins/my_cart_template.pt:69
 msgid "Prints"
