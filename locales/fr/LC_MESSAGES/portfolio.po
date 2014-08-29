@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Tue Jul  8 18:30:13 2014\n"
-"PO-Revision-Date: 2014-07-08 18:31+0200\n"
+"POT-Creation-Date: Fri Aug 29 10:44:06 2014\n"
+"PO-Revision-Date: 2014-08-29 10:45+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -71,8 +71,8 @@ msgid "This %s is already in the selection."
 msgstr "Cette %s est déjà dans la sélection."
 
 # from portfolio-manual
-#: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:52
-#: o/skins/photo_layout_macros.pt:55 o/skins/photo_view.pt:91
+#: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:51
+#: o/skins/photo_layout_macros.pt:54 o/skins/photo_view.pt:91
 #: o/skins/photo_view.pt:94
 msgid "Add to cart"
 msgstr "Ajouter au panier"
@@ -148,7 +148,8 @@ msgstr "Prix (TTC)"
 msgid "refresh amount"
 msgstr "actualiser le montant"
 
-#: o/skins/my_cart_template.pt:59 o/skins/portfolio_view.pt:81
+#: o/skins/my_cart_template.pt:59 o/skins/portfolio_view.pt:88
+#: o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr "supprimer"
 
@@ -201,25 +202,25 @@ msgid "Dimensions"
 msgstr "Dimensions"
 
 # from portfolio-manual
-#: o/skins/photo_layout_macros.pt:33 o/skins/photo_layout_macros.pt:36
+#: o/skins/photo_layout_macros.pt:32 o/skins/photo_layout_macros.pt:35
 msgid "Add to selection"
 msgstr "Ajouter à la sélection"
 
 # from portfolio-manual
-#: o/skins/photo_layout_macros.pt:42 o/skins/photo_layout_macros.pt:45
+#: o/skins/photo_layout_macros.pt:41 o/skins/photo_layout_macros.pt:44
 msgid "Remove to selection"
 msgstr "Retirer de la sélection"
 
-#: o/skins/photo_layout_macros.pt:61 o/skins/photo_layout_macros.pt:64
+#: o/skins/photo_layout_macros.pt:60 o/skins/photo_layout_macros.pt:63
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
 msgstr "Supprimer"
 
-#: o/skins/photo_layout_macros.pt:79 o/skins/photo_layout_macros.pt:82
+#: o/skins/photo_layout_macros.pt:78 o/skins/photo_layout_macros.pt:81
 msgid "Hide for anonymous"
 msgstr "Masquer pour les anonymes"
 
-#: o/skins/photo_layout_macros.pt:92 o/skins/photo_layout_macros.pt:95
+#: o/skins/photo_layout_macros.pt:91 o/skins/photo_layout_macros.pt:94
 msgid "Show for anonymous"
 msgstr "Montrer aux anonymes"
 
@@ -299,15 +300,15 @@ msgstr "Supprimer la présentation"
 msgid "sorting:"
 msgstr "tri :"
 
-#: o/skins/portfolio_view.pt:76
+#: o/skins/portfolio_view.pt:77
 msgid "manual"
 msgstr "manuel"
 
-#: o/skins/portfolio_view.pt:77
+#: o/skins/portfolio_view.pt:79
 msgid "shooting"
 msgstr "prise de vue"
 
-#: o/skins/portfolio_view.pt:78
+#: o/skins/portfolio_view.pt:81
 msgid "modification"
 msgstr "modification"
 
@@ -319,9 +320,21 @@ msgstr "Enregistrer la sélection dans une table lumineuse"
 msgid "Description"
 msgstr "Description"
 
-#: o/skins/selection_view.py:64 o/skins/selection_view.py:66
-#: o/skins/selection_view_template.pt:18 o/skins/selectioncontext.py:115
-#: o/skins/selectioncontext.py:117
+#: o/skins/selection_view.py:56
+msgid "Photo deselected."
+msgstr "Photo désélectionnée."
+
+#: o/skins/selection_view.py:58
+msgid "Deselected photos."
+msgstr "Photos désélectionnées."
+
+#: o/skins/selection_view.py:60
+msgid "Nothing to deselect."
+msgstr "Rien à désélectionner."
+
+#: o/skins/selection_view.py:70 o/skins/selection_view.py:72
+#: o/skins/selection_view_template.pt:18 o/skins/selectioncontext.py:116
+#: o/skins/selectioncontext.py:118
 msgid "My selection"
 msgstr "Ma sélection"
 
@@ -329,20 +342,20 @@ msgstr "Ma sélection"
 msgid "You are editing this ligthbox:"
 msgstr "Vous éditez cette table lumineuse :"
 
-#: o/skins/selection_view_template.pt:30
+#: o/skins/selection_view_template.pt:42
 msgid "Save as..."
 msgstr "Enregistrer sous..."
 
-#: o/skins/selection_view_template.pt:33
+#: o/skins/selection_view_template.pt:45
 msgid "${please_login} if you want to save this selection."
 msgstr "Si vous souhaiter enregistrer cette sélection, ${please_login}"
 
 #. Default: "Please log in"
-#: o/skins/selection_view_template.pt:34
+#: o/skins/selection_view_template.pt:46
 msgid "login_to_save_seletion"
 msgstr "veuillez vous connecter."
 
-#: o/skins/selection_view_template.pt:38
+#: o/skins/selection_view_template.pt:50
 msgid "Empty selection."
 msgstr "Sélection vide."
 

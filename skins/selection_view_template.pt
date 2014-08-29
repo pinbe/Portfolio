@@ -16,26 +16,37 @@
          tal:omit-tag=""
          i18n:domain="portfolio">
       <h1 i18n:translate="">My selection</h1>
-			<em tal:condition="python: not options['selectionIsLightbox'] and len(batch)">
-				(<span tal:content="options/selectionName" tal:omit-tag="" i18n:translate="">selection name</span>)
-			</em>
-			<div tal:condition="options/selectionIsLightbox">
-				<em i18n:translate="">You are editing this ligthbox:</em>
-				<a tal:attributes="href options/lightbox/absolute_url"
-			   	 tal:content="options/lightbox/title_or_id">lightbox url</a>
-			</div>
-      <div metal:use-macro="here/photo_layout_macros/macros/grid"></div>
+      <em tal:condition="python: not options['selectionIsLightbox'] and len(batch)">
+        (<span tal:content="options/selectionName" tal:omit-tag="" i18n:translate="">selection name</span>)
+      </em>
+      <div tal:condition="options/selectionIsLightbox">
+        <em i18n:translate="">You are editing this ligthbox:</em>
+        <a tal:attributes="href options/lightbox/absolute_url"
+           tal:content="options/lightbox/title_or_id">lightbox url</a>
+      </div>
+      <form tal:attributes="action string:$portal_url/selection_view" method="post">
+        <div id="lightbox_toolbar" class="image_toolbar"
+             tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
+             tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
+          <input type="image" width="17" height="27" alt="delete" title="delete"
+                 name="delete"
+                 tal:attributes="src string:$portal_url/trash_btn.gif"
+                 i18n:attributes="alt;title"/>
+          <br/>
+        </div>
+        <div metal:use-macro="here/photo_layout_macros/macros/grid"></div>
+      </form>
       <br clear="all"/>
-			<form tal:attributes="action string:$portal_url/save_as_lightbox_form"
-						tal:condition="python:not isAnon and not options['selectionIsLightbox'] and len(batch)">
-				<input type="submit" value="Save as..." name="saveas" i18n:attributes="value"/>
-			</form>
-			<div tal:condition="python:isAnon and len(batch)" i18n:translate="">
-			  <span i18n:name="please_login">
-			  <a tal:define="mq python:modules['ZTUtils'].make_query"
-			     tal:attributes="href python:'%s/login_form?%s' % (portal_url, mq(came_from='%s/save_as_lightbox_form' % portal_url))"
-			     i18n:translate="login_to_save_seletion">Please log in</a></span> if you want to save this selection.
-			</div>
+      <form tal:attributes="action string:$portal_url/save_as_lightbox_form"
+            tal:condition="python:not isAnon and not options['selectionIsLightbox'] and len(batch)">
+        <input type="submit" value="Save as..." name="saveas" i18n:attributes="value"/>
+      </form>
+      <div tal:condition="python:isAnon and len(batch)" i18n:translate="">
+        <span i18n:name="please_login">
+        <a tal:define="mq python:modules['ZTUtils'].make_query"
+           tal:attributes="href python:'%s/login_form?%s' % (portal_url, mq(came_from='%s/save_as_lightbox_form' % portal_url))"
+           i18n:translate="login_to_save_seletion">Please log in</a></span> if you want to save this selection.
+      </div>
       <div tal:condition="python:not len(batch)" i18n:translate="">Empty selection.</div>
     </div>
   </body>
