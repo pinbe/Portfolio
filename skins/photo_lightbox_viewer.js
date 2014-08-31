@@ -500,8 +500,10 @@ Lightbox.prototype.onDragEnd = function(evt) {
 	if (this.lastDropTarget) {
 		this.lastDropTarget.classList.remove('dragover');
 		var i, slide;
+		this.pendingMovedSlides = [];
 		for(i=this.draggedSelection.length -1 ; i>=0 ; i--) {
 			slide = this.draggedSelection[i].cloneNode(true);
+			this.pendingMovedSlides.push(slide);
 			this.grid.insertBefore(slide, this.lastDropTarget.nextSibling);
 			slide.style.opacity = 1;
 			slide.style.width = '';
@@ -522,10 +524,7 @@ Lightbox.prototype.moveSelectedPhotos = function() {
 				break;
 			case 4 :
 				hideProgressImage();
-				if (req.status === 200) {
-					console.log(req.responseText);
-					// self._refreshGrid(req);
-				}
+				self._moveSelectedPhotos(req)
 				break;
 		}
 	};
@@ -542,7 +541,31 @@ Lightbox.prototype.moveSelectedPhotos = function() {
   	req.send(query);
 };
 
-Lightbox.prototype.moveSelectedPhoto = function() {
+Lightbox.prototype._moveSelectedPhotos = function(req) {
+	var i, slide;
+	if (req.status === 200) {
+		var doc = req.responseXML.documentElement;
+		if (doc.nodeName === 'ok') {
+			this.pendingMovedSlides = undefined;
+			for(i=0 ; i<this.draggedSelection.length ; i++) {
+				slide = this.draggedSelection[i];
+				this.grid.removeChild(slide);
+			}
+			this.cbIndex = undefined;
+			return;
+		}
+	}
+	
+	for(i=0 ; i<this.pendingMovedSlides.length ; i++) {
+		slide = this.pendingMovedSlides[i];
+		this.grid.removeChild(slide);
+	}
+	
+	for(i=0 ; i<this.draggedSelection.length ; i++) {
+		slide = this.draggedSelection[i];
+		slide.style.opacity = 1;
+		slide.style.width = '';
+	}
 };
 
 }());
