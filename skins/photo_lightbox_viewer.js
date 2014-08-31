@@ -490,25 +490,59 @@ Lightbox.prototype.onDragOver = function(evt) {
 	if (target !== this.dragged) {
 		target.classList.add('dragover');
 	}
-	if (this.previousDragOver && this.previousDragOver !== target) {
-		this.previousDragOver.classList.remove('dragover');
+	if (this.lastDropTarget && this.lastDropTarget !== target) {
+		this.lastDropTarget.classList.remove('dragover');
 	}
-	this.previousDragOver = target;
+	this.lastDropTarget = target;
 };
 
 Lightbox.prototype.onDragEnd = function(evt) {
-	if (this.previousDragOver) {
-		this.previousDragOver.classList.remove('dragover');
+	if (this.lastDropTarget) {
+		this.lastDropTarget.classList.remove('dragover');
 		var i, slide;
 		for(i=this.draggedSelection.length -1 ; i>=0 ; i--) {
-			console.log(i);
 			slide = this.draggedSelection[i].cloneNode(true);
-			this.grid.insertBefore(slide, this.previousDragOver.nextSibling);
+			this.grid.insertBefore(slide, this.lastDropTarget.nextSibling);
 			slide.style.opacity = 1;
 			slide.style.width = '';
 		}
+		this.moveSelectedPhotos();
 	}
-	this.draggedSelection = this.previousDragOver = this.dragged = undefined;
+	// this.draggedSelection = this.lastDropTarget
+	this.dragged = undefined;
+};
+
+Lightbox.prototype.moveSelectedPhotos = function() {
+	var req = new XMLHttpRequest();
+	self = this;
+	req.onreadystatechange = function() {
+		switch (req.readyState) {
+			case 1 :
+				showProgressImage();
+				break;
+			case 4 :
+				hideProgressImage();
+				if (req.status === 200) {
+					console.log(req.responseText);
+					// self._refreshGrid(req);
+				}
+				break;
+		}
+	};
+	
+	var url = absolute_url() + '/portfolio_move_photos';
+  	req.open("POST", url, true);
+  	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+	var query = 'container_type=' + this.container_type;
+	var i;
+	for (i=0 ; i<this.draggedSelection.length ; i++) {
+		query += '&uids:list=' + this.draggedSelection[i].getAttribute('name');
+	}
+	query += '&afterUid=' + this.lastDropTarget.getAttribute('name');
+  	req.send(query);
+};
+
+Lightbox.prototype.moveSelectedPhoto = function() {
 };
 
 }());
