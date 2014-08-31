@@ -24,7 +24,6 @@ Lightbox = function(grid, toolbar, complete, container_type) {
 		addListener(window, 'scroll', function(evt){self.windowScrollToolbarlHandler(evt);});
 	}
 	addListener(window, 'scroll', function(evt){self.windowScrollGridHandler(evt);});
-	// addListener(window, 'load', function(evt){ self.windowScrollGridHandler();});
 	registerStartupFunction(function(){ self.windowScrollGridHandler();});
 	this.lastCBChecked = undefined;
 	this.form = undefined;
@@ -46,39 +45,13 @@ Lightbox = function(grid, toolbar, complete, container_type) {
 		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
 		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
 	}
-    this.disableDefaultDragging();
-    addListener(this.grid,
-                'dragstart',
-                function(evt) {
-                    var target = getTargetedObject(evt);
-                    console.info('dragstart',
-                                target);
-                    evt.dataTransfer.setData('text', '');
-                    target.style.opacity = 0;
-                    target.style.width = 0;
-                   // disableDefault(evt);
-                });
-};
 
-if (browser.isGecko) {
-    Lightbox.prototype.disableDefaultDragging = function(element) {
-        if (!element) {
-            element = this.grid;
-        }
-        var i, j, name, elements;
-        var elementsNames = ['a', 'img'];
-        for (i=0 ; i < elementsNames.length ; i++) {
-            name = elementsNames[i];
-            elements = element.getElementsByTagName(name);
-            for (j=0 ; j < elements.length ; j++) {
-                elements[j].draggable=false;
-            }
-        }
-    };
-}
-else {
-    Lightbox.prototype.disableDefaultDragging = function() {};
-}
+	// drag and drop
+	this.disableDefaultDragging();
+	addListener(this.grid, 'dragstart', function(evt){self.onDragStart(evt);});
+	addListener(this.grid, 'dragover', function(evt){self.onDragOver(evt);});
+	addListener(this.grid, 'dragend', function(evt){self.onDragEnd(evt);});
+};
 
 Lightbox.prototype._buildSlidesIndex = function() {
 	this.slides = [];
@@ -382,7 +355,7 @@ Lightbox.prototype._refreshGrid = function(req) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			node = getCopyOfNode(node);
-            this.disableDefaultDragging(node);
+			this.disableDefaultDragging(node);
 			this.grid.replaceChild(node, this.slides[j]);
 			this.slides[j] = node;
 			j++;
@@ -425,7 +398,7 @@ Lightbox.prototype._appendTail = function(req) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			this.lastSlide = this.grid.appendChild(getCopyOfNode(node));
-            this.disableDefaultDragging(this.lastSlide);
+			this.disableDefaultDragging(this.lastSlide);
 			this.slides.push(this.lastSlide);
 			if (this.cbIndex) {
 				c = this.lastSlide.getElementsByTagName('input')[0];
@@ -457,5 +430,58 @@ else {
 		}
 	};
 }
+
+if (browser.isGecko) {
+	Lightbox.prototype.disableDefaultDragging = function(element) {
+		if (!element) {
+			element = this.grid;
+		}
+		var i, j, name, elements;
+		var elementsNames = ['a', 'img'];
+		for (i=0 ; i < elementsNames.length ; i++) {
+			name = elementsNames[i];
+			elements = element.getElementsByTagName(name);
+			for (j=0 ; j < elements.length ; j++) {
+				elements[j].draggable=false;
+			}
+		}
+	};
+}
+else {
+	Lightbox.prototype.disableDefaultDragging = function() {};
+}
+
+
+Lightbox.prototype.onDragStart = function(evt) {
+	var target = getTargetedObject(evt);
+	this.dragged = target;
+	evt.dataTransfer.setData('text', '');
+	target.style.opacity = 0;
+	target.style.width = 0;
+};
+
+Lightbox.prototype.onDragOver = function(evt) {
+	var target = getTargetedObject(evt);
+	while(target.className !== 'slide') {
+		target = target.parentNode;
+	}
+	target = target.parentNode;
+	if (target !== this.dragged) {
+		target.classList.add('dragover');
+	}
+	if (this.previousDragOver && this.previousDragOver !== target) {
+		this.previousDragOver.classList.remove('dragover');
+	}
+	this.previousDragOver = target;
+};
+
+Lightbox.prototype.onDragEnd = function(evt) {
+	this.dragged.style.opacity = 1;
+	this.dragged.style.width = '';
+	if (this.previousDragOver) {
+		this.previousDragOver.classList.remove('dragover');
+	}
+	this.previousDragOver = this.dragged = undefined;
+};
 
 }());

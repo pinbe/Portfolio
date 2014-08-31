@@ -536,6 +536,10 @@ th.num {
 	-webkit-user-select: none;
 }
 
+.lightbox span.dragover {
+/*  width: <dtml-var expr="slide_size - 10">px;*/
+	border-right: 10px solid &dtml-outlineColor;;
+}
 /* 
 </dtml-with> 
 </dtml-with>
