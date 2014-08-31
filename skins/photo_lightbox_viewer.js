@@ -468,9 +468,10 @@ Lightbox.prototype.onDragStart = function(evt) {
 	var target = getTargetedObject(evt);
 	this.dragged = target;
 	this.draggedSelection = this.getSelectedSlides();
-	this.draggedSelection.push(target);
+	if (this.draggedSelection.indexOf(target) === -1) {
+		this.draggedSelection.push(target);
+	}
 	evt.dataTransfer.setData('text', '');
-	
 	var i, slide;
 	for(i=0 ; i<this.draggedSelection.length ; i++) {
 		slide = this.draggedSelection[i];
@@ -481,6 +482,7 @@ Lightbox.prototype.onDragStart = function(evt) {
 
 Lightbox.prototype.onDragOver = function(evt) {
 	var target = getTargetedObject(evt);
+	if (!target) {return;}
 	while(target.className !== 'slide') {
 		target = target.parentNode;
 	}
@@ -497,12 +499,14 @@ Lightbox.prototype.onDragOver = function(evt) {
 Lightbox.prototype.onDragEnd = function(evt) {
 	if (this.previousDragOver) {
 		this.previousDragOver.classList.remove('dragover');
-	}
-	var i, slide;
-	for(i=0 ; i<this.draggedSelection.length ; i++) {
-		slide = this.draggedSelection[i];
-		slide.style.opacity = 1;
-		slide.style.width = '';
+		var i, slide;
+		for(i=this.draggedSelection.length -1 ; i>=0 ; i--) {
+			console.log(i);
+			slide = this.draggedSelection[i].cloneNode(true);
+			this.grid.insertBefore(slide, this.previousDragOver.nextSibling);
+			slide.style.opacity = 1;
+			slide.style.width = '';
+		}
 	}
 	this.draggedSelection = this.previousDragOver = this.dragged = undefined;
 };
