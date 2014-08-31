@@ -451,13 +451,32 @@ else {
 	Lightbox.prototype.disableDefaultDragging = function() {};
 }
 
+Lightbox.prototype.getSelectedSlides = function() {
+	var i, e, slide;
+	var slides = [];
+	for (i=0 ; i<this.form.elements.length ; i++) {
+		e = this.form.elements[i];
+		if (e.type === 'checkbox' && e.checked) {
+			slide = e.parentNode.parentNode;
+			slides.push(slide);
+		}
+	}
+	return slides;
+};
 
 Lightbox.prototype.onDragStart = function(evt) {
 	var target = getTargetedObject(evt);
 	this.dragged = target;
+	this.draggedSelection = this.getSelectedSlides();
+	this.draggedSelection.push(target);
 	evt.dataTransfer.setData('text', '');
-	target.style.opacity = 0;
-	target.style.width = 0;
+	
+	var i, slide;
+	for(i=0 ; i<this.draggedSelection.length ; i++) {
+		slide = this.draggedSelection[i];
+		slide.style.opacity = 0;
+		slide.style.width = 0;
+	}
 };
 
 Lightbox.prototype.onDragOver = function(evt) {
@@ -476,12 +495,16 @@ Lightbox.prototype.onDragOver = function(evt) {
 };
 
 Lightbox.prototype.onDragEnd = function(evt) {
-	this.dragged.style.opacity = 1;
-	this.dragged.style.width = '';
 	if (this.previousDragOver) {
 		this.previousDragOver.classList.remove('dragover');
 	}
-	this.previousDragOver = this.dragged = undefined;
+	var i, slide;
+	for(i=0 ; i<this.draggedSelection.length ; i++) {
+		slide = this.draggedSelection[i];
+		slide.style.opacity = 1;
+		slide.style.width = '';
+	}
+	this.draggedSelection = this.previousDragOver = this.dragged = undefined;
 };
 
 }());
