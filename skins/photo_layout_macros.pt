@@ -19,7 +19,8 @@
                             selected info/selected|nothing"
                 tal:attributes="class info/className;
                                 name info/cmf_uid"
-                metal:define-macro="thumbnail">
+                metal:define-macro="thumbnail"
+                draggable="true">
             <a class="slide" tal:attributes="href info/href; title info/title">
               <img tal:attributes="src info/thumbUrl;
                                    alt info/title;

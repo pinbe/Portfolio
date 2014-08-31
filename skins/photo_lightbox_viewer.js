@@ -46,7 +46,39 @@ Lightbox = function(grid, toolbar, complete, container_type) {
 		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
 		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
 	}
+    this.disableDefaultDragging();
+    addListener(this.grid,
+                'dragstart',
+                function(evt) {
+                    var target = getTargetedObject(evt);
+                    console.info('dragstart',
+                                target);
+                    evt.dataTransfer.setData('text', '');
+                    target.style.opacity = 0;
+                    target.style.width = 0;
+                   // disableDefault(evt);
+                });
 };
+
+if (browser.isGecko) {
+    Lightbox.prototype.disableDefaultDragging = function(element) {
+        if (!element) {
+            element = this.grid;
+        }
+        var i, j, name, elements;
+        var elementsNames = ['a', 'img'];
+        for (i=0 ; i < elementsNames.length ; i++) {
+            name = elementsNames[i];
+            elements = element.getElementsByTagName(name);
+            for (j=0 ; j < elements.length ; j++) {
+                elements[j].draggable=false;
+            }
+        }
+    };
+}
+else {
+    Lightbox.prototype.disableDefaultDragging = function() {};
+}
 
 Lightbox.prototype._buildSlidesIndex = function() {
 	this.slides = [];
@@ -350,6 +382,7 @@ Lightbox.prototype._refreshGrid = function(req) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			node = getCopyOfNode(node);
+            this.disableDefaultDragging(node);
 			this.grid.replaceChild(node, this.slides[j]);
 			this.slides[j] = node;
 			j++;
@@ -392,6 +425,7 @@ Lightbox.prototype._appendTail = function(req) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			this.lastSlide = this.grid.appendChild(getCopyOfNode(node));
+            this.disableDefaultDragging(this.lastSlide);
 			this.slides.push(this.lastSlide);
 			if (this.cbIndex) {
 				c = this.lastSlide.getElementsByTagName('input')[0];
