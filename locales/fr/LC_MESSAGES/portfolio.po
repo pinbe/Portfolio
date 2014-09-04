@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Fri Aug 29 13:55:35 2014\n"
-"PO-Revision-Date: 2014-08-29 13:56+0200\n"
+"POT-Creation-Date: Fri Sep  5 00:23:02 2014\n"
+"PO-Revision-Date: 2014-09-05 00:24+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -97,15 +97,15 @@ msgstr "Vous devez entrer un titre."
 msgid "Lightbox created."
 msgstr "Table lumineuse créée."
 
-#: o/skins/lightbox_view.py:53
+#: o/skins/lightbox_view.py:51
 msgid "Photo removed."
 msgstr "Photo retirée."
 
-#: o/skins/lightbox_view.py:55
+#: o/skins/lightbox_view.py:53
 msgid "Removed photos."
 msgstr "Photos retirées."
 
-#: o/skins/lightbox_view.py:57
+#: o/skins/lightbox_view.py:55
 msgid "Nothing to remove."
 msgstr "Rien à retirer."
 
@@ -141,7 +141,7 @@ msgstr "Livraison >>"
 msgid "No more available copy of this photo and in this size."
 msgstr "Plus aucun tirage disponible pour cette photo à ce format."
 
-#: o/skins/my_cart.py:138 o/skins/my_cart_template.pt:113
+#: o/skins/my_cart.py:144 o/skins/my_cart_template.pt:118
 msgid "My cart"
 msgstr "Mon panier"
 
@@ -173,19 +173,23 @@ msgstr "Tirages"
 msgid "Total"
 msgstr "Total"
 
-#: o/skins/my_cart_template.pt:80 o/skins/sell_macros.pt:16
+#: o/skins/my_cart_template.pt:80
+msgid "Discount"
+msgstr "Remise"
+
+#: o/skins/my_cart_template.pt:85 o/skins/sell_macros.pt:16
 msgid "Shipping"
 msgstr "Livraison"
 
-#: o/skins/my_cart_template.pt:85
+#: o/skins/my_cart_template.pt:90
 msgid "VAT"
 msgstr "TVA"
 
-#: o/skins/my_cart_template.pt:90
+#: o/skins/my_cart_template.pt:95
 msgid "Total amount to pay"
 msgstr "Montant total à payer"
 
-#: o/skins/my_cart_template.pt:114
+#: o/skins/my_cart_template.pt:119
 msgid "Your cart is currently empty."
 msgstr "Votre panier est actuellement vide."
 

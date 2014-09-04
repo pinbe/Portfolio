@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Fri Aug 29 13:55:35 2014\n"
+"POT-Creation-Date: Fri Sep  5 00:23:02 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -106,15 +106,15 @@ msgstr ""
 msgid "Lightbox created."
 msgstr ""
 
-#: o/skins/lightbox_view.py:53
+#: o/skins/lightbox_view.py:51
 msgid "Photo removed."
 msgstr ""
 
-#: o/skins/lightbox_view.py:55
+#: o/skins/lightbox_view.py:53
 msgid "Removed photos."
 msgstr ""
 
-#: o/skins/lightbox_view.py:57
+#: o/skins/lightbox_view.py:55
 msgid "Nothing to remove."
 msgstr ""
 
@@ -155,8 +155,8 @@ msgstr ""
 msgid "No more available copy of this photo and in this size."
 msgstr ""
 
-#: o/skins/my_cart.py:138
-#: o/skins/my_cart_template.pt:113
+#: o/skins/my_cart.py:144
+#: o/skins/my_cart_template.pt:118
 msgid "My cart"
 msgstr ""
 
@@ -190,19 +190,23 @@ msgid "Total"
 msgstr ""
 
 #: o/skins/my_cart_template.pt:80
+msgid "Discount"
+msgstr ""
+
+#: o/skins/my_cart_template.pt:85
 #: o/skins/sell_macros.pt:16
 msgid "Shipping"
 msgstr ""
 
-#: o/skins/my_cart_template.pt:85
+#: o/skins/my_cart_template.pt:90
 msgid "VAT"
 msgstr ""
 
-#: o/skins/my_cart_template.pt:90
+#: o/skins/my_cart_template.pt:95
 msgid "Total amount to pay"
 msgstr ""
 
-#: o/skins/my_cart_template.pt:114
+#: o/skins/my_cart_template.pt:119
 msgid "Your cart is currently empty."
 msgstr ""
 
