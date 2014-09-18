@@ -1,444 +1,472 @@
+# #############################################################################
+#
+# Copyright (c) 2003-2004 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: 3.0\n"
+"POT-Creation-Date: Fri Sep  5 00:23:02 2014\n"
+"PO-Revision-Date: 2014-09-18 14:57+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
 #: o/ImageManipulationTool.py:40
 msgid "Processor"
-msgstr ""
+msgstr "Processor"
 
 #: o/ImageManipulationTool.py:56
 msgid "Process started."
-msgstr ""
+msgstr "Process started."
 
 #: o/ImageManipulationTool.py:64
 msgid "Process stopped."
-msgstr ""
+msgstr "Process stopped."
 
 #: o/skins/add_to_cart.py:20 o/skins/my_cart.py:73
 msgid "You must enter an integer for quantity (found: %s)"
-msgstr ""
+msgstr "You must enter an integer for quantity (found: %s)"
 
 #: o/skins/add_to_cart.py:23 o/skins/my_cart.py:75
 msgid "You must enter a positive value for quantity (found: %s)"
-msgstr ""
+msgstr "You must enter a positive value for quantity (found: %s)"
 
 #: o/skins/add_to_cart.py:49 o/skins/my_cart.py:85
 msgid "Only %d available copies of this photo in this size."
-msgstr ""
+msgstr "Only %d available copies of this photo in this size."
 
 #: o/skins/add_to_cart.py:51 o/skins/my_cart.py:87
 msgid "Only one last available copy of this photo in this size."
-msgstr ""
+msgstr "Only one last available copy of this photo in this size."
 
 #: o/skins/add_to_cart.py:53
 msgid "No more available copy of this photo in this size."
-msgstr ""
+msgstr "No more available copy of this photo in this size."
 
 #: o/skins/add_to_cart.py:62
 msgid ""
 "Your cart is locked:\n"
 "please complete your current order first."
 msgstr ""
+"Your cart is locked:\n"
+"please complete your current order first."
 
 #: o/skins/add_to_cart.py:72 o/skins/add_to_cart.py:74
 msgid "Added to cart."
-msgstr ""
+msgstr "Added to cart."
 
 #: o/skins/add_to_selection.py:37
 msgid "%s added to selection."
-msgstr ""
+msgstr "%s added to selection."
 
 #: o/skins/add_to_selection.py:39
 msgid "This %s is already in the selection."
-msgstr ""
+msgstr "This %s is already in the selection."
 
 #: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:51
 #: o/skins/photo_layout_macros.pt:54 o/skins/photo_view.pt:91
 #: o/skins/photo_view.pt:94
 msgid "Add to cart"
-msgstr ""
+msgstr "Add to cart"
 
 #: o/skins/get_slide_buyable_items.pt:27
 msgid "quantity:"
-msgstr ""
+msgstr "quantity:"
 
 #: o/skins/get_slide_buyable_items.pt:34
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel"
 
 #: o/skins/lightbox_save_control.py:10
 msgid "No photo selected."
-msgstr ""
+msgstr "No photo selected."
 
 #: o/skins/lightbox_save_control.py:21
 msgid "You must enter a title."
-msgstr ""
+msgstr "You must enter a title."
 
 #: o/skins/lightbox_save_control.py:27
 msgid "Lightbox created."
-msgstr ""
+msgstr "Lightbox created."
 
 #: o/skins/lightbox_view.py:51
 msgid "Photo removed."
-msgstr ""
+msgstr "Photo removed."
 
 #: o/skins/lightbox_view.py:53
 msgid "Removed photos."
-msgstr ""
+msgstr "Removed photos."
 
 #: o/skins/lightbox_view.py:55
 msgid "Nothing to remove."
-msgstr ""
+msgstr "Nothing to remove."
 
 #. Default: ""
 #: o/skins/lightbox_view_template.pt:19
 msgid "lightbox_selected_explanations"
-msgstr ""
+msgstr "This light box is selected: images that you select now will automatically be saved in that location."
 
 #: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
 #: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
 msgid "delete"
-msgstr ""
+msgstr "delete"
 
 #: o/skins/lightbox_view_template.pt:31 o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
-msgstr ""
+msgstr "${DYNAMIC_CONTENT}"
 
 #: o/skins/metadata_edit_form_macros.pt:258
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 #: o/skins/my_cart.py:58
 msgid "Order >>"
-msgstr ""
+msgstr "Order >>"
 
 #: o/skins/my_cart.py:60
 msgid "Shipping >>"
-msgstr ""
+msgstr "Shipping >>"
 
 #: o/skins/my_cart.py:89
 msgid "No more available copy of this photo and in this size."
-msgstr ""
+msgstr "No more available copy of this photo and in this size."
 
 #: o/skins/my_cart.py:144 o/skins/my_cart_template.pt:118
 msgid "My cart"
-msgstr ""
+msgstr "My cart"
 
 #: o/skins/my_cart_template.pt:26
 msgid "Image"
-msgstr ""
+msgstr "Image"
 
 #: o/skins/my_cart_template.pt:27
 msgid "Printing format and type"
-msgstr ""
+msgstr "Printing format and type"
 
 #: o/skins/my_cart_template.pt:28
 msgid "Quantity"
-msgstr ""
+msgstr "Quantity"
 
 #: o/skins/my_cart_template.pt:29
 msgid "Amount (incl tax)"
-msgstr ""
+msgstr "Amount (incl tax)"
 
 #: o/skins/my_cart_template.pt:53
 msgid "refresh amount"
-msgstr ""
+msgstr "refresh amount"
 
 #: o/skins/my_cart_template.pt:69
 msgid "Prints"
-msgstr ""
+msgstr "Prints"
 
 #: o/skins/my_cart_template.pt:70
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: o/skins/my_cart_template.pt:80
 msgid "Discount"
-msgstr ""
+msgstr "Discount"
 
 #: o/skins/my_cart_template.pt:85 o/skins/sell_macros.pt:16
 msgid "Shipping"
-msgstr ""
+msgstr "Shipping"
 
 #: o/skins/my_cart_template.pt:90
 msgid "VAT"
-msgstr ""
+msgstr "VAT"
 
 #: o/skins/my_cart_template.pt:95
 msgid "Total amount to pay"
-msgstr ""
+msgstr "Total amount to pay"
 
 #: o/skins/my_cart_template.pt:119
 msgid "Your cart is currently empty."
-msgstr ""
+msgstr "Your cart is currently empty."
 
 #: o/skins/photo_info.pt:9
 msgid "Preview:"
-msgstr ""
+msgstr "Preview:"
 
 #: o/skins/photo_info.pt:18 o/skins/save_as_lightbox_template.pt:15
 msgid "Title"
-msgstr ""
+msgstr "Title"
 
 #: o/skins/photo_info.pt:22
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: o/skins/photo_info.pt:26
 msgid "Created"
-msgstr ""
+msgstr "Created"
 
 #: o/skins/photo_info.pt:30
 msgid "Modified"
-msgstr ""
+msgstr "Modified"
 
 #: o/skins/photo_info.pt:34
 msgid "Dimensions"
-msgstr ""
+msgstr "Dimensions"
 
 #: o/skins/photo_layout_macros.pt:32 o/skins/photo_layout_macros.pt:35
 msgid "Add to selection"
-msgstr ""
+msgstr "Add to selection"
 
 #: o/skins/photo_layout_macros.pt:41 o/skins/photo_layout_macros.pt:44
 msgid "Remove to selection"
-msgstr ""
+msgstr "Remove to selection"
 
 #: o/skins/photo_layout_macros.pt:60 o/skins/photo_layout_macros.pt:63
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: o/skins/photo_layout_macros.pt:78 o/skins/photo_layout_macros.pt:81
 msgid "Hide for anonymous"
-msgstr ""
+msgstr "Hide for anonymous"
 
 #: o/skins/photo_layout_macros.pt:91 o/skins/photo_layout_macros.pt:94
 msgid "Show for anonymous"
-msgstr ""
+msgstr "Show for anonymous"
 
 #: o/skins/photo_medium.pt:37 o/skins/photo_medium.pt:38
 msgid "previous"
-msgstr ""
+msgstr "previous"
 
 #: o/skins/photo_medium.pt:44 o/skins/photo_medium.pt:45
 msgid "next"
-msgstr ""
+msgstr "next"
 
 #: o/skins/photo_medium.pt:52
 msgid "zoom in"
-msgstr ""
+msgstr "zoom in"
 
 #: o/skins/photo_medium.pt:52
 msgid "zoom out"
-msgstr ""
+msgstr "zoom out"
 
 #: o/skins/photo_view.pt:31
 msgid "Empty image: upload an image file in \"Edit\" tab."
-msgstr ""
+msgstr "Empty image: upload an image file in \"Edit\" tab."
 
 #: o/skins/photo_view.pt:46 o/skins/photo_view.pt:49
 msgid "Previous"
-msgstr ""
+msgstr "Previous"
 
 #: o/skins/photo_view.pt:52 o/skins/photo_view.pt:55
 msgid "Next"
-msgstr ""
+msgstr "Next"
 
 #: o/skins/photo_view.pt:58
 msgid "slide show"
-msgstr ""
+msgstr "slide show"
 
 #: o/skins/photo_view.pt:69 o/skins/photo_view.pt:72
 msgid "Back to portfolio..."
-msgstr ""
+msgstr "Back to portfolio..."
 
 #: o/skins/photo_view.pt:75 o/skins/photo_view.pt:77
 msgid "Full screen (f)"
-msgstr ""
+msgstr "Full screen (f)"
 
 #: o/skins/photo_view.pt:99 o/skins/photo_view.pt:104
 msgid "Edit metadata"
-msgstr ""
+msgstr "Edit metadata"
 
 #: o/skins/photo_view.pt:118
 msgid "Keywords"
-msgstr ""
+msgstr "Keywords"
 
 #: o/skins/photo_view.pt:125
 msgid "reference:"
-msgstr ""
+msgstr "reference:"
 
 #: o/skins/photo_view.pt:131
 msgid "download picture"
-msgstr ""
+msgstr "download picture"
 
 #: o/skins/portfolio_edit_form.py:17
 msgid "Photo deleted."
-msgstr ""
+msgstr "Photo deleted."
 
 #: o/skins/portfolio_edit_form.py:19
 msgid "Deleted photos."
-msgstr ""
+msgstr "Deleted photos."
 
 #: o/skins/portfolio_edit_form.py:22
 msgid "Nothing to delete."
-msgstr ""
+msgstr "Nothing to delete."
 
 #: o/skins/portfolio_presentation_template.pt:22
 msgid "Delete presentation"
-msgstr ""
+msgstr "Delete presentation"
 
 #: o/skins/portfolio_view.pt:74
 msgid "sorting:"
-msgstr ""
+msgstr "sorting:"
 
 #: o/skins/portfolio_view.pt:77
 msgid "manual"
-msgstr ""
+msgstr "manual"
 
 #: o/skins/portfolio_view.pt:79
 msgid "shooting"
-msgstr ""
+msgstr "shooting"
 
 #: o/skins/portfolio_view.pt:81
 msgid "modification"
-msgstr ""
+msgstr "modification"
 
 #: o/skins/save_as_lightbox_template.pt:12
 msgid "Save current selection as lightbox"
-msgstr ""
+msgstr "Save current selection as lightbox"
 
 #: o/skins/save_as_lightbox_template.pt:21
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: o/skins/selection_view.py:56
 msgid "Photo deselected."
-msgstr ""
+msgstr "Photo deselected."
 
 #: o/skins/selection_view.py:58
 msgid "Deselected photos."
-msgstr ""
+msgstr "Deselected photos."
 
 #: o/skins/selection_view.py:60
 msgid "Nothing to deselect."
-msgstr ""
+msgstr "Nothing to deselect."
 
 #: o/skins/selection_view.py:70 o/skins/selection_view.py:72
 #: o/skins/selection_view_template.pt:18 o/skins/selectioncontext.py:116
 #: o/skins/selectioncontext.py:118
 msgid "My selection"
-msgstr ""
+msgstr "My selection"
 
 #: o/skins/selection_view_template.pt:23
 msgid "You are editing this ligthbox:"
-msgstr ""
+msgstr "You are editing this ligthbox:"
 
 #: o/skins/selection_view_template.pt:42
 msgid "Save as..."
-msgstr ""
+msgstr "Save as..."
 
 #: o/skins/selection_view_template.pt:45
 msgid "${please_login} if you want to save this selection."
-msgstr ""
+msgstr "${please_login} if you want to save this selection."
 
 #. Default: "Please log in"
 #: o/skins/selection_view_template.pt:46
 msgid "login_to_save_seletion"
-msgstr ""
+msgstr "login_to_save_seletion"
 
 #: o/skins/selection_view_template.pt:50
 msgid "Empty selection."
-msgstr ""
+msgstr "Empty selection."
 
 #: o/skins/sell_macros.pt:14
 msgid "Cart"
-msgstr ""
+msgstr "Cart"
 
 #: o/skins/sell_macros.pt:15
 msgid "Authentication"
-msgstr ""
+msgstr "Authentication"
 
 #: o/skins/sell_macros.pt:17
 msgid "Payment"
-msgstr ""
+msgstr "Payment"
 
 #: o/skins/sell_macros.pt:18
 msgid "Confirmation"
-msgstr ""
+msgstr "Confirmation"
 
 #: o/skins/shipping_set_control.py:8
 msgid "Please enter a name."
-msgstr ""
+msgstr "Please enter a name."
 
 #: o/skins/shipping_set_control.py:9
 msgid "Please enter an address."
-msgstr ""
+msgstr "Please enter an address."
 
 #: o/skins/shipping_set_control.py:10
 msgid "Please enter a city."
-msgstr ""
+msgstr "Please enter a city."
 
 #: o/skins/shipping_set_control.py:11
 msgid "Please enter zip code."
-msgstr ""
+msgstr "Please enter zip code."
 
 #: o/skins/shipping_set_control.py:12
 msgid "Please enter a country."
-msgstr ""
+msgstr "Please enter a country."
 
 #: o/skins/shipping_set_control.py:27
 msgid "No cart found. Your session may have expired."
-msgstr ""
+msgstr "No cart found. Your session may have expired."
 
 #: o/skins/shipping_set_control.py:30
 msgid "Shipping informations saved."
-msgstr ""
+msgstr "Shipping informations saved."
 
 #: o/skins/shipping_template.pt:14
 msgid "Please set shipping informations"
-msgstr ""
+msgstr "Please set shipping informations"
 
 #: o/skins/shipping_template.pt:19 o/skins/shipping_template.pt:60
 msgid "Validate >>"
-msgstr ""
+msgstr "Validate >>"
 
 #: o/skins/shipping_template.pt:23
 msgid "Fullname"
-msgstr ""
+msgstr "Fullname"
 
 #: o/skins/shipping_template.pt:29
 msgid "Address"
-msgstr ""
+msgstr "Address"
 
 #: o/skins/shipping_template.pt:36
 msgid "City"
-msgstr ""
+msgstr "City"
 
 #: o/skins/shipping_template.pt:42
 msgid "Zip code"
-msgstr ""
+msgstr "Zip code"
 
 #: o/skins/shipping_template.pt:48
 msgid "Country"
-msgstr ""
+msgstr "Country"
 
 #: o/skins/zoom_view.pt:32
 msgid "back"
-msgstr ""
+msgstr "back"
 
 # from portfolio-manual
 msgid "not saved yet"
-msgstr ""
+msgstr "not saved yet"
 
 msgid "Load in my selection"
-msgstr ""
+msgstr "Load in my selection"
 
 msgid "Unload from my selection"
-msgstr ""
+msgstr "Unload from my selection"
 
 msgid "My albums"
-msgstr ""
+msgstr "My albums"
 
 msgid "You don't have any album yet."
-msgstr ""
+msgstr "You don't have any album yet."
 
+# date et heure de prise de vue
 msgid "%m/%d/%Y %H:%M:%S"
-msgstr ""
+msgstr "%m/%d/%Y %H:%M:%S"
