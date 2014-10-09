@@ -542,15 +542,18 @@ Lightbox.prototype.moveSelectedPhotos = function() {
 };
 
 Lightbox.prototype._moveSelectedPhotos = function(req) {
-	var i, slide;
+	var i, slide, cb;
 	if (req.status === 200) {
 		var doc = req.responseXML.documentElement;
 		if (doc.nodeName === 'ok') {
-			this.pendingMovedSlides = undefined;
 			for(i=0 ; i<this.draggedSelection.length ; i++) {
 				slide = this.draggedSelection[i];
 				this.grid.removeChild(slide);
+				cb = this.pendingMovedSlides[i].getElementsByTagName('input')[0]
+				cb.checked = false;
+				cb.removeAttribute('checked');
 			}
+			this.pendingMovedSlides = undefined;
 			this.cbIndex = undefined;
 			return;
 		}
