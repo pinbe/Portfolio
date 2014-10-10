@@ -9,7 +9,9 @@
     <div metal:define-macro="grid"
          tal:define="slide_size portal_object/slide_size;
                      mayBeDropable exists:dropable;
-                     dropable python:True if mayBeDropable and dropable else False"
+                     dropable python:True if mayBeDropable and dropable else False;
+                     mayBeOrderable exists:orderable;
+                     orderable python:True if mayBeOrderable and orderable else False"
          i18n:domain="portfolio">
       <div id="lightbox" tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
         <span metal:define-macro="thumbnails" tal:repeat="info infos" tal:omit-tag="">
@@ -122,7 +124,8 @@
                 new Lightbox(lb,
                              document.getElementById('lightbox_toolbar'),
                              %(complete)s,
-                             '%(container_type)s');
+                             '%(container_type)s',
+                             %(orderable)s);
                 var uploadUrl = '%(putUrl)s';
                 var options = {'slideSize' : %(slideSize)d,
                                'thumbnailSize' : %(thumbnailSize)d};
@@ -132,7 +135,8 @@
                      'slideSize' : portal_object.slide_size,
                      'thumbnailSize' : portal_object.thumb_size,
                      'complete': 'true' if not batch.next else 'false',
-                     'container_type' : options.get('container_type', 'portfolio')}">
+                     'container_type' : options.get('container_type', 'portfolio'),
+                     'orderable' : 'true' if orderable else 'false'}">
       </script>
     </div>
     <div metal:define-macro="film_bar" tal:omit-tag="">

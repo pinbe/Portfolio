@@ -11,7 +11,7 @@ var Lightbox;
 
 var reSelected = /.*selected.*/;
 
-Lightbox = function(grid, toolbar, complete, container_type) {
+Lightbox = function(grid, toolbar, complete, container_type, orderable) {
 	var self = this;
 	this.grid = grid;
 	this._buildSlidesIndex(); // set this.slides and this.lastSlide;
@@ -48,9 +48,11 @@ Lightbox = function(grid, toolbar, complete, container_type) {
 
 	// drag and drop
 	this.disableDefaultDragging();
-	addListener(this.grid, 'dragstart', function(evt){self.onDragStart(evt);});
-	addListener(this.grid, 'dragover', function(evt){self.onDragOver(evt);});
-	addListener(this.grid, 'dragend', function(evt){self.onDragEnd(evt);});
+	this._DDOrderingListeners = {'dragstart' : function(evt){self.onDragStart(evt);},
+								 'dragover' : function(evt){self.onDragOver(evt);},
+								 'dragend' : function(evt){self.onDragEnd(evt);}
+								 };
+	if(orderable) {this.enableDDOrdering();}
 };
 
 Lightbox.prototype._buildSlidesIndex = function() {
@@ -76,6 +78,7 @@ Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
 		this.switchToolBarPositioning(false);
 	}
 };
+
 Lightbox.prototype.windowScrollGridHandler = function(evt) {
 	if (!this.complete &&
 		!this.fetchingDisabled &&
@@ -180,6 +183,8 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 Lightbox.prototype.onChangeHandler = function(evt) {
 	var target = getTargetedObject(evt);
 	if (target.name === 'sort_on') {
+		if (target.value === 'position') {this.enableDDOrdering();}
+		else {this.disableDDOrdering();}
 		this.fm.submitButton = {'name' : 'set_sorting', 'value' : 'ok'};
 		this.fm.submit(evt);
 	}
@@ -462,6 +467,19 @@ Lightbox.prototype.getSelectedSlides = function() {
 		}
 	}
 	return slides;
+};
+
+
+Lightbox.prototype.enableDDOrdering = function() {
+	addListener(this.grid, 'dragstart', this._DDOrderingListeners.dragstart);
+	addListener(this.grid, 'dragover', this._DDOrderingListeners.dragover);
+	addListener(this.grid, 'dragend', this._DDOrderingListeners.dragend);
+};
+
+Lightbox.prototype.disableDDOrdering = function() {
+	removeListener(this.grid, 'dragstart', this._DDOrderingListeners.dragstart);
+	removeListener(this.grid, 'dragover', this._DDOrderingListeners.dragover);
+	removeListener(this.grid, 'dragend', this._DDOrderingListeners.dragend);
 };
 
 Lightbox.prototype.onDragStart = function(evt) {
