@@ -482,10 +482,10 @@ Lightbox.prototype.onDragStart = function(evt) {
 
 Lightbox.prototype.onDragOver = function(evt) {
 	var target = getTargetedObject(evt);
-	if (!target) {return;}
-	while(target.className !== 'slide') {
+	while(target && target.className !== 'slide') {
 		target = target.parentNode;
 	}
+	if (!target) {return;}
 	target = target.parentNode;
 	if (target !== this.dragged) {
 		target.classList.add('dragover');
