@@ -19,7 +19,7 @@ CartWidget = function(slide, url) {
 	req.send(null);
 	hideProgressImage();
 	
-	if (req.status != 200){
+	if (req.status !== 200){
 		alert(req.status);
 		return;
 	}
@@ -27,12 +27,12 @@ CartWidget = function(slide, url) {
 	var wdgtNode = this.wdgtNode = getCopyOfNode(doc);
 	slide.appendChild(wdgtNode);
 	
-	var descriptions = this.descriptions = new Array();
+	var descriptions = this.descriptions = [];
 	var divs = wdgtNode.getElementsByTagName('div');
-	var d;
-	for (var i=0; i<divs.length; i++) {
+	var d, i;
+	for (i=0; i<divs.length; i++) {
 		d = divs[i];
-		if (d.className =='ppt-description') {
+		if (d.className === 'ppt-description') {
 			descriptions[d.getAttribute('name')] = d;
 		}
 	}
@@ -44,31 +44,26 @@ CartWidget = function(slide, url) {
 	fm.onBeforeSubmit  = function(fm, evt){return thisCart.onBeforeSubmit(fm, evt);};
 	fm.onResponseLoad = function(req){return thisCart.loadResponse(req);};
 
-	with (descriptions[itemSelector.value].style) {
-		visibility = 'visible';
-		display='block';
-	}
+	descriptions[itemSelector.value].style.visibility = 'visible';
+	descriptions[itemSelector.value].style.display='block';
 	this.selectedItem = itemSelector.value;
 	
-	addListener(itemSelector, 'change', function(evt){thisCart.selectItem(evt)})
-}
+	addListener(itemSelector, 'change', function(evt){thisCart.selectItem(evt);});
+};
 
 CartWidget.prototype.selectItem = function(evt) {
-	with(this.descriptions[this.selectedItem].style) {
-		visibility = 'hidden';
-		display = 'none'
-	}
+	this.descriptions[this.selectedItem].style.visibility = 'hidden';
+	this.descriptions[this.selectedItem].style.display = 'none';
 	var name = this.itemSelector.value;
 	
-	with (this.descriptions[name].style) {
-		visibility = 'visible';
-		display='block';
-	}
+	this.descriptions[name].style.visibility = 'visible';
+	this.descriptions[name].style.display='block';
+
 	this.selectedItem = name;
 };
 
 CartWidget.prototype.onBeforeSubmit = function(fm, evt) {
-	if (fm.submitButton.name == 'cancel') {
+	if (fm.submitButton.name === 'cancel') {
 		this.onCancel();
 		return 'cancelSubmit';
 	}
@@ -87,7 +82,7 @@ CartWidget.prototype.loadResponse = function(req) {
 			confirm.innerHTML = text;
 			slide.appendChild(confirm);
 
-			var duration = parseInt(doc.getAttribute('duration')) * 1000;
+			var duration = parseInt(doc.getAttribute('duration'), 10) * 1000;
 			var thisCart = this;
 
 			setTimeout(function(){
@@ -112,4 +107,4 @@ CartWidget.prototype.onCancel = function() {
 
 CartWidget.prototype.onAfterConfirm = function(){};
 
-})();
+}());
