@@ -527,21 +527,21 @@ Lightbox.prototype.moveSelectedPhotos = function() {
 				break;
 			case 4 :
 				hideProgressImage();
-				self._moveSelectedPhotos(req)
+				self._moveSelectedPhotos(req);
 				break;
 		}
 	};
 	
 	var url = absolute_url() + '/portfolio_move_photos';
-  	req.open("POST", url, true);
-  	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+	req.open("POST", url, true);
+	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 	var query = 'container_type=' + this.container_type;
 	var i;
 	for (i=0 ; i<this.draggedSelection.length ; i++) {
 		query += '&uids:list=' + this.draggedSelection[i].getAttribute('name');
 	}
 	query += '&afterUid=' + this.lastDropTarget.getAttribute('name');
-  	req.send(query);
+	req.send(query);
 };
 
 Lightbox.prototype._moveSelectedPhotos = function(req) {
@@ -552,7 +552,7 @@ Lightbox.prototype._moveSelectedPhotos = function(req) {
 			for(i=0 ; i<this.draggedSelection.length ; i++) {
 				slide = this.draggedSelection[i];
 				this.grid.removeChild(slide);
-				cb = this.pendingMovedSlides[i].getElementsByTagName('input')[0]
+				cb = this.pendingMovedSlides[i].getElementsByTagName('input')[0];
 				cb.checked = false;
 				cb.removeAttribute('checked');
 			}
