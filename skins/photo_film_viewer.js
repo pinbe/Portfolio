@@ -211,9 +211,9 @@ FilmSlider.prototype.getBestFitSize = function(ratio) {
 };
 
 FilmSlider.prototype.adjustImage = function(img) {
-	var dispWidth = parseInt(this.stretchable.style.width);
+	var dispWidth = parseInt(this.stretchable.style.width, 10);
 	var imgWidth = img.naturalWidth;
-	var dispHeight = parseInt(this.stretchable.style.height);
+	var dispHeight = parseInt(this.stretchable.style.height, 10);
 	var imgHeight = img.naturalHeight;
 	var ratio;
 

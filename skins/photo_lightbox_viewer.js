@@ -11,7 +11,7 @@ var Lightbox;
 
 var reSelected = /.*selected.*/;
 
-Lightbox = function(grid, toolbar, complete, container_type) {
+Lightbox = function(grid, toolbar, complete, container_type, orderable) {
 	var self = this;
 	this.grid = grid;
 	this._buildSlidesIndex(); // set this.slides and this.lastSlide;
@@ -24,7 +24,6 @@ Lightbox = function(grid, toolbar, complete, container_type) {
 		addListener(window, 'scroll', function(evt){self.windowScrollToolbarlHandler(evt);});
 	}
 	addListener(window, 'scroll', function(evt){self.windowScrollGridHandler(evt);});
-	// addListener(window, 'load', function(evt){ self.windowScrollGridHandler();});
 	registerStartupFunction(function(){ self.windowScrollGridHandler();});
 	this.lastCBChecked = undefined;
 	this.form = undefined;
@@ -46,6 +45,14 @@ Lightbox = function(grid, toolbar, complete, container_type) {
 		fm.onBeforeSubmit = function(fm_, evt) {return self.onBeforeSubmit(fm_, evt);};
 		fm.onResponseLoad = function(req) {return self.onResponseLoad(req);};
 	}
+
+	// drag and drop
+	this.disableDefaultDragging();
+	this._DDOrderingListeners = {'dragstart' : function(evt){self.onDragStart(evt);},
+								 'dragover' : function(evt){self.onDragOver(evt);},
+								 'dragend' : function(evt){self.onDragEnd(evt);}
+								 };
+	if(orderable) {this.enableDDOrdering();}
 };
 
 Lightbox.prototype._buildSlidesIndex = function() {
@@ -71,6 +78,7 @@ Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
 		this.switchToolBarPositioning(false);
 	}
 };
+
 Lightbox.prototype.windowScrollGridHandler = function(evt) {
 	if (!this.complete &&
 		!this.fetchingDisabled &&
@@ -175,6 +183,8 @@ Lightbox.prototype.mouseClickHandler = function(evt) {
 Lightbox.prototype.onChangeHandler = function(evt) {
 	var target = getTargetedObject(evt);
 	if (target.name === 'sort_on') {
+		if (target.value === 'position') {this.enableDDOrdering();}
+		else {this.disableDDOrdering();}
 		this.fm.submitButton = {'name' : 'set_sorting', 'value' : 'ok'};
 		this.fm.submit(evt);
 	}
@@ -350,6 +360,7 @@ Lightbox.prototype._refreshGrid = function(req) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			node = getCopyOfNode(node);
+			this.disableDefaultDragging(node);
 			this.grid.replaceChild(node, this.slides[j]);
 			this.slides[j] = node;
 			j++;
@@ -392,6 +403,7 @@ Lightbox.prototype._appendTail = function(req) {
 		node = doc.childNodes[i];
 		if (node.nodeType === 1) {
 			this.lastSlide = this.grid.appendChild(getCopyOfNode(node));
+			this.disableDefaultDragging(this.lastSlide);
 			this.slides.push(this.lastSlide);
 			if (this.cbIndex) {
 				c = this.lastSlide.getElementsByTagName('input')[0];
@@ -423,5 +435,161 @@ else {
 		}
 	};
 }
+
+if (browser.isGecko) {
+	Lightbox.prototype.disableDefaultDragging = function(element) {
+		if (!element) {
+			element = this.grid;
+		}
+		var i, j, name, elements;
+		var elementsNames = ['a', 'img'];
+		for (i=0 ; i < elementsNames.length ; i++) {
+			name = elementsNames[i];
+			elements = element.getElementsByTagName(name);
+			for (j=0 ; j < elements.length ; j++) {
+				elements[j].draggable=false;
+			}
+		}
+	};
+}
+else {
+	Lightbox.prototype.disableDefaultDragging = function() {};
+}
+
+Lightbox.prototype.getSelectedSlides = function() {
+	var i, e, slide;
+	var slides = [];
+	for (i=0 ; i<this.form.elements.length ; i++) {
+		e = this.form.elements[i];
+		if (e.type === 'checkbox' && e.checked) {
+			slide = e.parentNode.parentNode;
+			slides.push(slide);
+		}
+	}
+	return slides;
+};
+
+
+Lightbox.prototype.enableDDOrdering = function() {
+	addListener(this.grid, 'dragstart', this._DDOrderingListeners.dragstart);
+	addListener(this.grid, 'dragover', this._DDOrderingListeners.dragover);
+	addListener(this.grid, 'dragend', this._DDOrderingListeners.dragend);
+};
+
+Lightbox.prototype.disableDDOrdering = function() {
+	removeListener(this.grid, 'dragstart', this._DDOrderingListeners.dragstart);
+	removeListener(this.grid, 'dragover', this._DDOrderingListeners.dragover);
+	removeListener(this.grid, 'dragend', this._DDOrderingListeners.dragend);
+};
+
+Lightbox.prototype.onDragStart = function(evt) {
+	var target = getTargetedObject(evt);
+	this.dragged = target;
+	this.draggedSelection = this.getSelectedSlides();
+	if (this.draggedSelection.indexOf(target) === -1) {
+		this.draggedSelection.push(target);
+	}
+	evt.dataTransfer.setData('text', '');
+	var i, slide;
+	for(i=0 ; i<this.draggedSelection.length ; i++) {
+		slide = this.draggedSelection[i];
+		slide.style.opacity = 0;
+		slide.style.width = 0;
+	}
+};
+
+Lightbox.prototype.onDragOver = function(evt) {
+	if (!this.dragged) {
+		return;
+	}
+	var target = getTargetedObject(evt);
+	while(target && target.className !== 'slide') {
+		target = target.parentNode;
+	}
+	if (!target) {return;}
+	target = target.parentNode;
+	if (target !== this.dragged) {
+		target.classList.add('dragover');
+	}
+	if (this.lastDropTarget && this.lastDropTarget !== target) {
+		this.lastDropTarget.classList.remove('dragover');
+	}
+	this.lastDropTarget = target;
+};
+
+Lightbox.prototype.onDragEnd = function(evt) {
+	if (this.lastDropTarget) {
+		this.lastDropTarget.classList.remove('dragover');
+		var i, slide;
+		this.pendingMovedSlides = [];
+		for(i=this.draggedSelection.length -1 ; i>=0 ; i--) {
+			slide = this.draggedSelection[i].cloneNode(true);
+			this.pendingMovedSlides.push(slide);
+			this.grid.insertBefore(slide, this.lastDropTarget.nextSibling);
+			slide.style.opacity = 1;
+			slide.style.width = '';
+		}
+		this.moveSelectedPhotos();
+	}
+	// this.draggedSelection = this.lastDropTarget
+	this.dragged = undefined;
+};
+
+Lightbox.prototype.moveSelectedPhotos = function() {
+	var req = new XMLHttpRequest();
+	self = this;
+	req.onreadystatechange = function() {
+		switch (req.readyState) {
+			case 1 :
+				showProgressImage();
+				break;
+			case 4 :
+				hideProgressImage();
+				self._moveSelectedPhotos(req);
+				break;
+		}
+	};
+	
+	var url = absolute_url() + '/portfolio_move_photos';
+	req.open("POST", url, true);
+	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+	var query = 'container_type=' + this.container_type;
+	var i;
+	for (i=0 ; i<this.draggedSelection.length ; i++) {
+		query += '&uids:list=' + this.draggedSelection[i].getAttribute('name');
+	}
+	query += '&afterUid=' + this.lastDropTarget.getAttribute('name');
+	req.send(query);
+};
+
+Lightbox.prototype._moveSelectedPhotos = function(req) {
+	var i, slide, cb;
+	if (req.status === 200) {
+		var doc = req.responseXML.documentElement;
+		if (doc.nodeName === 'ok') {
+			for(i=0 ; i<this.draggedSelection.length ; i++) {
+				slide = this.draggedSelection[i];
+				this.grid.removeChild(slide);
+				cb = this.pendingMovedSlides[i].getElementsByTagName('input')[0];
+				cb.checked = false;
+				cb.removeAttribute('checked');
+			}
+			this.pendingMovedSlides = undefined;
+			this.cbIndex = undefined;
+			return;
+		}
+	}
+	
+	for(i=0 ; i<this.pendingMovedSlides.length ; i++) {
+		slide = this.pendingMovedSlides[i];
+		this.grid.removeChild(slide);
+	}
+	
+	for(i=0 ; i<this.draggedSelection.length ; i++) {
+		slide = this.draggedSelection[i];
+		slide.style.opacity = 1;
+		slide.style.width = '';
+	}
+};
 
 }());

@@ -28,7 +28,9 @@
 
     <div metal:fill-slot="main" tal:omit-tag=""
          tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent;
+                     ManageProperties modules/Products/CMFCore/permissions/ManageProperties;
                      dropable python:mtool.checkPermission(AddPortalContent, here);
+                     orderable python:mtool.checkPermission(ManageProperties, here) and here.getDefaultSorting()[0] == 'position';
                      Batch python:modules['Products.Plinn'].Batch;
                      pho_start python:request.get('pho_start', 0);
                      port_start python:request.get('port_start', 0);

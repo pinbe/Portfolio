@@ -520,6 +520,26 @@ th.num {
   color: &dtml-messageFontColor;;
 }
 
+/* drag and drop */
+#lightbox img,
+#lightbox a {
+	user-drag: none;
+	-moz-user-select: none;
+	-webkit-user-drag: none;
+}
+
+*[draggable=true] {
+	-moz-user-select:none;
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+}
+
+.lightbox span.dragover {
+/*  width: <dtml-var expr="slide_size - 10">px;*/
+	border-right: 10px solid &dtml-outlineColor;;
+}
 /* 
 </dtml-with> 
 </dtml-with>
