@@ -24,7 +24,7 @@ Lightbox = function(grid, toolbar, complete, container_type, orderable) {
 		addListener(window, 'scroll', function(evt){self.windowScrollToolbarlHandler(evt);});
 	}
 	addListener(window, 'scroll', function(evt){self.windowScrollGridHandler(evt);});
-	registerStartupFunction(function(){ self.windowScrollGridHandler();});
+	addListener(window, 'load', function(evt){self.windowScrollGridHandler();});
 	this.lastCBChecked = undefined;
 	this.form = undefined;
 	var parent = this.grid.parentNode;
@@ -82,9 +82,7 @@ Lightbox.prototype.windowScrollToolbarlHandler = function(evt) {
 Lightbox.prototype.windowScrollGridHandler = function(evt) {
 	if (!this.complete &&
 		!this.fetchingDisabled &&
-		getWindowScrollY() >
-			(this.lastSlide.firstElementChild || this.lastSlide.children[0]).offsetTop
-			 - getWindowHeight()) {
+		getWindowScrollY() > (this.lastSlide.firstElementChild || this.lastSlide.children[0]).offsetTop - getWindowHeight()) {
 		this.fetchingDisabled = true;
 		this.fetchTail();
 	}
