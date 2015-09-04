@@ -17,7 +17,7 @@
     </div>
     <div metal:fill-slot="main" tal:omit-tag="" i18n:domain="portfolio">
       <em tal:condition="options/lightboxSelected" i18n:translate="lightbox_selected_explanations"></em>
-      <form tal:attributes="action string:${here/absolute_url}/lightbox_view" tal:condition="options/buttons">
+      <form tal:attributes="action string:${here/absolute_url}/lightbox_view" tal:condition="options/buttons" method="post">
         <div id="lightbox_toolbar" class="image_toolbar"
              tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
              tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
