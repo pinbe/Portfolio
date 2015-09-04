@@ -13,7 +13,7 @@
      i18n:domain="portfolio">
   <div class="panel-background"><br/></div>
   <div style="position:absolute;padding:5px;">
-    <form tal:attributes="action string:${context/absolute_url}/add_to_cart">
+    <form tal:attributes="action string:${context/absolute_url}/add_to_cart" method="post">
       <select name="printing_template">
         <option tal:repeat="item items" tal:attributes="value item/getId"
           ><span tal:replace="item/title"/> – <span tal:replace="item/price/taxed"/> €</option>
