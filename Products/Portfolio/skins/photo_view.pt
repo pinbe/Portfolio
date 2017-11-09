@@ -10,7 +10,6 @@
     <metal:block metal:fill-slot="javascript_head_slot">
     <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>
     <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>
-    <script type="text/javascript" tal:attributes="src string:${portal_url}/DHTMLapi.js"></script>
     <script type="text/javascript" tal:attributes="src string:${portal_url}/navigateur.js"></script>
     <script type="text/javascript" tal:attributes="src string:${portal_url}/mosaique.js"></script>
     <script type="text/javascript" tal:attributes="src string:${portal_url}/swfobject.js"></script>
