@@ -372,10 +372,10 @@ var Lightbox;
         req.onreadystatechange = function() {
             switch(req.readyState) {
                 case 1 :
-                    showProgressImage();
+                    // showProgressImage();
                     break;
                 case 4 :
-                    hideProgressImage();
+                    // hideProgressImage();
                     if(req.status === 200) {
                         self._refreshGrid(req);
                     }
@@ -413,10 +413,10 @@ var Lightbox;
         req.onreadystatechange = function() {
             switch(req.readyState) {
                 case 1 :
-                    showProgressImage();
+                    // showProgressImage();
                     break;
                 case 4 :
-                    hideProgressImage();
+                    // hideProgressImage();
                     if(req.status === 200) {
                         self._appendTail(req);
                     }
@@ -564,10 +564,10 @@ var Lightbox;
         req.onreadystatechange = function() {
             switch(req.readyState) {
                 case 1 :
-                    showProgressImage();
+                    // showProgressImage();
                     break;
                 case 4 :
-                    hideProgressImage();
+                    // hideProgressImage();
                     self._moveSelectedPhotos(req);
                     break;
             }
