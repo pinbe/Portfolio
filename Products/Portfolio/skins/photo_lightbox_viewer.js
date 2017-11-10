@@ -103,9 +103,10 @@ var Lightbox;
     };
 
     Lightbox.prototype.windowScrollToolbarlHandler = function() {
-        if(this.toolbar.offsetTop < getWindowScrollY() && !this.toolbarFixed) {
+        if(this.toolbar.getBoundingClientRect().top <= 0 &&
+           !this.toolbarFixed) {
             this.toolbarFixed = true;
-            this.backThreshold = this.toolbar.offsetTop;
+            this.backThreshold = getWindowScrollY() + this.toolbar.getBoundingClientRect().top;
             this.switchToolBarPositioning(true);
         }
         else if(this.toolbarFixed && getWindowScrollY() < this.backThreshold) {
