@@ -205,10 +205,12 @@ var FilmSlider;
         var wh = window.innerHeight;
         var rb;
         if(!isMobile) {
-            rb = this.rail.offsetTop + this.rail.getBoundingClientRect().height; // rail bottom
+            rb = this.rail.getBoundingClientRect().top
+                 + this.rail.getBoundingClientRect().height; // rail bottom
         }
         else {
-            rb = this.filmBar.offsetTop + this.filmBar.getBoundingClientRect().height; // film bottom
+            rb = this.filmBar.getBoundingClientRect().top
+                 + this.filmBar.getBoundingClientRect().height; // film bottom
         }
         var delta = wh - rb;
         var sh = this.stretchable.getBoundingClientRect().height;
@@ -359,24 +361,24 @@ var FilmSlider;
     };
 
     FilmSlider.prototype.addEventListeners = function() {
-        var thisSlider = this;
+        var self = this;
         window.addEventListener('resize', function(evt) {
-            thisSlider.resizeSlider(evt);
+            self.resizeSlider(evt);
         });
         this.filmBar.addEventListener('click', function(evt) {
-            thisSlider.thumbnailClickHandler(evt);
+            self.thumbnailClickHandler(evt);
         });
         this.toolbar.addEventListener('click', function(evt) {
-            thisSlider.toolbarClickHandler(evt);
+            self.toolbarClickHandler(evt);
         });
         window.addEventListener('load', function(evt) {
-            thisSlider.fitToScreen(evt);
+            self.fitToScreen(evt);
         });
         window.addEventListener('load', function(evt) {
-            thisSlider._checkSizeAfterLoad(evt);
+            self._checkSizeAfterLoad(evt);
         });
         window.addEventListener('load', function(evt) {
-            thisSlider.startThumbnailsLoadQueue(evt);
+            self.startThumbnailsLoadQueue(evt);
         });
 
         // dd listeners
@@ -384,31 +386,31 @@ var FilmSlider;
 
         if(isAppleWebKit) {
             this.filmBar.addEventListener('mousewheel', function(evt) {
-                thisSlider.mouseWheelHandler(evt);
+                self.mouseWheelHandler(evt);
             }, false);
         }
         else {
             this.filmBar.addEventListener('DOMMouseScroll', function(evt) {
-                thisSlider.mouseWheelHandler(evt);
+                self.mouseWheelHandler(evt);
             });
         }
         if(isMobile) {
             this.filmBar.addEventListener('touchstart', function(evt) {
-                thisSlider.touchStartHandler(evt);
+                self.touchStartHandler(evt);
             }, false);
             this.filmBar.addEventListener('touchmove', function(evt) {
-                thisSlider.touchMoveHandler(evt);
+                self.touchMoveHandler(evt);
             }, false);
             this.filmBar.addEventListener('touchend', function(evt) {
-                thisSlider.touchEndHandler(evt);
+                self.touchEndHandler(evt);
             }, false);
         }
 
         document.addEventListener('keydown', function(evt) {
-            thisSlider.keyDownHandler(evt);
+            self.keyDownHandler(evt);
         });
         document.addEventListener('keypress', function(evt) {
-            thisSlider.keyPressHandler(evt);
+            self.keyPressHandler(evt);
         });
     };
 

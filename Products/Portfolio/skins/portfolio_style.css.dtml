@@ -27,6 +27,7 @@
 .photo_viewer .metadata_bar {
   background: &dtml-metadata_bar_background;;
   width:20em;
+  vertical-align: top;
 }
 
 .image_metadata {
