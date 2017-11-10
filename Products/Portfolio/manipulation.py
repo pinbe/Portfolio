@@ -84,7 +84,10 @@ class ImageQueueProcessorThread(threading.Thread) :
                 p.makeThumbnail()
                 # print 'make thumbnail'
 
-            for size in ((500, 500), (600, 600), (800, 800)) :
+            for size in ((500, 500),
+                         (600, 600),
+                         (800, 800),
+                         (1600, 1600)) :
                 # print 'resize at', size
                 p._getResizedImage(size, True)
                 transaction.commit()

@@ -56,12 +56,12 @@ def main(app, portal_path, userid, skipfile) :
                         p.makeThumbnail()
                         transaction.commit()
 
-                    for size in ((500, 500), (600, 600), (800, 800)) :
+                    for size in ((500, 500), (600, 600), (800, 800), (1600, 1600)) :
                         index = aggregateIndex(GET_RI_SIGNATURE, (size, True))
                         if p._methodResultsCache['_getResizedImage'].has_key(index) :
                             del p._methodResultsCache['_getResizedImage'][index]
-                            print 'resize at', size
-                            p._getResizedImage(size, True)
+                        print 'resize at', size
+                        p._getResizedImage(size, True)
                         transaction.commit()
 
                     zMin = p.tiles_min_zoom
