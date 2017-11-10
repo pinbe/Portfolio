@@ -12,7 +12,6 @@
     <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>
     <script type="text/javascript" tal:attributes="src string:${portal_url}/navigateur.js"></script>
     <script type="text/javascript" tal:attributes="src string:${portal_url}/mosaique.js"></script>
-    <script type="text/javascript" tal:attributes="src string:${portal_url}/swfobject.js"></script>
     </metal:block>
     <title>photo_view</title>
   </head>
@@ -56,14 +55,6 @@
                 </a>
                 <img tal:attributes="src string:${portal_url}/slide_show_btn.gif" width="33" height="27" alt="slide show" i18n:attributes="alt"
                      id="slide_show"/>
-                <script type="text/javascript" tal:content="python:'''
-                  (function(){
-                  var params = {'allowFullScreen' : true
-                               ,'allowScriptAccess' : 'always'};
-                  swfobject.embedSWF('%s/slide_show.swf', 'slide_show', '33', '27', '9.0.0', undefined, undefined, params);
-                  })();
-                  ''' % portal_url">
-                </script>
                 <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
                 <a title="Back to portfolio..." rel="index"
                    tal:attributes="href contextInfos/backUrl"
@@ -135,16 +126,16 @@
           </tr>
         </table>
       </div>
-      
+
       <!-- film bar -->
       <div metal:use-macro="here/photo_layout_macros/macros/film_bar">
         film bar
       </div>
-      
+
     </div>
-    
-    
-    
+
+
+
     <div metal:fill-slot="footer" tal:omit-tag="">
       <div metal:use-macro="here/viewThreadsAtBottom/macros/threadsDisplay" />
     </div>
