@@ -118,7 +118,8 @@ var Lightbox;
     Lightbox.prototype.windowScrollGridHandler = function() {
         if(!this.complete &&
             !this.fetchingDisabled &&
-            getWindowScrollY() > (this.lastSlide.firstElementChild || this.lastSlide.children[0]).offsetTop - getWindowHeight()) {
+            getWindowScrollY() > (this.lastSlide.firstElementChild ||
+                                  this.lastSlide.children[0]).offsetTop - getWindowHeight()) {
             this.fetchingDisabled = true;
             this.fetchTail();
         }
@@ -140,7 +141,8 @@ var Lightbox;
                         req = new XMLHttpRequest();
                         url = link.href;
                         req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                        req.setRequestHeader("Content-Type",
+                                             "application/x-www-form-urlencoded;charset=utf-8");
                         req.send("ajax=1");
 
                         slide.className = 'selected';
@@ -157,11 +159,13 @@ var Lightbox;
                         req = new XMLHttpRequest();
                         url = link.href;
                         req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                        req.setRequestHeader("Content-Type",
+                                             "application/x-www-form-urlencoded;charset=utf-8");
                         req.send("ajax=1");
                         slide.className = null;
                         link.setAttribute('name', 'add_to_selection');
-                        link.href = url.replace(/(.*\/)remove_to_selection$/, '$1add_to_selection');
+                        link.href = url.replace(/(.*\/)remove_to_selection$/,
+                                                '$1add_to_selection');
                         link.title = img.alt = 'Ajouter à la sélection';
                         button.className = "button slide-select";
                         break;
@@ -177,7 +181,8 @@ var Lightbox;
                         req = new XMLHttpRequest();
                         url = link.href;
                         req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                        req.setRequestHeader("Content-Type",
+                                             "application/x-www-form-urlencoded;charset=utf-8");
                         req.send(null);
                         slide.className = 'hidden-slide';
                         link.setAttribute('name', 'show_for_anonymous');
@@ -192,7 +197,8 @@ var Lightbox;
                         req = new XMLHttpRequest();
                         url = link.href;
                         req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                        req.setRequestHeader("Content-Type",
+                                             "application/x-www-form-urlencoded;charset=utf-8");
                         req.send(null);
                         slide.className = null;
                         link.setAttribute('name', 'hide_for_anonymous');
@@ -267,13 +273,13 @@ var Lightbox;
             phs.cssText = tbs.cssText;
             phs.position = 'relative';
             this.toolbar.parentNode.insertBefore(this.toolbarPlaceholder, this.toolbar);
+
         }
         else {
             this.toolbarPlaceholder.parentNode.removeChild(this.toolbarPlaceholder);
             tbs.cssText = this.toolbar.defaultCssText;
         }
     };
-
 
     Lightbox.prototype.hideSelection = function() {
         var i, e, slide;
