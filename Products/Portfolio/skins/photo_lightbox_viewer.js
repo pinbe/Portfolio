@@ -36,6 +36,9 @@ var Lightbox;
             window.addEventListener('scroll', function(evt) {
                 self.windowScrollToolbarlHandler(evt);
             });
+            this._resizeWindowToolbarListener = function() {
+                self.fitToolBarWidth();
+            };
         }
         window.addEventListener('scroll', function(evt) {
             self.windowScrollGridHandler(evt);
@@ -273,12 +276,19 @@ var Lightbox;
             phs.cssText = tbs.cssText;
             phs.position = 'relative';
             this.toolbar.parentNode.insertBefore(this.toolbarPlaceholder, this.toolbar);
-
+            window.addEventListener('resize', this._resizeWindowToolbarListener);
         }
         else {
             this.toolbarPlaceholder.parentNode.removeChild(this.toolbarPlaceholder);
             tbs.cssText = this.toolbar.defaultCssText;
+            window.removeEventListener('resize', this._resizeWindowToolbarListener);
         }
+    };
+
+    Lightbox.prototype.fitToolBarWidth = function() {
+        if(!this.toolbarFixed)
+            return;
+        this.toolbar.style.width = this.toolbar.parentNode.offsetWidth + 'px';
     };
 
     Lightbox.prototype.hideSelection = function() {
