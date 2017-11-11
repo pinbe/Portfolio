@@ -145,6 +145,7 @@
           <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10;
                           blank_img string:$portal_url/transparent.gif">
             <td tal:repeat="info contextInfos/infos">
+
               <a tal:attributes="href info/href;
                                  title info/title;
                                  class info/className;
@@ -157,6 +158,7 @@
                                      width size/width;
                                      style string:margin-top : ${margin_top}px ;"/>
               </a>
+
             </td>
           </tr>
         </table>
@@ -172,7 +174,7 @@
                                 'center': %(center)s,
                                 'slideSize': %(slideSize)d,
                                 'ctxUrlTranslation' : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
-              var fs = new FilmSlider(document.getElementById('film_bar'),
+              fs = new FilmSlider(document.getElementById('film_bar'),
                                       document.getElementById('slider'),
                                       ctxInfos,
                                       document.getElementById('medium_image').getElementsByTagName('img')[0],
