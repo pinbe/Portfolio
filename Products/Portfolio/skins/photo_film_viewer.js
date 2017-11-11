@@ -24,17 +24,6 @@ var FilmSlider;
 
 
     FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
-
-        // d3.select('body')
-        //   .insert('div', '*:first-child')
-        //   .style('position', 'fixed')
-        //   .style('border-right', '1px dashed red')
-        //   .style('height', '100vh')
-        //   .style('width', window.innerWidth/2 + 'px')
-        //   .style('z-index', 10)
-        // ;
-
-
         var thisSlider = this;
         this.filmBar = filmBar;
         this.filmBarWidth = this.filmBar.getBoundingClientRect().width;
@@ -73,10 +62,6 @@ var FilmSlider;
         this.pendingImage.onload = function() {
             thisSlider.refreshImage();
         };
-        this.initialized = false;
-
-        // this.film.style.left = '0';
-        // this.film.style.top = '0';
 
         this.filmLength = ctxInfos.filmLength;
         this.center = ctxInfos.center;
@@ -84,7 +69,6 @@ var FilmSlider;
         this.ctxUrlTranslation = ctxInfos.ctxUrlTranslation;
 
         this.centerSlide();
-
         this.addEventListeners();
     };
 
