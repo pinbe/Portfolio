@@ -19,8 +19,13 @@ var FilmSlider;
     }
 
 
-    FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
-        var thisSlider = this;
+    FilmSlider = function(stretchableElement,
+                          image,
+                          filmBar,
+                          ctxInfos,
+                          toolbar,
+                          breadcrumbs) {
+        this.stretchable = stretchableElement;
         filmBar.style.width = filmBar.parentNode.offsetWidth + 'px';
         window.addEventListener('resize', function() {
             filmBar.style.width = filmBar.parentNode.offsetWidth + 'px';
@@ -31,7 +36,6 @@ var FilmSlider;
         this.displayedSlideInSelection = this.displayedSlide.classList.contains('selected');
         this.cartSlide = document.getElementById('cart_slide');
         this.image = image;
-        this.stretchable = image.parentNode;
         this.viewMode = 'medium';
 
         this.buttons = [];
@@ -58,15 +62,24 @@ var FilmSlider;
         }
 
         this.pendingImage = new Image();
+        var self = this;
         this.pendingImage.onload = function() {
-            thisSlider.refreshImage();
+            self.refreshImage();
         };
 
         this.center = ctxInfos.center;
         this.ctxUrlTranslation = ctxInfos.ctxUrlTranslation;
 
         this.centerSlide();
+        this.fitViewer();
         this.addEventListeners();
+    };
+
+    // adjust viewer to available height
+    FilmSlider.prototype.fitViewer = function() {
+        var start = this.stretchable.getBoundingClientRect().top;
+        var end = this.stretchable.nextElementSibling.getBoundingClientRect().top;
+        this.stretchable.style.height = end - start + 'px';
     };
 
 
@@ -154,6 +167,9 @@ var FilmSlider;
         });
         document.addEventListener('keypress', function(evt) {
             self.keyPressHandler(evt);
+        });
+        window.addEventListener('resize', function() {
+            self.fitViewer();
         });
     };
 
@@ -326,16 +342,16 @@ var FilmSlider;
                         button.src = portal_url() + '/unselect_flag_btn.gif';
                         button.alt = link.title = 'Retirer de la sélection';
                         link.href = canonicalImgUrl + '/remove_to_selection';
-                        this.displayedSlide.className = 'selected displayed';
-                        this.image.parentNode.className = 'selected';
+                        this.displayedSlide.classList.add('selected');
+                        this.image.parentNode.classList.add('selected');
                         this.displayedSlideInSelection = true;
                     }
                     else {
                         button.src = portal_url() + '/select_flag_btn.gif';
                         button.alt = link.title = 'Ajouter à la sélection';
                         link.href = canonicalImgUrl + '/add_to_selection';
-                        this.displayedSlide.className = 'displayed';
-                        this.image.parentNode.className = '';
+                        this.displayedSlide.classList.remove('selected');
+                        this.image.parentNode.classList.remove('selected');
                         this.displayedSlideInSelection = false;
                     }
                     break;
@@ -447,10 +463,10 @@ var FilmSlider;
         this.image.height = this.pendingImage.height;
         this.image.style.visibility = 'visible';
         if(this.displayedSlideInSelection) {
-            this.image.parentNode.className = 'selected';
+            this.image.parentNode.classList.add('selected');
         }
         else {
-            this.image.parentNode.className = '';
+            this.image.parentNode.classList.remove('selected');
         }
     };
 
@@ -502,26 +518,6 @@ var FilmSlider;
             self._loadNextThumb(evt);
         });
         next.src = this.translateImgUrl(next.parentNode.href) + '/getThumbnail';
-    };
-
-
-    /* UTILS */
-    function Point(x, y) {
-        this.x = Math.round(x);
-        this.y = Math.round(y);
-    }
-
-    Point.prototype.diff = function(point) {
-        return new Point(this.x - point.x, this.y - point.y);
-    };
-    Point.prototype.add = function(point) {
-        return new Point(this.x + point.x, this.y + point.y);
-    };
-    Point.prototype.mul = function(k) {
-        return new Point(this.x * k, this.y * k);
-    };
-    Point.prototype.toString = function() {
-        return "(" + String(this.x) + ", " + String(this.y) + ")";
     };
 
 }());

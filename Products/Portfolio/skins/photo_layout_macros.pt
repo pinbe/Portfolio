@@ -140,7 +140,7 @@
       </script>
     </div>
     <div metal:define-macro="film_bar" tal:omit-tag="">
-      <div id="film_bar">
+      <div class="film_bar">
         <table cellspacing="0">
           <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10;
                           blank_img string:$portal_url/transparent.gif">
@@ -170,14 +170,15 @@
               (function(){
               var ctxInfos = {center: %(center)s,
                               ctxUrlTranslation : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
-              new FilmSlider(document.getElementById('film_bar'),
-                             document.getElementById('slider'),
-                             ctxInfos,
+              fs=new FilmSlider(
+                             document.querySelector('.photo_viewer'),
                              document.querySelector('.photo_viewer .image-wrapper img'),
-                             document.getElementById('image_toolbar'),
+                             document.querySelector('.film_bar'),
+                             ctxInfos,
+                             document.querySelector('.image_toolbar'),
                              document.getElementById('Breadcrumbs'));
 
-              new PerfectScrollbar(document.getElementById('film_bar'), {
+              new PerfectScrollbar(document.querySelector('.film_bar'), {
                 suppressScrollY: true
               });
 

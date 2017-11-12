@@ -18,7 +18,19 @@
   vertical-align:middle;
 }
 
-#medium_image.selected {
+.photo_viewer {
+  /*border: 1px dashed cadetblue;*/
+}
+
+.image-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.image-wrapper.selected {
   background: &dtml-medium_image_background;;
 }
 
@@ -362,7 +374,7 @@ div.lightbox {
   border:0;
 }*/
 
-#film_bar {
+.film_bar {
   background:#555;
   overflow:hidden;
   position:fixed;
@@ -371,17 +383,17 @@ div.lightbox {
   height: <dtml-var expr="thumb_size/2 + 12">px;
 }
 
-#film_bar table {
+.film_bar table {
   position:absolute;
   border-collapse:collapse;
 }
 
-#film_bar td {
+.film_bar td {
   padding:0;
   border:1px solid #484848;
 }
 
-#film_bar a {
+.film_bar a {
   width: <dtml-var expr="thumb_size/2 + 10">px;
   height: <dtml-var expr="thumb_size/2 + 10">px;
   display:block;
@@ -389,33 +401,17 @@ div.lightbox {
   vertical-align:middle;
 }
 
-#film_bar a:hover, 
-#film_bar a.selected {
+.film_bar a:hover, 
+.film_bar a.selected {
   background:#727272;
 }
 
-#film_bar a.displayed {
+.film_bar a.displayed {
   background:#bfbfbf;
 }
 
-#film_bar img{
+.film_bar img{
   border:none;
-}
-
-.jsslider {
-  position:absolute;
-  height:13px;
-  width:0px;
-  background: #000;
-}
-
-.jsslider span {
-  position:absolute;
-  width:0px;
-  height:11px;
-  background:url(&dtml-portal_url;/slider_bg.gif);
-  margin:1px 0;
-  font-size:0;  /*IE 6 hack */
 }
 
 #cart_slide {

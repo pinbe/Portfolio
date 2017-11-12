@@ -28,7 +28,8 @@
                      translate nocall:modules/Products/Portfolio/utils/translate;
                      _ python:lambda msg : translate(msg, here)">
       <div class="photo_viewer">
-        <div class="image-wrapper">
+        <div class="image-wrapper"
+             tal:attributes="class python:('image-wrapper %s' % ('selected' if contextInfos['isSelected'] else '')).strip()">
           <img tal:define="dummy python:here.getOrSetSessionVar(key='preferedImageSize', value=(600, 600));
                            size python:here.getResizedImageSize(request);
                            width python:size[0];
