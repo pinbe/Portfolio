@@ -8,6 +8,8 @@
 .photo_viewer {
   width:100%;
   margin-bottom:1px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .photo_viewer #medium_image {

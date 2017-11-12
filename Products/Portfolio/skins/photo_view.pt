@@ -7,11 +7,16 @@
 
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <metal:block metal:fill-slot="css_slot">
+      <link rel="stylesheet" media="screen"
+            tal:attributes="href string:$portal_url/css/perfect-scrollbar.css"/>
+    </metal:block>
     <metal:block metal:fill-slot="javascript_head_slot">
-    <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>
-    <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>
-    <script type="text/javascript" tal:attributes="src string:${portal_url}/navigateur.js"></script>
-    <script type="text/javascript" tal:attributes="src string:${portal_url}/mosaique.js"></script>
+      <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>
+      <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>
+      <script type="text/javascript" tal:attributes="src string:${portal_url}/js/perfect-scrollbar.min.js"></script>
+    <!--?<script type="text/javascript" tal:attributes="src string:${portal_url}/navigateur.js"></script>-->
+    <!--?<script type="text/javascript" tal:attributes="src string:${portal_url}/mosaique.js"></script>-->
     </metal:block>
     <title>photo_view</title>
   </head>
@@ -22,109 +27,102 @@
                      index contextInfos/index;
                      translate nocall:modules/Products/Portfolio/utils/translate;
                      _ python:lambda msg : translate(msg, here)">
-      <div id="photo_viewer">
-        <table cellspacing="0" class="photo_viewer">
-          <tr>
-            <td id="medium_image" tal:attributes="class python:contextInfos['isSelected'] and 'selected' or None">
-              <div tal:condition="not:here/size" i18n:translate="">Empty image: upload an image file in "Edit" tab.</div>
-              <div tal:condition="here/size" tal:omit-tag="">
-                <img src="corse_071.jpg" border="0"
-                     tal:define="dummy python:here.getOrSetSessionVar(key='preferedImageSize', value=(600, 600));
-                                 size python:here.getResizedImageSize(request);
-                                 width python:size[0];
-                                 height python:size[1];"
-                     tal:attributes="src string:${here/absolute_url}/getResizedImage?size=600;
-                                     alt here/Title;
-                                     width width;
-                                     height height"/>
+      <div class="photo_viewer">
+        <div class="image-wrapper">
+          <img tal:define="dummy python:here.getOrSetSessionVar(key='preferedImageSize', value=(600, 600));
+                           size python:here.getResizedImageSize(request);
+                           width python:size[0];
+                           height python:size[1];"
+               tal:attributes="src string:${here/absolute_url}/getResizedImage?size=600;
+                               alt here/Title;
+                               width width;
+                               height height"/>
+        </div>
+        <div class="metadata_bar">
+          <div id="image_toolbar" class="image_toolbar">
+            <a title="Previous" rel="prev"
+               tal:attributes="href contextInfos/previous"
+               i18n:attributes="title">
+              <img tal:attributes="src string:${portal_url}/prev_img_btn.gif" width="23" height="27" alt="Previous" i18n:attributes="alt"
+                   name="previous" />
+            </a>
+            <a title="Next" rel="next"
+               tal:attributes="href contextInfos/next"
+               i18n:attributes="title">
+              <img tal:attributes="src string:${portal_url}/next_img_btn.gif" width="23" height="27" alt="Next" i18n:attributes="alt"
+                   name="next" />
+            </a>
+            <img tal:attributes="src string:${portal_url}/slide_show_btn.gif" width="33" height="27" alt="slide show" i18n:attributes="alt"
+                 id="slide_show"/>
+            <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
+            <a title="Back to portfolio..." rel="index"
+               tal:attributes="href contextInfos/backUrl"
+               i18n:attributes="title" tal:on-error="string:">
+              <img tal:attributes="src string:${portal_url}/lightbox_btn.gif" width="31" height="27" alt="Back to portfolio..." i18n:attributes="alt"
+                   name="back_to_portfolio" />
+            </a>
+            <a title="Full screen (f)" i18n:attributes="title"
+               tal:attributes="href string:${here/absolute_url}/zoom_view">
+              <img tal:attributes="src string:${portal_url}/full_screen_btn.gif" width="31" height="27" alt="Full screen (f)" i18n:attributes="alt"
+                   name="full_screen"/>
+            </a>
+            <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
+            <a tal:define="selected contextInfos/isSelected;
+                           msg python:selected and 'Retirer de la sélection' or 'Ajouter à la sélection';
+                           action python:selected and 'remove_to_selection' or 'add_to_selection';
+                           imgSrc python:'%s/%s' % (portal_url, selected and 'unselect_flag_btn.gif' or 'select_flag_btn.gif');"
+               tal:attributes="href python:'%s/%s' % (here.absolute_url(), action); title msg">
+              <img tal:attributes="src imgSrc; alt msg" width="31" height="27"
+                   name="toggle_selection"/>
+            </a>
+            <div style="display:inline;position:relative">
+              <div id="cart_slide"></div>
+              <a tal:attributes="href python:'%s/get_slide_buyable_items' % here.absolute_url();
+                                 class python:(contextInfos.get('buyable') and [None] or['hidden'])[0]"
+                 title="Add to cart" i18n:attributes="title">
+                <img width="31" height="27" alt="Add to cart" name="show_buyable"
+                     tal:attributes="src string:$portal_url/cart_btn.gif" i18n:attributes="alt"/>
+              </a>
+            </div>
+            <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
+            <a title="Edit metadata"
+               tal:define="ModifyPortalContent python:modules['Products.CMFCore'].permissions.ModifyPortalContent"
+               tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"
+               tal:attributes="href string:${here/absolute_url}/photo_edit_form"
+               i18n:attributes="title">
+              <img tal:attributes="src string:${portal_url}/edit_metadata_btn.gif" width="31" height="27" alt="Edit metadata" i18n:attributes="alt"
+                   name="edit_metadata"/>
+            </a>
+          </div>
+          <div id="image_metadata" class="image_metadata">
+            <div  metal:define-macro="image_metadata" tal:omit-tag="">
+              <span tal:define="title here/Title" tal:condition="title" tal:omit-tag="">
+                <span class="photographer" tal:define="creator here/Creator" tal:content="python:'%s :' % creator" tal:condition="creator">Benoît PIN</span>
+                <span class="title_summary" tal:content="title"></span>
+              </span>
+              <div tal:condition="here/showDateTimeOriginal|nothing"
+                   tal:content="python:here.DateTimeOriginal().strftime(_('%m/%d/%Y %H:%M:%S'))"></div>
+              <div class="description" tal:content="here/Description"></div>
+              <div tal:define="keywords here/Subject" tal:condition="keywords">
+                <h4 i18n:translate="">Keywords</h4>
+                <ul class="keywords"
+                    tal:define="mq nocall:modules/ZTUtils/make_query;
+                                kwurl python:lambda k: '%s/search?%s' % (portal_url, mq(Subject=k, portal_type=['Photo']))">
+                  <li tal:repeat="k keywords"><a tal:content="k" tal:attributes="href python:kwurl(k)">bla</a></li>
+                </ul>
               </div>
-            </td>
-            <td class="metadata_bar">
-              <div id="image_toolbar" class="image_toolbar">
-                <a title="Previous" rel="prev"
-                   tal:attributes="href contextInfos/previous"
-                   i18n:attributes="title">
-                  <img tal:attributes="src string:${portal_url}/prev_img_btn.gif" width="23" height="27" alt="Previous" i18n:attributes="alt"
-                       name="previous" />
-                </a>
-                <a title="Next" rel="next"
-                   tal:attributes="href contextInfos/next"
-                   i18n:attributes="title">
-                  <img tal:attributes="src string:${portal_url}/next_img_btn.gif" width="23" height="27" alt="Next" i18n:attributes="alt"
-                       name="next" />
-                </a>
-                <img tal:attributes="src string:${portal_url}/slide_show_btn.gif" width="33" height="27" alt="slide show" i18n:attributes="alt"
-                     id="slide_show"/>
-                <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
-                <a title="Back to portfolio..." rel="index"
-                   tal:attributes="href contextInfos/backUrl"
-                   i18n:attributes="title" tal:on-error="string:">
-                  <img tal:attributes="src string:${portal_url}/lightbox_btn.gif" width="31" height="27" alt="Back to portfolio..." i18n:attributes="alt"
-                       name="back_to_portfolio" />
-                </a>
-                <a title="Full screen (f)" i18n:attributes="title"
-                   tal:attributes="href string:${here/absolute_url}/zoom_view">
-                  <img tal:attributes="src string:${portal_url}/full_screen_btn.gif" width="31" height="27" alt="Full screen (f)" i18n:attributes="alt"
-                       name="full_screen"/>
-                </a>
-                <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
-                <a tal:define="selected contextInfos/isSelected;
-                               msg python:selected and 'Retirer de la sélection' or 'Ajouter à la sélection';
-                               action python:selected and 'remove_to_selection' or 'add_to_selection';
-                               imgSrc python:'%s/%s' % (portal_url, selected and 'unselect_flag_btn.gif' or 'select_flag_btn.gif');"
-                   tal:attributes="href python:'%s/%s' % (here.absolute_url(), action); title msg">
-                  <img tal:attributes="src imgSrc; alt msg" width="31" height="27"
-                       name="toggle_selection"/>
-                </a>
-                <div style="display:inline;position:relative">
-                  <div id="cart_slide"></div>
-                  <a tal:attributes="href python:'%s/get_slide_buyable_items' % here.absolute_url();
-                                     class python:(contextInfos.get('buyable') and [None] or['hidden'])[0]"
-                     title="Add to cart" i18n:attributes="title">
-                    <img width="31" height="27" alt="Add to cart" name="show_buyable"
-                         tal:attributes="src string:$portal_url/cart_btn.gif" i18n:attributes="alt"/>
-                  </a>
-                </div>
-                <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
-                <a title="Edit metadata"
-                   tal:define="ModifyPortalContent python:modules['Products.CMFCore'].permissions.ModifyPortalContent"
-                   tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"
-                   tal:attributes="href string:${here/absolute_url}/photo_edit_form"
-                   i18n:attributes="title">
-                  <img tal:attributes="src string:${portal_url}/edit_metadata_btn.gif" width="31" height="27" alt="Edit metadata" i18n:attributes="alt"
-                       name="edit_metadata"/>
-                </a>
+              <div><span i18n:translate="" tal:omit-tag="">reference:</span> <span tal:replace="context/getId">bidule.jpg</span></div>
+              <div tal:define="rights here/Rights"
+                   tal:condition="rights"
+                   tal:content="python:rights.startswith('©') and rights or '© %s' % rights"></div>
+              <div tal:define="ViewRawImage python:modules['Products.Portfolio.permissions'].ViewRawImage"
+                   tal:condition="python:mtool.checkPermission(ViewRawImage, here)" style="font-weight:bold; margin-top:1em">
+                   <a tal:attributes="href string:${here/absolute_url}/photo_download" i18n:translate="">download picture</a>
               </div>
-              <div id="image_metadata" class="image_metadata">
-                <div  metal:define-macro="image_metadata" tal:omit-tag="">
-                  <span tal:define="title here/Title" tal:condition="title" tal:omit-tag="">
-                    <span class="photographer" tal:define="creator here/Creator" tal:content="python:'%s :' % creator" tal:condition="creator">Benoît PIN</span>
-                    <span class="title_summary" tal:content="title"></span>
-                  </span>
-                  <div tal:condition="here/showDateTimeOriginal|nothing"
-                       tal:content="python:here.DateTimeOriginal().strftime(_('%m/%d/%Y %H:%M:%S'))"></div>
-                  <div class="description" tal:content="here/Description"></div>
-                  <div tal:define="keywords here/Subject" tal:condition="keywords">
-                    <h4 i18n:translate="">Keywords</h4>
-                    <ul class="keywords"
-                        tal:define="mq nocall:modules/ZTUtils/make_query;
-                                    kwurl python:lambda k: '%s/search?%s' % (portal_url, mq(Subject=k, portal_type=['Photo']))">
-                      <li tal:repeat="k keywords"><a tal:content="k" tal:attributes="href python:kwurl(k)">bla</a></li>
-                    </ul>
-                  </div>
-                  <div><span i18n:translate="" tal:omit-tag="">reference:</span> <span tal:replace="context/getId">bidule.jpg</span></div>
-                  <div tal:define="rights here/Rights"
-                       tal:condition="rights"
-                       tal:content="python:rights.startswith('©') and rights or '© %s' % rights"></div>
-                  <div tal:define="ViewRawImage python:modules['Products.Portfolio.permissions'].ViewRawImage"
-                       tal:condition="python:mtool.checkPermission(ViewRawImage, here)" style="font-weight:bold; margin-top:1em">
-                       <a tal:attributes="href string:${here/absolute_url}/photo_download" i18n:translate="">download picture</a>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <!-- film bar -->

@@ -163,32 +163,27 @@
           </tr>
         </table>
       </div>
-      <div class="jsslider">
-        <span id="slider"/>
-      </div>
+
       <script type="text/javascript"
               tal:content="python:'''
               var startSlideShow, slideShowNext, stopSlideShow;
               (function(){
-                var ctxInfos = {'filmLength': %(filmLength)s,
-                                'center': %(center)s,
-                                'slideSize': %(slideSize)d,
-                                'ctxUrlTranslation' : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
-              fs = new FilmSlider(document.getElementById('film_bar'),
-                                      document.getElementById('slider'),
-                                      ctxInfos,
-                                      document.getElementById('medium_image').getElementsByTagName('img')[0],
-                                      document.getElementById('image_toolbar'),
-                                      document.getElementById('Breadcrumbs'));
-              startSlideShow = function() {return fs.startSlideShow();};
-              stopSlideShow = function() {return fs.stopSlideShow();};
-              slideShowPrevious = function() {return fs.slideShowPrevious();};
-              slideShowNext = function() {return fs.slideShowNext();};
-              slideShowImageLoaded = function() {return fs.slideShowImageLoaded();};
+              var ctxInfos = {center: %(center)s,
+                              ctxUrlTranslation : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
+              new FilmSlider(document.getElementById('film_bar'),
+                             document.getElementById('slider'),
+                             ctxInfos,
+                             document.querySelector('.photo_viewer .image-wrapper img'),
+                             document.getElementById('image_toolbar'),
+                             document.getElementById('Breadcrumbs'));
+
+              new PerfectScrollbar(document.getElementById('film_bar'), {
+                suppressScrollY: true
+              });
+
               })();
               ''' % {'filmLength' : len(contextInfos['infos']),
                      'center' : index,
-                     'slideSize' : portal_object.thumb_size/2 + 11,
                      'reBaseCtxUrl' : contextInfos['reBaseCtxUrl'],
                      'canonicalUrl' : contextInfos['canonicalUrl']}">
       </script>
