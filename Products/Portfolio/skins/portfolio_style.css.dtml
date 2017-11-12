@@ -363,7 +363,8 @@ div.lightbox {
 #film_bar {
   background:#555;
   overflow:hidden;
-  position:relative;
+  position:fixed;
+  bottom: 0;
   width:100%;
   height: <dtml-var expr="thumb_size/2 + 12">px;
 }

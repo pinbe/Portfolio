@@ -25,8 +25,11 @@ var FilmSlider;
 
     FilmSlider = function(filmBar, slider, ctxInfos, image, toolbar, breadcrumbs) {
         var thisSlider = this;
+        filmBar.style.width = filmBar.parentNode.offsetWidth + 'px';
+        window.addEventListener('resize', function() {
+            filmBar.style.width = filmBar.parentNode.offsetWidth + 'px';
+        });
         this.filmBar = filmBar;
-        this.filmBarWidth = this.filmBar.getBoundingClientRect().width;
         this.film = filmBar.firstElementChild;
         this.displayedSlide = filmBar.querySelector('a.displayed');
         this.displayedSlideInSelection = this.displayedSlide.classList.contains('selected');
