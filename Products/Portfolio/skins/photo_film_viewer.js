@@ -84,8 +84,8 @@ var FilmSlider;
 
 
     FilmSlider.prototype.getBestFitSize = function(ratio) {
-        var fw = this.stretchable.getBoundingClientRect().width - 1;
-        var fh = this.stretchable.getBoundingClientRect().height - 1;
+        var fw = this.image.parentNode.getBoundingClientRect().width - 1;
+        var fh = this.image.parentNode.getBoundingClientRect().height - 1;
 
         var i, irw, irh;
         if(ratio < 1) {
