@@ -138,86 +138,88 @@ var Lightbox;
 
     Lightbox.prototype.mouseClickHandler = function(evt) {
         var target = evt.target;
-        if(target.tagName === 'IMG') {
-            var img = target;
-            var link = target.parentNode;
-            var button = link.parentNode;
-            var slide = button.parentNode;
+        while(!target.classList.contains('button') && target !== this.grid)
+            target = target.parentNode;
+
+        if(target === this.grid)
+            return;
+
+        if(target.tagName === 'A') {
+            evt.preventDefault();
+            var link = target;
+            var slide = link.parentNode
+                .parentNode
+                .parentNode;
             var req, url;
-            if(link.tagName === 'A') {
-                switch(link.getAttribute('name')) {
-                    case 'add_to_selection':
-                        evt.preventDefault();
-                        link.blur();
-                        req = new XMLHttpRequest();
-                        url = link.href;
-                        req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type",
-                                             "application/x-www-form-urlencoded;charset=utf-8");
-                        req.send("ajax=1");
+            link.blur();
 
-                        slide.className = 'selected';
+            switch(link.name) {
+                case 'add_to_selection':
+                    req = new XMLHttpRequest();
+                    url = link.href;
+                    req.open("POST", url, true);
+                    req.setRequestHeader("Content-Type",
+                                         "application/x-www-form-urlencoded;charset=utf-8");
+                    req.send("ajax=1");
 
-                        link.setAttribute('name', 'remove_to_selection');
-                        link.href = url.replace(/(.*\/)add_to_selection$/, '$1remove_to_selection');
-                        link.title = img.alt = 'Retirer de la sélection';
-                        button.className = "button slide-deselect";
-                        break;
+                    slide.className = 'selected';
 
-                    case 'remove_to_selection':
-                        evt.preventDefault();
-                        link.blur();
-                        req = new XMLHttpRequest();
-                        url = link.href;
-                        req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type",
-                                             "application/x-www-form-urlencoded;charset=utf-8");
-                        req.send("ajax=1");
-                        slide.className = null;
-                        link.setAttribute('name', 'add_to_selection');
-                        link.href = url.replace(/(.*\/)remove_to_selection$/,
-                                                '$1add_to_selection');
-                        link.title = img.alt = 'Ajouter à la sélection';
-                        button.className = "button slide-select";
-                        break;
+                    link.name = 'remove_to_selection';
+                    link.href = url.replace(/(.*\/)add_to_selection$/, '$1remove_to_selection');
+                    link.title = 'Retirer de la sélection';
+                    slide.classList.add('selected');
+                    break;
 
-                    case 'add_to_cart' :
-                        evt.preventDefault();
-                        slide.widget = new CartWidget(slide, link.href);
-                        break;
+                case 'remove_to_selection':
+                    req = new XMLHttpRequest();
+                    url = link.href;
+                    req.open("POST", url, true);
+                    req.setRequestHeader("Content-Type",
+                                         "application/x-www-form-urlencoded;charset=utf-8");
+                    req.send("ajax=1");
+                    link.name = 'add_to_selection';
+                    link.href = url.replace(/(.*\/)remove_to_selection$/,
+                                            '$1add_to_selection');
+                    link.title = 'Ajouter à la sélection';
+                    slide.classList.remove('selected');
+                    break;
 
-                    case 'hide_for_anonymous':
-                        evt.preventDefault();
-                        link.blur();
-                        req = new XMLHttpRequest();
-                        url = link.href;
-                        req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type",
-                                             "application/x-www-form-urlencoded;charset=utf-8");
-                        req.send(null);
-                        slide.className = 'hidden-slide';
-                        link.setAttribute('name', 'show_for_anonymous');
-                        link.href = url.replace(/(.*\/)hideForAnonymous$/, '$1resetHide');
-                        link.title = img.alt = 'Montrer au anonymes';
-                        button.className = "button slide-show";
-                        break;
+                case 'add_to_cart' :
+                    evt.preventDefault();
+                    slide.widget = new CartWidget(slide, link.href);
+                    break;
 
-                    case 'show_for_anonymous':
-                        evt.preventDefault();
-                        link.blur();
-                        req = new XMLHttpRequest();
-                        url = link.href;
-                        req.open("POST", url, true);
-                        req.setRequestHeader("Content-Type",
-                                             "application/x-www-form-urlencoded;charset=utf-8");
-                        req.send(null);
-                        slide.className = null;
-                        link.setAttribute('name', 'hide_for_anonymous');
-                        link.href = url.replace(/(.*\/)resetHide$/, '$1hideForAnonymous');
-                        link.title = img.alt = 'Masquer pour les anonymes';
-                        button.className = "button slide-hide";
-                        break;
-                }
+                case 'hide_for_anonymous':
+                    evt.preventDefault();
+                    link.blur();
+                    req = new XMLHttpRequest();
+                    url = link.href;
+                    req.open("POST", url, true);
+                    req.setRequestHeader("Content-Type",
+                                         "application/x-www-form-urlencoded;charset=utf-8");
+                    req.send(null);
+                    slide.className = 'hidden-slide';
+                    link.setAttribute('name', 'show_for_anonymous');
+                    link.href = url.replace(/(.*\/)hideForAnonymous$/, '$1resetHide');
+                    link.title = img.alt = 'Montrer au anonymes';
+                    button.className = "button slide-show";
+                    break;
+
+                case 'show_for_anonymous':
+                    evt.preventDefault();
+                    link.blur();
+                    req = new XMLHttpRequest();
+                    url = link.href;
+                    req.open("POST", url, true);
+                    req.setRequestHeader("Content-Type",
+                                         "application/x-www-form-urlencoded;charset=utf-8");
+                    req.send(null);
+                    slide.className = null;
+                    link.setAttribute('name', 'hide_for_anonymous');
+                    link.href = url.replace(/(.*\/)resetHide$/, '$1hideForAnonymous');
+                    link.title = img.alt = 'Masquer pour les anonymes';
+                    button.className = "button slide-hide";
+                    break;
             }
         } else if(target.tagName === 'INPUT' && target.type === 'checkbox') {
             var cb = target;
