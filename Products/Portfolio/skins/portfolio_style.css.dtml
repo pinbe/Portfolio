@@ -179,6 +179,115 @@ table.metadata_category select:focus {
 	text-align: right;
 }
 
+.lightbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border: 1px dotted silver;
+}
+
+.lightbox img {
+  display: block;
+}
+
+.lightbox > div {
+  /* slide square */
+  display: flex;
+  width: &dtml-slide_size;px;
+  height: &dtml-slide_size;px;
+  /*border: 1px dotted green;*/
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox > div > span {
+  /* photo narrow  wrapper */
+  position: relative;
+}
+
+.lightbox > div > span > span {
+  /* photo buttons */
+  position: absolute;
+  font-size: 20px;
+  display: flex;
+  width: 100%;
+}
+
+.lightbox > div > span.portrait > span {
+  /* photo buttons on left side of the img */
+  top:0;
+  left: -23px;
+  flex-direction: column;
+}
+
+.lightbox > div > span.landscape > span {
+  /* photo buttons on top of the img */
+  top: -23px;
+  left: 0;
+  flex-direction: row;
+}
+
+.lightbox > div > span > span > a {
+  color: &dtml-highLightColor;;
+}
+
+/* buttons */
+
+.lightbox .button {
+  display: none;
+}
+
+.lightbox > div:hover .button {
+  display: block;
+}
+
+.lightbox .portrait .button {
+  margin-bottom: 4px;
+}
+
+.lightbox .landscape .button {
+  margin-right: 4px;
+}
+
+
+.lightbox .selected a.button.selection {
+  display: block;
+}
+
+.lightbox a.button.selection i::before {
+  content: "\f11d"; /* fa-flag-o */
+}
+
+.lightbox .selected a.button.selection i::before {
+  content: "\f024"; /* fa-flag */
+}
+
+.lightbox input.button.cb {
+  display: none;
+}
+
+.lightbox input.button.cb + label.fa {
+    color: &dtml-highLightColor;;
+    font-size: 25px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.lightbox input.button.cb + label.fa:before {
+  content: "\f096";
+}
+
+
+.lightbox input.button.cb:checked + label.button.fa:before {
+  content: "\f046";
+}
+
+.lightbox input.button.cb:checked + label.button.fa {
+  display: block;
+}
+
+/* <dtml-comment> */
 div.lightbox {
   /* The lightbox itself.
      Force this div to fit grid
@@ -225,7 +334,7 @@ div.lightbox {
 
 .lightbox .slide img {
   position:absolute;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
 }
 
 .lightbox span.button {
@@ -355,6 +464,8 @@ div.lightbox {
   top: -4px;
 /*  border: 1px solid red;*/
 }
+
+/* </dtml-comment> */
 
 .image_toolbar {
   background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;

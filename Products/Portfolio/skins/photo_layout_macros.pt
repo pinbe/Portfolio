@@ -13,6 +13,56 @@
                      mayBeOrderable exists:orderable;
                      orderable python:True if mayBeOrderable and orderable else False"
          i18n:domain="portfolio">
+      <div class="lightbox">
+        <div tal:repeat="info infos"
+             tal:attributes="class python:'selected' if info['selected'] else None">
+          <span tal:attributes="class python:'landscape' if info['thumbSize']['width'] > info['thumbSize']['height'] else 'portrait'">
+            <a tal:attributes="href info/href; title info/title">
+              <img tal:attributes="src info/thumbUrl;
+                                   alt info/title;
+                                   height info/thumbSize/height;
+                                   width info/thumbSize/width;"/>
+            </a>
+            <span>
+              <span tal:condition="features/checkbox|nothing"
+                    tal:omit-tag="">
+                <input class="button cb"
+                       type="checkbox" name="uids:list"
+                       tal:attributes="value info/cmf_uid;
+                                       id string:cb_${info/cmf_uid}"/>
+                <label class="button fa"
+                       tal:attributes="for string:cb_${info/cmf_uid}"></label>
+              </span>
+              <a class="button selection"
+                 tal:define="selected info/selected|nothing"
+                 tal:condition="python:features.has_key('select')"
+                 tal:attributes="href python:features['select'](info['o'], selected);
+                                 name python:'remove_to_selection' if selected else 'add_to_selection';
+                                 title python:'Remove to selection' if selected else 'Add to selection'"
+                 i18n:attributes="title">
+                <i class="fa"></i>
+              </a>
+              <a class="button slide-cart"
+                 name="add_to_cart" title="Add to cart"
+                 tal:condition="python:info.get('buyable')"
+                 tal:attributes="href python:features['cart'](info['o'])"
+                 i18n:attributes="title">
+                <i class="fa fa-cart-arrow-down"></i>
+              </a>
+              <a class="button slide-del"
+                 title="Delete"
+                 tal:condition="python:features.has_key('del')"
+                 tal:attributes="href python:features['del'](info['o'])"
+                 i18n:attributes="title">
+                <i class="fa fa-times"></i>
+              </a>
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <hr/>
+
       <div id="lightbox" tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
         <span metal:define-macro="thumbnails" tal:repeat="info infos" tal:omit-tag="">
           <span tal:define="size info/thumbSize;
