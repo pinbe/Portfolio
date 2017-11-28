@@ -10,17 +10,25 @@ var Lightbox;
 (function() {
 
     var getWindowScrollY = (window.scrollY !== undefined) ?
-        function() {return window.scrollY;} :
-        function() {return document.documentElement.scrollTop;};
+        function() {
+            return window.scrollY;
+        } :
+        function() {
+            return document.documentElement.scrollTop;
+        };
 
     var getWindowHeight = (window.innerHeight !== undefined) ?
-		function() {return window.innerHeight;} :
-        function() {return document.documentElement.clientHeight;};
+        function() {
+            return window.innerHeight;
+        } :
+        function() {
+            return document.documentElement.clientHeight;
+        };
 
     var ua = navigator.userAgent.toLocaleLowerCase();
-    var isTrident   = ua.indexOf('trident') !== -1;
+    var isTrident = ua.indexOf('trident') !== -1;
     var isGecko = (!isTrident &&
-                  (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
+        (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
 
 
     Lightbox = function(grid, toolbar, complete, container_type, orderable) {
@@ -107,7 +115,7 @@ var Lightbox;
 
     Lightbox.prototype.windowScrollToolbarlHandler = function() {
         if(this.toolbar.getBoundingClientRect().top <= 0 &&
-           !this.toolbarFixed) {
+            !this.toolbarFixed) {
             this.toolbarFixed = true;
             this.backThreshold = getWindowScrollY() + this.toolbar.getBoundingClientRect().top;
             this.switchToolBarPositioning(true);
@@ -122,7 +130,7 @@ var Lightbox;
         if(!this.complete &&
             !this.fetchingDisabled &&
             getWindowScrollY() > (this.lastSlide.firstElementChild ||
-                                  this.lastSlide.children[0]).offsetTop - getWindowHeight()) {
+                this.lastSlide.children[0]).offsetTop - getWindowHeight()) {
             this.fetchingDisabled = true;
             this.fetchTail();
         }
@@ -476,7 +484,6 @@ var Lightbox;
     };
 
 
-
     Lightbox.prototype.disableDefaultDragging = (isGecko) ?
         function(element) {
             if(!element) {
@@ -492,7 +499,8 @@ var Lightbox;
                 }
             }
         } :
-        function() {};
+        function() {
+        };
 
     Lightbox.prototype.getSelectedSlides = function() {
         var i, e, slide;
