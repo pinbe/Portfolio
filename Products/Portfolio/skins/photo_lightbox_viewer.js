@@ -25,6 +25,19 @@ var Lightbox;
             return document.documentElement.clientHeight;
         };
 
+    var clearSelection = function() {
+        if(window.getSelection) {
+            if(window.getSelection().empty) {  // Chrome
+                window.getSelection().empty();
+            } else if(window.getSelection().removeAllRanges) {  // Firefox
+                window.getSelection().removeAllRanges();
+            }
+        } else if(document.selection) {  // IE?
+            document.selection.empty();
+        }
+    };
+
+
     var ua = navigator.userAgent.toLocaleLowerCase();
     var isTrident = ua.indexOf('trident') !== -1;
     var isGecko = (!isTrident &&
@@ -141,6 +154,11 @@ var Lightbox;
         while(!target.classList.contains('button') && target !== this.grid)
             target = target.parentNode;
 
+        if(target.tagName === 'INPUT' && target.type === 'checkbox') {
+            // Firefox bug workarround
+            evt.preventDefault();
+            return;
+        }
         if(target === this.grid)
             return;
 
@@ -184,52 +202,48 @@ var Lightbox;
                     slide.classList.remove('selected');
                     break;
 
-                case 'add_to_cart' :
-                    evt.preventDefault();
-                    slide.widget = new CartWidget(slide, link.href);
-                    break;
-
-                case 'hide_for_anonymous':
-                    evt.preventDefault();
-                    link.blur();
-                    req = new XMLHttpRequest();
-                    url = link.href;
-                    req.open("POST", url, true);
-                    req.setRequestHeader("Content-Type",
-                                         "application/x-www-form-urlencoded;charset=utf-8");
-                    req.send(null);
-                    slide.className = 'hidden-slide';
-                    link.setAttribute('name', 'show_for_anonymous');
-                    link.href = url.replace(/(.*\/)hideForAnonymous$/, '$1resetHide');
-                    link.title = img.alt = 'Montrer au anonymes';
-                    button.className = "button slide-show";
-                    break;
-
-                case 'show_for_anonymous':
-                    evt.preventDefault();
-                    link.blur();
-                    req = new XMLHttpRequest();
-                    url = link.href;
-                    req.open("POST", url, true);
-                    req.setRequestHeader("Content-Type",
-                                         "application/x-www-form-urlencoded;charset=utf-8");
-                    req.send(null);
-                    slide.className = null;
-                    link.setAttribute('name', 'hide_for_anonymous');
-                    link.href = url.replace(/(.*\/)resetHide$/, '$1hideForAnonymous');
-                    link.title = img.alt = 'Masquer pour les anonymes';
-                    button.className = "button slide-hide";
-                    break;
+                // case 'add_to_cart' :
+                //     evt.preventDefault();
+                //     slide.widget = new CartWidget(slide, link.href);
+                //     break;
+                //
+                // case 'hide_for_anonymous':
+                //     evt.preventDefault();
+                //     link.blur();
+                //     req = new XMLHttpRequest();
+                //     url = link.href;
+                //     req.open("POST", url, true);
+                //     req.setRequestHeader("Content-Type",
+                //                          "application/x-www-form-urlencoded;charset=utf-8");
+                //     req.send(null);
+                //     slide.className = 'hidden-slide';
+                //     link.setAttribute('name', 'show_for_anonymous');
+                //     link.href = url.replace(/(.*\/)hideForAnonymous$/, '$1resetHide');
+                //     link.title = img.alt = 'Montrer au anonymes';
+                //     button.className = "button slide-show";
+                //     break;
+                //
+                // case 'show_for_anonymous':
+                //     evt.preventDefault();
+                //     link.blur();
+                //     req = new XMLHttpRequest();
+                //     url = link.href;
+                //     req.open("POST", url, true);
+                //     req.setRequestHeader("Content-Type",
+                //                          "application/x-www-form-urlencoded;charset=utf-8");
+                //     req.send(null);
+                //     slide.className = null;
+                //     link.setAttribute('name', 'hide_for_anonymous');
+                //     link.href = url.replace(/(.*\/)resetHide$/, '$1hideForAnonymous');
+                //     link.title = img.alt = 'Masquer pour les anonymes';
+                //     button.className = "button slide-hide";
+                //     break;
             }
-        } else if(target.tagName === 'INPUT' && target.type === 'checkbox') {
-            var cb = target;
-            if(cb.checked) {
-                cb.setAttribute('checked', 'checked');
-            }
-            else {
-                cb.removeAttribute('checked');
-            }
-            this.selectCBRange(evt);
+        } else if(target.tagName === 'LABEL' &&
+            target.previousElementSibling.type === 'checkbox') {
+            var cb = target.previousElementSibling;
+            cb.checked = !cb.checked;
+            this.selectCBRange(cb, evt);
         }
     };
 
@@ -372,24 +386,25 @@ var Lightbox;
         return cb.index;
     };
 
-    Lightbox.prototype.selectCBRange = function(evt) {
-        var target = evt.target;
+    Lightbox.prototype.selectCBRange = function(cb, evt) {
         var shift = evt.shiftKey;
         if(shift && this.lastCBChecked) {
+            clearSelection();
             var from = this.getCBIndex(this.lastCBChecked);
-            var to = this.getCBIndex(target);
+            var to = this.getCBIndex(cb);
             var start = Math.min(from, to);
             var stop = Math.max(from, to);
             var i;
             for(i = start; i < stop; i++) {
-                this.cbIndex[i].setAttribute('checked', 'checked');
+                // this.cbIndex[i].setAttribute('checked', 'checked');
+                this.cbIndex[i].checked = true;
             }
         }
-        else if(target.checked) {
-            this.lastCBChecked = target;
+        else if(cb.checked) {
+            this.lastCBChecked = cb;
         }
         else {
-            this.lastCBChecked = undefined;
+            this.lastCBChecked = null;
         }
     };
 
