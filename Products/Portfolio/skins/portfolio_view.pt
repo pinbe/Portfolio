@@ -63,7 +63,8 @@
       </div>
     </div>
     
-    <div tal:define="batchInfos python:here.getPhotosInfos(here);
+    <div tal:define="batchInfos python:here.getPhotosInfos(here,
+                                                           request.get('pho_start', 0));
                      batch batchInfos/batch;
                      infos batchInfos/infos;
                      features batchInfos/features"
