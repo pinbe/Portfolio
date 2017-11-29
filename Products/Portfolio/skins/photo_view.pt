@@ -10,6 +10,11 @@
     <metal:block metal:fill-slot="css_slot">
       <link rel="stylesheet" media="screen"
             tal:attributes="href string:$portal_url/css/perfect-scrollbar.css"/>
+      <style>
+        #content-outer > div:first-child {
+          width: 100%;
+        }
+      </style>
     </metal:block>
     <metal:block metal:fill-slot="javascript_head_slot">
       <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>

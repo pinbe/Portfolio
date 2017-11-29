@@ -12,16 +12,6 @@
   justify-content: space-between;
 }
 
-.photo_viewer #medium_image {
-  height:603px; /* todo : paramètre */
-  text-align:center;
-  vertical-align:middle;
-}
-
-.photo_viewer {
-  /*border: 1px dashed cadetblue;*/
-}
-
 .image-wrapper {
   width: 100%;
   display: flex;
