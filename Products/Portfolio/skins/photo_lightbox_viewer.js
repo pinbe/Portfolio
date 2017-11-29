@@ -165,9 +165,7 @@ var Lightbox;
         if(target.tagName === 'A') {
             evt.preventDefault();
             var link = target;
-            var slide = link.parentNode
-                .parentNode
-                .parentNode;
+            var slide = this.getSlide(link);
             var req, url;
             link.blur();
 
@@ -316,12 +314,12 @@ var Lightbox;
     };
 
     Lightbox.prototype.hideSelection = function() {
-        var i, e, slide;
+        var i, e;
         for(i = 0; i < this.form.elements.length; i++) {
             e = this.form.elements[i];
             if(e.type === 'checkbox' && e.checked) {
-                slide = e.parentNode.parentNode;
-                slide.classList.add('zero_opacity');
+                this.getSlide(e)
+                    .classList.add('zero_opacity');
             }
         }
     };
@@ -331,8 +329,8 @@ var Lightbox;
         for(i = 0; i < this.form.elements.length; i++) {
             e = this.form.elements[i];
             if(e.type === 'checkbox' && e.checked) {
-                slide = e.parentNode.parentNode;
-                slide.classList.remove('zero_opacity');
+                this.getSlide(e)
+                    .classList.remove('zero_opacity');
             }
         }
     };
@@ -342,7 +340,7 @@ var Lightbox;
         for(i = 0; i < this.form.elements.length; i++) {
             e = this.form.elements[i];
             if(e.type === 'checkbox' && e.checked) {
-                slide = e.parentNode.parentNode;
+                slide = this.getSlide(e);
                 slide.classList.add('zero_width');
             }
         }
@@ -360,7 +358,7 @@ var Lightbox;
         for(i = 0; i < this.form.elements.length; i++) {
             e = this.form.elements[i];
             if(e.type === 'checkbox' && e.checked) {
-                toRemove.push(e.parentNode.parentNode);
+                toRemove.push(this.getSlide(e));
             }
         }
         for(i = 0; i < toRemove.length; i++) {
@@ -503,18 +501,11 @@ var Lightbox;
 
     Lightbox.prototype.disableDefaultDragging = (isGecko) ?
         function(element) {
-            if(!element) {
-                element = this.grid;
-            }
-            var i, j, name, elements;
-            var elementsNames = ['a', 'img'];
-            for(i = 0; i < elementsNames.length; i++) {
-                name = elementsNames[i];
-                elements = element.getElementsByTagName(name);
-                for(j = 0; j < elements.length; j++) {
-                    elements[j].draggable = false;
-                }
-            }
+            /* on gecko browser, <img> and <a> elements have default dragging behavior
+            *  that must be disabled in order to drag only the slide container */
+            element = (element) ? element : this.grid;
+            for(var i=0, all = element.querySelectorAll('a, img') ; i < all.length ; i++)
+                all[i].draggable = false;
         } :
         function() {
         };
@@ -525,7 +516,7 @@ var Lightbox;
         for(i = 0; i < this.form.elements.length; i++) {
             e = this.form.elements[i];
             if(e.type === 'checkbox' && e.checked) {
-                slide = e.parentNode.parentNode;
+                slide = this.getSlide(e);
                 slides.push(slide);
             }
         }
@@ -562,24 +553,17 @@ var Lightbox;
     };
 
     Lightbox.prototype.onDragOver = function(evt) {
-        if(!this.dragged) {
-            return;
-        }
-        var target = evt.target;
-        while(target && target.className !== 'slide') {
-            target = target.parentNode;
-        }
-        if(!target) {
-            return;
-        }
-        target = target.parentNode;
-        if(target !== this.dragged) {
-            target.classList.add('dragover');
-        }
-        if(this.lastDropTarget && this.lastDropTarget !== target) {
+        if(!this.dragged) return;
+        var slide = this.getSlide(evt.target);
+        if(!slide)return;
+
+        if(slide !== this.dragged)
+            slide.classList.add('dragover');
+
+        if(this.lastDropTarget && this.lastDropTarget !== slide)
             this.lastDropTarget.classList.remove('dragover');
-        }
-        this.lastDropTarget = target;
+
+        this.lastDropTarget = slide;
     };
 
     Lightbox.prototype.onDragEnd = function() {
@@ -596,7 +580,6 @@ var Lightbox;
             }
             this.moveSelectedPhotos();
         }
-        // this.draggedSelection = this.lastDropTarget
         this.dragged = undefined;
     };
 
@@ -604,15 +587,8 @@ var Lightbox;
         var req = new XMLHttpRequest();
         var self = this;
         req.onreadystatechange = function() {
-            switch(req.readyState) {
-                case 1 :
-                    // showProgressImage();
-                    break;
-                case 4 :
-                    // hideProgressImage();
+            if(req.readyState === 4)
                     self._moveSelectedPhotos(req);
-                    break;
-            }
         };
 
         var url = absolute_url() + '/portfolio_move_photos';
@@ -621,23 +597,23 @@ var Lightbox;
         var query = 'container_type=' + this.container_type;
         var i;
         for(i = 0; i < this.draggedSelection.length; i++) {
-            query += '&uids:list=' + this.draggedSelection[i].getAttribute('name');
+            query += '&uids:list=' +
+                this.draggedSelection[i].querySelector('input[name="uids:list"]').value;
         }
-        query += '&afterUid=' + this.lastDropTarget.getAttribute('name');
+        query += '&afterUid=' + this.lastDropTarget.querySelector('input[name="uids:list"]').value;
         req.send(query);
     };
 
     Lightbox.prototype._moveSelectedPhotos = function(req) {
-        var i, slide, cb;
+        var i, slide;
         if(req.status === 200) {
             var doc = req.responseXML.documentElement;
             if(doc.nodeName === 'ok') {
                 for(i = 0; i < this.draggedSelection.length; i++) {
                     slide = this.draggedSelection[i];
                     this.grid.removeChild(slide);
-                    cb = this.pendingMovedSlides[i].getElementsByTagName('input')[0];
-                    cb.checked = false;
-                    cb.removeAttribute('checked');
+                    this.pendingMovedSlides[i]
+                        .querySelector('input[name="uids:list"]').checked = false;
                 }
                 this.pendingMovedSlides = undefined;
                 this.cbIndex = undefined;
@@ -655,6 +631,13 @@ var Lightbox;
             slide.style.opacity = 1;
             slide.style.width = '';
         }
+    };
+
+    Lightbox.prototype.getSlide = function(descendent) {
+        var slide = descendent;
+        while(slide.parentNode !== this.grid && slide !== document.body)
+            slide = slide.parentNode;
+        return (slide.parentNode === this.grid) ? slide : null;
     };
 
 }());

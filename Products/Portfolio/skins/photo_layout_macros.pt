@@ -20,7 +20,8 @@
              tal:omit-tag="">
 
           <div tal:repeat="info infos"
-               tal:attributes="class python:'selected' if info['selected'] else None">
+               tal:attributes="class python:'selected' if info['selected'] else None"
+               draggable="true">
             <span tal:attributes="class python:'landscape' if info['thumbSize']['width'] > info['thumbSize']['height'] else 'portrait'">
               <a tal:attributes="href info/href; title info/title">
                 <img tal:attributes="src info/thumbUrl;
