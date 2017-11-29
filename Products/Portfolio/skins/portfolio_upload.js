@@ -3,20 +3,24 @@
 var DDImageUploader;
 
 (function() {
-// nombre maximun d'image chargées en local
+    // nombre maximun d'image chargées en local
     var MAX_PREVIEW = 2;
     var isThumbnail = /.*\/getThumbnail$/;
     var getWindowHeight = (window.innerHeight !== undefined) ?
-		function() {return window.innerHeight;} :
-        function() {return document.documentElement.clientHeight;};
+        function() {
+            return window.innerHeight;
+        } :
+        function() {
+            return document.documentElement.clientHeight;
+        };
 
 
-    DDImageUploader = function(dropbox, uploadUrl, options) {
-        DDFileUploaderBase.apply(this, [dropbox, uploadUrl]);
+    DDImageUploader = function(lightbox, uploadUrl, options) {
+        DDFileUploaderBase.apply(this, [lightbox.grid, uploadUrl]);
 
+        this.lightbox = lightbox;
         this.existingSlides = this.indexExistingSlides();
         this.slideSize = options.slideSize || 222; // pixels
-        this.progressBarMaxSize = this.slideSize - 22 || 200;
         this.thumbnailSize = options.thumbnailSize || 180;
         this.previewQueue = [];
         this._previewQueueRunning = false;
@@ -37,7 +41,7 @@ var DDImageUploader;
         return index;
     };
 
-// Methods about upload.
+    // Methods about upload.
     DDImageUploader.prototype.handleFiles = function(files) {
         var file, i, slide;
         for(i = 0; i < files.length; i++) {
@@ -49,44 +53,49 @@ var DDImageUploader;
     };
 
     DDImageUploader.prototype.beforeUpload = function(slide) {
+        slide.file = slide.datum(); // required by DDFileUploaderBase.prototype.upload
         this.uploadedSlide = slide;
-        this.previewImg = slide.img;
-        this.progressBar = slide.progressBar;
-        this.scrollToSlide(slide);
+        this.previewImg = slide.select('img').node();
+        this.progressBar = slide.select('.progressbar').node();
+        this.scrollToSlide(slide.node());
     };
 
     DDImageUploader.prototype.scrollToSlide = function(slide) {
-        var slideHeight = slide.offsetHeight;
-        var slideOffsetTop = slide.getElementsByClassName('slide')[0].offsetTop;
-        var to = slideOffsetTop - getWindowHeight() + slideHeight;
+        var to = slide.offsetTop - getWindowHeight() + slide.offsetHeight;
         window.scroll(0, to);
     };
 
     DDImageUploader.prototype.uploadCompleteHandlerCB = function(req) {
         var slide = this.uploadedSlide;
-        this.uploadedSlide.removeChild(slide.label);
-        this.uploadedSlide.removeChild(slide.progressBar);
-        var fragment = getCopyOfNode(req.responseXML.documentElement.firstChild);
-        var img = fragment.getElementsByTagName('img')[0];
+        slide.select('.filename').remove();
+        slide.select('.progressbar').remove();
+
+        var respSlide = getCopyOfNode(req.responseXML.documentElement.firstChild);
+        var remoteImg = respSlide.querySelector('img');
+
         if(req.status === 200) {
             // update
-            var existing = this.existingSlides[img.src];
+            var existing = this.existingSlides[remoteImg.src];
             if(existing) {
                 existing.src = existing.src + '?' + Math.random().toString();
             }
-            slide.img.src = '';
-            slide.img.parentNode.removeChild(slide.img);
-            slide.img = undefined;
-            slide.parentNode.removeChild(slide);
+            // accelerate GC before removing
+            slide.select('img')
+                 .attr('src', '')
+                 .remove();
+            slide.remove();
         }
         else if(req.status === 201) {
             // creation
-            img.onload = function() {
+            var self = this;
+            remoteImg.onload = function() {
                 // accelerate GC before replacing
-                slide.img.src = '';
-                slide.img.parentNode.removeChild(slide.img);
-                slide.img = undefined;
-                slide.parentNode.replaceChild(fragment, slide);
+                slide.select('img')
+                     .attr('src', '')
+                     .remove();
+                slide.node().parentNode.replaceChild(respSlide, slide.node());
+                slide = undefined;
+                self.lightbox.notifyAdd(respSlide);
             };
         }
         this.previewsLoaded--;
@@ -94,12 +103,12 @@ var DDImageUploader;
     };
 
     DDImageUploader.prototype.progressHandlerCB = function(progress) {
-        this.updateProgressBar(progress);
-        var currentOpacity = this.previewImg.style.opacity;
-        this.previewImg.style.opacity = Math.max(currentOpacity, progress);
+        this.progressBar.style.width = progress * 100 + '%';
+        this.previewImg.style.opacity = Math.max(this.previewImg.style.opacity,
+                                                 progress);
     };
 
-// Methods about preview queue.
+    // Methods about preview queue.
     DDImageUploader.prototype.previewQueuePush = function(slide) {
         this.previewQueue.push(slide);
         if(!this._previewQueueRunning) {
@@ -123,58 +132,42 @@ var DDImageUploader;
         }
     };
 
-// User interface
+    // User interface
     DDImageUploader.prototype.createSlide = function(file) {
-        var slide = document.createElement('span');
-        slide.file = file;
-
-        var a = document.createElement('a');
-        a.href = '#';
-        a.className = 'slide';
-
-        var img = document.createElement('img');
-        img.className = 'hidden';
-        var size = this.thumbnailSize;
         var self = this;
-        img.onload = function() {
-            if(img.width > img.height) { // landscape
-                img.height = Math.round(size * img.height / img.width);
-                img.width = size;
-            }
-            else {
-                img.width = Math.round(size * img.width / img.height);
-                img.height = size;
-            }
-            img.style.marginLeft = Math.floor((self.slideSize - img.width) / 2) + 'px';
-            img.style.marginTop = Math.floor((self.slideSize - img.height) / 2) + 'px';
-            img.style.opacity = 0.2;
-            img.className = undefined;
-        };
-        a.appendChild(img);
-        slide.img = img;
 
-        var label = document.createElement('span');
-        slide.label = label;
-        label.className = 'label';
-        label.innerHTML = file.name;
+        var slide = d3.select(this.dropbox)
+                      .append('div')
+                      .datum(file);
 
-        var progressBar = document.createElement('span');
-        progressBar.className = 'upload-progress';
-        slide.progressBar = progressBar;
+        slide.attr('class', 'placeholder')
+             .append('span')
+             .append('img')
+             .attr('class', 'hidden')
+             .style('opacity', '0.2')
+             .on('load', function() {
+                 var size = self.thumbnailSize;
+                 if(this.width > this.height) { // landscape
+                     this.height = Math.round(size * this.height / this.width);
+                     this.width = size;
+                 }
+                 else {
+                     this.width = Math.round(size * this.width / this.height);
+                     this.height = size;
+                 }
+                 this.className = undefined;
+             })
+        ;
 
-        slide.appendChild(a);
-        slide.appendChild(progressBar);
-        slide.appendChild(label);
-        this.dropbox.appendChild(slide);
+        slide.append('span')
+             .attr('class', 'progressbar');
+
+        slide.append('span')
+             .attr('class', 'filename')
+             .text(file.name)
+        ;
 
         return slide;
-    };
-
-    DDImageUploader.prototype.updateProgressBar = function(progress) {
-        // 0 <= progress <= 1
-        var size = this.progressBarMaxSize * progress;
-        size = Math.round(size);
-        this.progressBar.style.width = size + 'px';
     };
 
     DDImageUploader.prototype.previewUploadedImage = function(slide) {
@@ -183,12 +176,13 @@ var DDImageUploader;
         var self = this;
 
         reader.onload = function(evt) {
-            slide.img.src = evt.target.result;
+            slide.select('img')
+                 .attr('src', evt.target.result);
             setTimeout(function() {
                 self.previewQueueLoadNext();
             }, 500);
         };
-        reader.readAsDataURL(slide.file);
+        reader.readAsDataURL(slide.datum());
     };
 
 }());

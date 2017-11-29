@@ -14,8 +14,10 @@
                      orderable python:True if mayBeOrderable and orderable else False"
          i18n:domain="portfolio">
       <div class="lightbox"
-           tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">
-
+           tal:define="classes python:{'lightbox':True,
+                                       'photo-drop-target': dropable,
+                                       'empty': not len(infos)}"
+           tal:attributes="class python:' '.join([k for (k, v) in classes.items() if v])">
         <div metal:define-macro="thumbnails"
              tal:omit-tag="">
           <tal:block tal:repeat="info infos">
@@ -177,12 +179,12 @@
               tal:condition="dropable"
               tal:content="structure python:'''
               (function(){
-                var lb = document.querySelector('.lightbox');
-                new Lightbox(lb,
-                             document.getElementById('lightbox_toolbar'),
-                             %(complete)s,
-                             '%(container_type)s',
-                             %(orderable)s);
+                var grid = document.querySelector('.lightbox');
+                var lb = new Lightbox(grid,
+                                      document.getElementById('lightbox_toolbar'),
+                                      %(complete)s,
+                                      '%(container_type)s',
+                                      %(orderable)s);
                 var uploadUrl = '%(putUrl)s';
                 var options = {'slideSize' : %(slideSize)d,
                                'thumbnailSize' : %(thumbnailSize)d};

@@ -124,6 +124,8 @@ var Lightbox;
             }
         }
         this.lastSlide = this.slides[this.slides.length - 1];
+        if(!this.slides.length)
+            this.grid.classList.add('empty');
     };
 
     Lightbox.prototype.windowScrollToolbarlHandler = function() {
@@ -638,6 +640,13 @@ var Lightbox;
         while(slide.parentNode !== this.grid && slide !== document.body)
             slide = slide.parentNode;
         return (slide.parentNode === this.grid) ? slide : null;
+    };
+
+    Lightbox.prototype.notifyAdd = function(slideElt) {
+        this.slides.push(slideElt);
+        this.disableDefaultDragging(slideElt);
+        this.lastSlide = slideElt;
+        this.grid.classList.remove('empty');
     };
 
 }());

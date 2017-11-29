@@ -27,7 +27,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .image-wrapper.selected {
@@ -183,7 +182,6 @@ table.metadata_category select:focus {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  border: 1px dotted silver;
 }
 
 .lightbox img {
@@ -303,7 +301,7 @@ table.metadata_category select:focus {
   /*overflow:hidden; */
 /*}*/
 
-.photo-drop-target {
+.photo-drop-target.empty {
   background: url('&dtml-portal_url;/image-upload-dd-target.png') no-repeat center center;
   min-height:300px;
 }
@@ -656,7 +654,25 @@ th.num {
 /*  width: <dtml-var expr="slide_size - 10">px;*/
 	border-right: 10px solid &dtml-outlineColor;;
 }
-/* 
+
+.lightbox > div.placeholder {
+  border: 1px dotted #c6c6c6;
+  position: relative;
+}
+
+.lightbox > div.placeholder .filename {
+  position: absolute;
+}
+
+.lightbox > div.placeholder .progressbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  border-bottom: 2px solid &dtml-outlineColor;;
+}
+
+/*
 </dtml-with> 
 </dtml-with>
 */
