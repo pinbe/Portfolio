@@ -295,7 +295,6 @@ table.metadata_category select:focus {
   display: block;
 }
 
-/* <dtml-comment> */
 /*div.lightbox {*/
   /*!* The lightbox itself.*/
      /*Force this div to fit grid*/
@@ -304,10 +303,10 @@ table.metadata_category select:focus {
   /*overflow:hidden; */
 /*}*/
 
-/*.photo-drop-target {*/
-  /*background: url('&dtml-portal_url;/image-upload-dd-target.png') no-repeat center center;*/
-  /*min-height:300px;*/
-/*}*/
+.photo-drop-target {
+  background: url('&dtml-portal_url;/image-upload-dd-target.png') no-repeat center center;
+  min-height:300px;
+}
 
 /*.lightbox span {*/
   /*width: &dtml-slide_size;px;*/
@@ -472,8 +471,6 @@ table.metadata_category select:focus {
   /*top: -4px;*/
 /*!*  border: 1px solid red;*!*/
 /*}*/
-
-/* </dtml-comment> */
 
 .image_toolbar {
   background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;
