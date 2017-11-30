@@ -24,7 +24,8 @@ var FilmSlider;
                           filmBar,
                           ctxInfos,
                           toolbar,
-                          breadcrumbs) {
+                          breadcrumbs,
+                          stepSizes) {
         this.stretchable = stretchableElement;
         filmBar.style.width = filmBar.parentNode.offsetWidth + 'px';
         window.addEventListener('resize', function() {
@@ -36,6 +37,7 @@ var FilmSlider;
         this.displayedSlideInSelection = this.displayedSlide.classList.contains('selected');
         this.cartSlide = document.getElementById('cart_slide');
         this.image = image;
+        this.viewPort = image.parentNode;
         this.viewMode = 'medium';
 
         this.buttons = [];
@@ -50,6 +52,7 @@ var FilmSlider;
         else {
             this.hasBreadcrumbs = false;
         }
+        this.stepSizes = (stepSizes) ? stepSizes : DEFAULT_IMAGE_SIZES;
 
         var buttons = toolbar.getElementsByTagName('img');
         var b, name, i;
@@ -83,51 +86,50 @@ var FilmSlider;
     };
 
 
-    FilmSlider.prototype.getBestFitSize = function(ratio) {
-        var fw = this.image.parentNode.getBoundingClientRect().width - 1;
-        var fh = this.image.parentNode.getBoundingClientRect().height - 1;
+    FilmSlider.prototype.getBestFitSize = function(srcSize) {
+        // ratio < 1 => portrait
+        var viewPortRect = this.viewPort.getBoundingClientRect();
+        var dstSize = {
+            width: viewPortRect.width,
+            height: viewPortRect.height
+        };
 
-        var i, irw, irh;
-        if(ratio < 1) {
-            for(i = DEFAULT_IMAGE_SIZES.length - 1; i > 0; i--) {
-                irw = DEFAULT_IMAGE_SIZES[i];
-                irh = irw * ratio;
-                if(irw <= fw && irh <= fh) {
-                    break;
-                }
+        var i, stepSize, imgSize, scale;
+        var ratio = srcSize.width / srcSize.height;
+
+        for(i = 0; i < this.stepSizes.length; i++) {
+            stepSize = this.stepSizes[i];
+            if(ratio >= 1) {
+                imgSize = {
+                    width: stepSize,
+                    height: stepSize / ratio
+                };
             }
-        }
-        else {
-            for(i = DEFAULT_IMAGE_SIZES.length - 1; i > 0; i--) {
-                irh = DEFAULT_IMAGE_SIZES[i];
-                irw = irh / ratio;
-                if(irw <= fw && irh <= fh) {
-                    break;
-                }
+            else {
+                imgSize = {
+                    width: stepSize * ratio,
+                    height: stepSize
+                };
             }
+            scale = Math.min(dstSize.width / imgSize.width,
+                             dstSize.height/ imgSize.height);
+            if(scale <= 1)
+                return stepSize;
         }
-        return DEFAULT_IMAGE_SIZES[i];
+
+        return stepSize;
     };
 
     FilmSlider.prototype.adjustImage = function(img) {
-        var dispWidth = parseInt(this.stretchable.style.width, 10);
+        var viewPortRect = this.viewPort.getBoundingClientRect();
         var imgWidth = img.naturalWidth;
-        var dispHeight = parseInt(this.stretchable.style.height, 10);
         var imgHeight = img.naturalHeight;
-        var ratio;
 
-        if(imgHeight > dispHeight) {
-            ratio = dispHeight / imgHeight;
-            imgWidth = imgWidth * ratio;
-            imgHeight = dispHeight;
-        }
-        if(imgWidth > dispWidth) {
-            ratio = dispWidth / imgWidth;
-            imgHeight = imgHeight * ratio;
-            imgWidth = dispWidth;
-        }
-        img.width = imgWidth;
-        img.height = imgHeight;
+        var scale = Math.min(viewPortRect.width / imgWidth,
+                             viewPortRect.height / imgHeight);
+
+        img.width = imgWidth * scale;
+        img.height = imgHeight * scale;
     };
 
     FilmSlider.prototype.centerSlide = function(slide) {
@@ -211,7 +213,10 @@ var FilmSlider;
 
         //this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=600';
         var thumbnail = target.querySelector('img');
-        var bestFitSize = this.getBestFitSize(thumbnail.height / thumbnail.width);
+        var bestFitSize = this.getBestFitSize({
+                                                  width: thumbnail.width,
+                                                  height: thumbnail.height
+                                              });
         this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + bestFitSize;
 
         // update buttons
