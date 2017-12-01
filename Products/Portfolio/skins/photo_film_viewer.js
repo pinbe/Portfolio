@@ -83,8 +83,23 @@ var FilmSlider;
         var start = this.stretchable.getBoundingClientRect().top;
         var end = this.stretchable.nextElementSibling.getBoundingClientRect().top;
         this.stretchable.style.height = end - start + 'px';
+        this.optimizeImg(this.image);
     };
 
+    FilmSlider.prototype.optimizeImg = function(img){
+        var infos = /(^.*)\/getResizedImage\?size=(\d+)/.exec(img.src);
+        var canonicalImgUrl = infos[1];
+        var currentSize = parseInt(infos[2]);
+
+        var optiSize = this.getBestFitSize({width: img.width, height: img.height});
+        if (currentSize === optiSize) {
+            this.adjustImage(this.image);
+            return;
+        }
+
+        this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + optiSize;
+
+    };
 
     FilmSlider.prototype.getBestFitSize = function(srcSize) {
         // ratio < 1 => portrait
@@ -127,6 +142,7 @@ var FilmSlider;
 
         var scale = Math.min(viewPortRect.width / imgWidth,
                              viewPortRect.height / imgHeight);
+        scale = Math.min(scale, 1);
 
         img.width = imgWidth * scale;
         img.height = imgHeight * scale;
