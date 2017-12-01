@@ -67,7 +67,7 @@ var FilmSlider;
         this.pendingImage = new Image();
         var self = this;
         this.pendingImage.onload = function() {
-            self.refreshImage();
+            self.displayPendingImage();
         };
 
         this.center = ctxInfos.center;
@@ -93,12 +93,15 @@ var FilmSlider;
 
         var optiSize = this.getBestFitSize({width: img.width, height: img.height});
         if (currentSize === optiSize) {
-            this.adjustImage(this.image);
+            this.adjustImageSize(this.image);
             return;
         }
 
+        if(this._pendImgLoading)
+            return;
+        this._pendImgLoading = true;
         this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + optiSize;
-
+        console.info('loading:', this.pendingImage.src);
     };
 
     FilmSlider.prototype.getBestFitSize = function(srcSize) {
@@ -135,7 +138,7 @@ var FilmSlider;
         return stepSize;
     };
 
-    FilmSlider.prototype.adjustImage = function(img) {
+    FilmSlider.prototype.adjustImageSize = function(img) {
         var viewPortRect = this.viewPort.getBoundingClientRect();
         var imgWidth = img.naturalWidth;
         var imgHeight = img.naturalHeight;
@@ -476,8 +479,8 @@ var FilmSlider;
         }
     };
 
-    FilmSlider.prototype.refreshImage = function() {
-        this.adjustImage(this.pendingImage);
+    FilmSlider.prototype.displayPendingImage = function() {
+        this.adjustImageSize(this.pendingImage);
         this.image.style.visibility = 'hidden';
         this.image.src = this.pendingImage.src;
         this.image.width = this.pendingImage.width;
@@ -489,6 +492,8 @@ var FilmSlider;
         else {
             this.image.parentNode.classList.remove('selected');
         }
+        this._pendImgLoading = false;
+        this.optimizeImg(this.image);
     };
 
     FilmSlider.prototype.updateBreadcrumbs = function(url, title) {
