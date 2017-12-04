@@ -10,7 +10,7 @@ var FilmSlider;
     var keyLeft = 37, keyRight = 39;
     var isTextMime = /^text\/.+/i;
     var isAddToSelection = /.*\/add_to_selection$/;
-    var DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200];
+    var DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
 
     function raiseMouseEvent(ob, eventName) {
         var event = document.createEvent("MouseEvents");
