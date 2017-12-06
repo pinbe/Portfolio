@@ -1,6 +1,12 @@
-#! /bin/sh
+#! /bin/bash
 
-i18nextract --path . --site_zcml ../../etc/site.zcml --domain portfolio -o locales
+if [ !$1 ]; then
+    ZCML=$INSTANCE_HOME/etc/site.zcml
+else
+    ZCML=$1
+fi
+
+i18nextract --path . --site_zcml $ZCML --domain portfolio -o locales
 
 cat locales/portfolio.pot locales/portfolio-manual.pot > locales/portfolio-all.pot
 mv locales/portfolio-all.pot locales/portfolio.pot
