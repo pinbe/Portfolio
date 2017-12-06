@@ -86,13 +86,13 @@ var FilmSlider;
         this.optimizeImg(this.image);
     };
 
-    FilmSlider.prototype.optimizeImg = function(img){
+    FilmSlider.prototype.optimizeImg = function(img) {
         var infos = /(^.*)\/getResizedImage\?size=(\d+)/.exec(img.src);
         var canonicalImgUrl = infos[1];
         var currentSize = parseInt(infos[2]);
 
         var optiSize = this.getBestFitSize({width: img.width, height: img.height});
-        if (currentSize === optiSize) {
+        if(currentSize === optiSize) {
             this.adjustImageSize(this.image);
             return;
         }
@@ -101,7 +101,6 @@ var FilmSlider;
             return;
         this._pendImgLoading = true;
         this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + optiSize;
-        console.info('loading:', this.pendingImage.src);
     };
 
     FilmSlider.prototype.getBestFitSize = function(srcSize) {
@@ -130,7 +129,7 @@ var FilmSlider;
                 };
             }
             scale = Math.min(dstSize.width / imgSize.width,
-                             dstSize.height/ imgSize.height);
+                dstSize.height / imgSize.height);
             if(scale <= 1)
                 return stepSize;
         }
@@ -144,7 +143,7 @@ var FilmSlider;
         var imgHeight = img.naturalHeight;
 
         var scale = Math.min(viewPortRect.width / imgWidth,
-                             viewPortRect.height / imgHeight);
+            viewPortRect.height / imgHeight);
         scale = Math.min(scale, 1);
 
         img.width = imgWidth * scale;
@@ -443,7 +442,7 @@ var FilmSlider;
         switch(charPress) {
             case 'f':
             case 'F':
-                raiseMouseEvent(this.buttons.full_screen, 'click');
+                this.toggleFullScreen();
                 break;
         }
     };
@@ -532,6 +531,23 @@ var FilmSlider;
             self._loadNextThumb(evt);
         });
         next.src = this.translateImgUrl(next.parentNode.href) + '/getThumbnail';
+    };
+
+    FilmSlider.prototype.toggleFullScreen = function() {
+        if(!document.mozFullScreen && !document.webkitFullScreen) {
+            if(this.viewPort.mozRequestFullScreen) {
+                this.viewPort.mozRequestFullScreen();
+            } else {
+                this.viewPort.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        } else {
+            if(document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else {
+                document.webkitCancelFullScreen();
+            }
+        }
+
     };
 
     FilmSlider.prototype._loadNextThumb = function() {
