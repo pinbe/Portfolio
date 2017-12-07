@@ -424,9 +424,13 @@ var FilmSlider;
         switch(evt.keyCode) {
             case keyLeft :
                 this.loadSibling(true);
+                evt.preventDefault();
+                evt.stopPropagation();
                 break;
             case keyRight :
                 this.loadSibling(false);
+                evt.preventDefault();
+                evt.stopPropagation();
                 break;
             default:
                 return;
