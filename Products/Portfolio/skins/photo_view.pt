@@ -61,14 +61,14 @@
               <i class="fa fa-play"></i>
             </a>
             <i class="sep"></i>
-            <a title="Full screen (f)" name="full_screen" href="#"
-               i18n:attributes="title">
-              <i class="fa fa-arrows-alt"></i>
-            </a>
             <a title="Back to portfolio…" rel="index" name="back_to_portfolio"
                tal:attributes="href contextInfos/backUrl"
                i18n:attributes="title" tal:on-error="string:">
               <i class="fa fa-th"></i>
+            </a>
+            <a title="Full screen (f)" name="full_screen" href="#"
+               i18n:attributes="title">
+              <i class="fa fa-expand"></i>
             </a>
             <!--?<a tal:define="selected contextInfos/isSelected;-->
                            <!--?msg python:selected and 'Retirer de la sélection' or 'Ajouter à la sélection';-->
