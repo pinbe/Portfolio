@@ -25,14 +25,14 @@
 
 .image-wrapper:-moz-full-screen {
   background: #000;
-  background: radial-gradient(ellipse at center, rgb(84, 81, 81) 0%,rgb(0,0,0) 71%);
+  background: radial-gradient(ellipse at center, rgb(59, 59, 59) 0%,rgb(0,0,0) 60%);
 }
 
 .image-wrapper:-webkit-full-screen {
   height: 100%;
   width: 100%;
   background: #000;
-  background: radial-gradient(ellipse at center, rgb(84, 81, 81) 0%,rgb(0,0,0) 71%);
+  background: radial-gradient(ellipse at center, rgb(59, 59, 59) 0%,rgb(0,0,0) 60%);
 }
 
 .photo_viewer td {
