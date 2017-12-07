@@ -199,29 +199,23 @@
       </script>
     </div>
     <div metal:define-macro="film_bar" tal:omit-tag="">
-      <div class="film_bar">
-        <table cellspacing="0">
-          <tr tal:define="slide_size python:portal_object.thumb_size/2 + 10;
-                          blank_img string:$portal_url/transparent.gif">
-            <td tal:repeat="info contextInfos/infos">
-
-              <a tal:attributes="href info/href;
-                                 title info/title;
-                                 class info/className;
-                                 portfolio:position info/index;">
-                <img tal:define="size info/thumbSize;
-                                 margin_top python:(slide_size - size['height']) / 2"
-                     tal:attributes="src python:info['src'] if info['displayed'] else blank_img;
-                                     alt info/title;
-                                     height size/height;
-                                     width size/width;
-                                     style string:margin-top : ${margin_top}px ;"/>
-              </a>
-
-            </td>
-          </tr>
-        </table>
-      </div>
+      <nav class="film_bar"
+           tal:define="blank_img string:$portal_url/transparent.gif">
+        <div>
+          <span tal:repeat="info contextInfos/infos">
+            <a tal:attributes="href info/href;
+                               title info/title;
+                               class info/className;
+                               portfolio:position info/index;">
+              <img tal:define="size info/thumbSize"
+                   tal:attributes="src python:info['src'] if info['displayed'] else blank_img;
+                                   alt info/title;
+                                   height size/height;
+                                   width size/width;"/>
+            </a>
+          </span>
+        </div>
+      </nav>
 
       <script type="text/javascript"
               tal:content="python:'''

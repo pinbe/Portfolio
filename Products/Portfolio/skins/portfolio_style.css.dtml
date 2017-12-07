@@ -23,10 +23,16 @@
   background: &dtml-medium_image_background;;
 }
 
-.image-wrapper:-webkit-full-screen {
-  width: 100%;
-  height: 100%;
+.image-wrapper:-moz-full-screen {
   background: #000;
+  background: radial-gradient(ellipse at center, rgb(84, 81, 81) 0%,rgb(0,0,0) 71%);
+}
+
+.image-wrapper:-webkit-full-screen {
+  height: 100%;
+  width: 100%;
+  background: #000;
+  background: radial-gradient(ellipse at center, rgb(84, 81, 81) 0%,rgb(0,0,0) 71%);
 }
 
 .photo_viewer td {
@@ -490,25 +496,24 @@ table.metadata_category select:focus {
   position:fixed;
   bottom: 0;
   width:100%;
-  height: <dtml-var expr="thumb_size/2 + 12">px;
+  /*height: <dtml-var expr="thumb_size/2 + 12">px;*/
 }
 
-.film_bar table {
-  position:absolute;
-  border-collapse:collapse;
+.film_bar > div {
+  white-space: nowrap;
+  display: flex;
 }
 
-.film_bar td {
-  padding:0;
-  border:1px solid #484848;
+.film_bar > div > span {
+  display: block;
 }
 
 .film_bar a {
   width: <dtml-var expr="thumb_size/2 + 10">px;
   height: <dtml-var expr="thumb_size/2 + 10">px;
-  display:block;
-  text-align:center;
-  vertical-align:middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .film_bar a:hover, 
@@ -518,10 +523,6 @@ table.metadata_category select:focus {
 
 .film_bar a.displayed {
   background:#bfbfbf;
-}
-
-.film_bar img{
-  border:none;
 }
 
 #cart_slide {
