@@ -330,18 +330,7 @@ var FilmSlider;
                     evt.preventDefault();
                     evt.stopPropagation();
                     target.parentNode.blur();
-                    if(this.viewMode === 'full') {
-                        this.mosaique.unload();
-                        this.mosaique = null;
-                        this.viewMode = 'medium';
-                        return;
-                    }
-                    var main = document.getElementById('photo_viewer');
-                    url = target.parentNode.href;
-                    url = url.substring(0, url.length - '/zoom_view'.length);
-                    var margins = {'top': 0, 'right': -1, 'bottom': 0, 'left': 0};
-                    this.mosaique = new Mosaique(main, url, margins);
-                    this.viewMode = 'full';
+                    this.toggleFullScreen();
                     break;
 
                 case 'toggle_selection':
