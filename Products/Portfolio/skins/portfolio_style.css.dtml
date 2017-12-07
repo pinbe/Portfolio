@@ -541,12 +541,38 @@ th.num {
   opacity: 1; /* yeah :-) */
 }
 
-.image-wrapper:-webkit-full-screen {
+:-webkit-full-screen {
   height: 100%;
   width: 100%;
   background: #000;
   background: radial-gradient(ellipse at center, rgb(59, 59, 59) 0%,rgb(0,0,0) 60%);
 }
+
+:-webkit-full-screen .metadata_bar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: unset;
+  background: transparent;
+}
+
+:-webkit-full-screen .image_metadata {
+  display: none;
+}
+
+:-webkit-full-screen .image_toolbar {
+  padding: 0 5px;
+  background: rgba(0, 0, 0, 0.60);
+}
+
+:-webkit-full-screen .image_toolbar.zero_opacity {
+  opacity: 0;
+}
+
+:-webkit-full-screen .image_toolbar.zero_opacity:hover {
+  opacity: 1; /* yeah :-) */
+}
+
 
 /*
 </dtml-with> 

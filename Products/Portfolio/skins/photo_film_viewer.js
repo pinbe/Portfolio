@@ -438,6 +438,7 @@ var FilmSlider;
         if(target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
             return;
         }
+        var isDefault = false;
         var charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
         switch(charPress) {
             case 'f':
@@ -447,6 +448,12 @@ var FilmSlider;
             case ' ' : // space
                 this.toggleSlideShow();
                 break;
+            default:
+                isDefault = true;
+        }
+        if(!isDefault) {
+            evt.preventDefault();
+            evt.stopPropagation();
         }
     };
 
