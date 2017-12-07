@@ -301,6 +301,8 @@ table.metadata_category select:focus {
   padding: 3px 0;
   border-top: 1px solid silver;
   border-bottom: 1px solid silver;
+  opacity: 1;
+  transition: opacity 500ms;
 }
 
 .image_toolbar .sep {
@@ -519,7 +521,7 @@ th.num {
   right: 0;
   top: 0;
   width: unset;
-  background: #000;
+  background: transparent;
 }
 
 :-moz-full-screen .image_metadata {
@@ -528,6 +530,15 @@ th.num {
 
 :-moz-full-screen .image_toolbar {
   padding: 0 5px;
+  background: rgba(0, 0, 0, 0.60);
+}
+
+:-moz-full-screen .image_toolbar.zero_opacity {
+  opacity: 0;
+}
+
+:-moz-full-screen .image_toolbar.zero_opacity:hover {
+  opacity: 1; /* yeah :-) */
 }
 
 .image-wrapper:-webkit-full-screen {

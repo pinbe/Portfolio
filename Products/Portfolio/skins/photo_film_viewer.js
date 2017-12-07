@@ -539,6 +539,7 @@ var FilmSlider;
     FilmSlider.prototype.toggleFullScreen = function() {
         var btn = this.buttons.full_screen.querySelector('i');
         if(!document.mozFullScreen && !document.webkitFullScreen) {
+            // start fullscreen
             if(this.stretchable.mozRequestFullScreen) {
                 this.stretchable.mozRequestFullScreen();
             } else {
@@ -546,7 +547,9 @@ var FilmSlider;
             }
             btn.classList.remove('fa-expand');
             btn.classList.add('fa-compress');
+            this.onEnterFullScreen();
         } else {
+            // stop fullscreen
             if(document.mozCancelFullScreen) {
                 document.mozCancelFullScreen();
             } else {
@@ -554,8 +557,40 @@ var FilmSlider;
             }
             btn.classList.remove('fa-compress');
             btn.classList.add('fa-expand');
+            this.onExitFullScreen();
         }
 
+    };
+
+    FilmSlider.prototype.onEnterFullScreen = function() {
+        this._showToolbar();
+        this._fullScreenMouseMoveHandler = function() {
+            self._showToolbar();
+        };
+
+        var self = this;
+        this.stretchable.addEventListener(
+            'mousemove',
+            self._fullScreenMouseMoveHandler);
+    };
+
+    FilmSlider.prototype.onExitFullScreen = function() {
+        clearTimeout(this.toolBarTimeoutID);
+        this.toolbar.classList.remove('zero_opacity'); // just to be pretty
+        this.stretchable.removeEventListener('mousemove',
+                                             this._fullScreenMouseMoveHandler);
+        this._stopSlideShow();
+    };
+
+    FilmSlider.prototype._showToolbar = function() {
+        this.toolbar.classList.remove('zero_opacity');
+        clearTimeout(this.toolBarTimeoutID);
+        var self = this;
+        this.toolBarTimeoutID = setTimeout(
+            function() {
+                self.toolbar.classList.add('zero_opacity');
+            },
+            3500);
     };
 
     FilmSlider.prototype.toggleSlideShow = function() {
@@ -578,7 +613,7 @@ var FilmSlider;
                 if(!self.loadSibling(false)) {
                     var firstSlide = self.film.querySelector('span');
                     raiseMouseEvent(firstSlide.querySelector('a'), 'click');
-                    self.centerSlide(firstSlide)
+                    self.centerSlide(firstSlide);
                 }
             },
             this.slideShowTimeout);
