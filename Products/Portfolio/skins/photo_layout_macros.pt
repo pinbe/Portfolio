@@ -71,96 +71,6 @@
         </div>
 
       </div>
-      <!--?<div id="lightbox" tal:attributes="class python:'lightbox photo-drop-target' if dropable else 'lightbox'">-->
-        <!--?<span metal:define-macro="thumbnails" tal:repeat="info infos" tal:omit-tag="">-->
-          <!--?<span tal:define="size info/thumbSize;-->
-                            <!--?margin_top python:(slide_size - size['height']) / 2;-->
-                            <!--?margin_left python:(slide_size - size['width']) / 2;-->
-                            <!--?selected info/selected|nothing"-->
-                <!--?tal:attributes="class info/className;-->
-                                <!--?name info/cmf_uid"-->
-                <!--?metal:define-macro="thumbnail"-->
-                <!--?draggable="true">-->
-            <!--?<a class="slide" tal:attributes="href info/href; title info/title">-->
-              <!--?<img tal:attributes="src info/thumbUrl;-->
-                                   <!--?alt info/title;-->
-                                   <!--?height size/height;-->
-                                   <!--?width size/width;-->
-                                   <!--?style string:margin-top:${margin_top}px;; margin-left:${margin_left}px;"/>-->
-            <!--?</a>-->
-            <!--?<tal:block tal:condition="python:features.has_key('select')">-->
-              <!--?<span class="button slide-select" tal:condition="not:selected">-->
-                <!--?<a name="add_to_selection" title="Add to selection"-->
-                   <!--?tal:attributes="href python:features['select'](info['o'], False)"-->
-                   <!--?i18n:attributes="title">-->
-                  <!--?<img tal:attributes="src string:${portal_url}/transparent.gif"-->
-                       <!--?height="17" width="12" alt="Add to selection"-->
-                       <!--?i18n:attributes="alt"/>-->
-                <!--?</a>-->
-              <!--?</span>-->
-              <!--?<span class="button slide-deselect" tal:condition="selected">-->
-                <!--?<a name="remove_to_selection" title="Remove to selection"-->
-                   <!--?tal:attributes="href python:features['select'](info['o'], True)"-->
-                   <!--?i18n:attributes="title">-->
-                  <!--?<img height="17" width="12" alt="Remove to selection"-->
-                       <!--?tal:attributes="src string:${portal_url}/transparent.gif"-->
-                       <!--?i18n:attributes="alt"/>-->
-                <!--?</a>-->
-              <!--?</span>-->
-            <!--?</tal:block>-->
-            <!--?<span class="button slide-cart" tal:condition="python:info.get('buyable')">-->
-              <!--?<a name="add_to_cart" title="Add to cart"-->
-                 <!--?tal:attributes="href python:features['cart'](info['o'])"-->
-                 <!--?i18n:attributes="title">-->
-                <!--?<img height="17" width="20" alt="Add to cart"-->
-                     <!--?tal:attributes="src string:${portal_url}/transparent.gif"-->
-                     <!--?i18n:attributes="alt"/>-->
-              <!--?</a>-->
-            <!--?</span>-->
-            <!--?<span class="button slide-del" tal:condition="python:features.has_key('del')">-->
-              <!--?<a title="Delete"-->
-                 <!--?tal:attributes="href python:features['del'](info['o'])"-->
-                 <!--?i18n:attributes="title">-->
-                <!--?<img height="19" width="18" alt="Delete"-->
-                     <!--?tal:attributes="src string:${portal_url}/transparent.gif"-->
-                     <!--?i18n:attributes="alt"/>-->
-              <!--?</a>-->
-            <!--?</span>-->
-            <!--?<span class="button cb" tal:condition="features/checkbox|nothing">-->
-              <!--?<input type="checkbox" name="uids:list"-->
-                     <!--?tal:attributes="value info/cmf_uid"/>-->
-            <!--?</span>-->
-            <!--?<tal:block tal:condition="features/hideAnonymous|nothing">-->
-              <!--?<span class="button slide-hide"-->
-                    <!--?tal:define="mtop python:margin_top + 4;-->
-                                <!--?mleft python:margin_left + size['width'] - 17"-->
-                    <!--?tal:condition="not:info/hiddenForAnonymous"-->
-                    <!--?tal:attributes="style python:'margin-top:%dpx;; margin-left:%dpx' % (mtop, mleft)">-->
-                <!--?<a title="Hide for anonymous" name="hide_for_anonymous"-->
-                   <!--?tal:attributes="href string:${info/href}/hideForAnonymous"-->
-                   <!--?i18n:attributes="title">-->
-                  <!--?<img height="15" width="16" alt="Hide for anonymous"-->
-                       <!--?tal:attributes="src string:${portal_url}/transparent.gif"-->
-                       <!--?i18n:attributes="alt"/>-->
-                <!--?</a>-->
-              <!--?</span>-->
-              <!--?<span class="button slide-show"-->
-                    <!--?tal:define="mtop python:margin_top + 4;-->
-                                <!--?mleft python:margin_left + size['width'] - 17"-->
-                    <!--?tal:condition="info/hiddenForAnonymous"-->
-                    <!--?tal:attributes="style python:'margin-top:%dpx;; margin-left:%dpx' % (mtop, mleft)">-->
-                <!--?<a title="Show for anonymous" name="show_for_anonymous"-->
-                   <!--?tal:attributes="href string:${info/href}/resetHide"-->
-                   <!--?i18n:attributes="title">-->
-                  <!--?<img height="15" width="16" alt="Show for anonymous"-->
-                       <!--?tal:attributes="src string:${portal_url}/transparent.gif"-->
-                       <!--?i18n:attributes="alt"/>-->
-                <!--?</a>-->
-              <!--?</span>-->
-            <!--?</tal:block>-->
-          <!--?</span>-->
-        <!--?</span>-->
-      <!--?</div>-->
 
       <noscript>
         <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
@@ -223,8 +133,7 @@
               (function(){
               var ctxInfos = {center: %(center)s,
                               ctxUrlTranslation : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
-              fs=new FilmSlider(
-                             document.querySelector('.photo_viewer'),
+              new FilmSlider(document.querySelector('.photo_viewer'),
                              document.querySelector('.photo_viewer .image-wrapper img'),
                              document.querySelector('.film_bar'),
                              ctxInfos,
