@@ -133,7 +133,7 @@
               (function(){
               var ctxInfos = {center: %(center)s,
                               ctxUrlTranslation : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
-              new FilmSlider(document.querySelector('.photo_viewer'),
+              fs = new FilmSlider(document.querySelector('.photo_viewer'),
                              document.querySelector('.photo_viewer .image-wrapper img'),
                              document.querySelector('.film_bar'),
                              ctxInfos,

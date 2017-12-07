@@ -308,17 +308,35 @@ table.metadata_category select:focus {
   min-height:300px;
 }
 
+
 .image_toolbar {
-  background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;
-  position:relative;
-  z-index:3;
-  font-size:12px;
-  white-space:nowrap;
+  /*border: 1px dotted silver;*/
+  white-space: nowrap;
+  font-size: 30px;
+  color: silver;
+  padding: 3px 0;
+  border-top: 1px solid silver;
+  border-bottom: 1px solid silver;
 }
 
-.image_toolbar span {
-	vertical-align:9px;
+.image_toolbar .sep {
+  display: inline-block;
+  /*position: relative;*/
+  height: 24px;
+  border-left: 1px solid silver;
 }
+
+/*.image_toolbar {*/
+  /*background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;*/
+  /*position:relative;*/
+  /*z-index:3;*/
+  /*font-size:12px;*/
+  /*white-space:nowrap;*/
+/*}*/
+
+/*.image_toolbar span {*/
+	/*vertical-align:9px;*/
+/*}*/
 
 /*
 .image_toolbar img {

@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Zope Foundation and Contributors.
+# Copyright (c) 2003-2017 Zope Foundation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Fri Sep  5 00:23:02 2014\n"
+"POT-Creation-Date: Thu Dec  7 11:49:08 2017\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -79,10 +79,9 @@ msgid "This %s is already in the selection."
 msgstr ""
 
 #: o/skins/get_slide_buyable_items.pt:21
-#: o/skins/photo_layout_macros.pt:51
-#: o/skins/photo_layout_macros.pt:54
-#: o/skins/photo_view.pt:91
-#: o/skins/photo_view.pt:94
+#: o/skins/photo_layout_macros.pt:53
+#: o/skins/photo_view.pt:85
+#: o/skins/photo_view.pt:88
 msgid "Add to cart"
 msgstr ""
 
@@ -127,14 +126,15 @@ msgstr ""
 #: o/skins/lightbox_view_template.pt:24
 #: o/skins/my_cart_template.pt:59
 #: o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88
-#: o/skins/portfolio_view.pt:88
+#: o/skins/portfolio_view.pt:91
+#: o/skins/portfolio_view.pt:91
 #: o/skins/selection_view_template.pt:31
 #: o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr ""
 
 #: o/skins/lightbox_view_template.pt:31
+#: o/skins/photo_layout_macros.pt:44
 #: o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
@@ -235,30 +235,9 @@ msgstr ""
 msgid "Dimensions"
 msgstr ""
 
-#: o/skins/photo_layout_macros.pt:32
-#: o/skins/photo_layout_macros.pt:35
-msgid "Add to selection"
-msgstr ""
-
-#: o/skins/photo_layout_macros.pt:41
-#: o/skins/photo_layout_macros.pt:44
-msgid "Remove to selection"
-msgstr ""
-
 #: o/skins/photo_layout_macros.pt:60
-#: o/skins/photo_layout_macros.pt:63
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
-msgstr ""
-
-#: o/skins/photo_layout_macros.pt:78
-#: o/skins/photo_layout_macros.pt:81
-msgid "Hide for anonymous"
-msgstr ""
-
-#: o/skins/photo_layout_macros.pt:91
-#: o/skins/photo_layout_macros.pt:94
-msgid "Show for anonymous"
 msgstr ""
 
 #: o/skins/photo_medium.pt:37
@@ -279,48 +258,41 @@ msgstr ""
 msgid "zoom out"
 msgstr ""
 
-#: o/skins/photo_view.pt:31
-msgid "Empty image: upload an image file in \"Edit\" tab."
-msgstr ""
-
-#: o/skins/photo_view.pt:46
 #: o/skins/photo_view.pt:49
 msgid "Previous"
 msgstr ""
 
-#: o/skins/photo_view.pt:52
-#: o/skins/photo_view.pt:55
+#: o/skins/photo_view.pt:54
 msgid "Next"
 msgstr ""
 
-#: o/skins/photo_view.pt:58
-msgid "slide show"
+#: o/skins/photo_view.pt:59
+msgid "Slide show"
+msgstr ""
+
+#: o/skins/photo_view.pt:64
+msgid "Back to portfolio…"
 msgstr ""
 
 #: o/skins/photo_view.pt:69
-#: o/skins/photo_view.pt:72
-msgid "Back to portfolio..."
-msgstr ""
-
-#: o/skins/photo_view.pt:75
-#: o/skins/photo_view.pt:77
+#: o/skins/photo_view.pt:71
 msgid "Full screen (f)"
 msgstr ""
 
-#: o/skins/photo_view.pt:99
-#: o/skins/photo_view.pt:104
+#: o/skins/photo_view.pt:93
+#: o/skins/photo_view.pt:98
 msgid "Edit metadata"
 msgstr ""
 
-#: o/skins/photo_view.pt:118
+#: o/skins/photo_view.pt:112
 msgid "Keywords"
 msgstr ""
 
-#: o/skins/photo_view.pt:125
+#: o/skins/photo_view.pt:119
 msgid "reference:"
 msgstr ""
 
-#: o/skins/photo_view.pt:131
+#: o/skins/photo_view.pt:125
 msgid "download picture"
 msgstr ""
 
@@ -340,19 +312,19 @@ msgstr ""
 msgid "Delete presentation"
 msgstr ""
 
-#: o/skins/portfolio_view.pt:74
+#: o/skins/portfolio_view.pt:77
 msgid "sorting:"
 msgstr ""
 
-#: o/skins/portfolio_view.pt:77
+#: o/skins/portfolio_view.pt:80
 msgid "manual"
 msgstr ""
 
-#: o/skins/portfolio_view.pt:79
+#: o/skins/portfolio_view.pt:82
 msgid "shooting"
 msgstr ""
 
-#: o/skins/portfolio_view.pt:81
+#: o/skins/portfolio_view.pt:84
 msgid "modification"
 msgstr ""
 

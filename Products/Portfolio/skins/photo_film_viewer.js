@@ -11,6 +11,7 @@ var FilmSlider;
     var isTextMime = /^text\/.+/i;
     var isAddToSelection = /.*\/add_to_selection$/;
     var DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
+    var DEFAULT_SLIDESHOW_TIMEOUT = 4000;
 
     function raiseMouseEvent(ob, eventName) {
         var event = document.createEvent("MouseEvents");
@@ -25,7 +26,8 @@ var FilmSlider;
                           ctxInfos,
                           toolbar,
                           breadcrumbs,
-                          stepSizes) {
+                          stepSizes,
+                          slideShowTimeout) {
         this.stretchable = stretchableElement;
         filmBar.style.width = filmBar.parentNode.offsetWidth + 'px';
         window.addEventListener('resize', function() {
@@ -53,15 +55,13 @@ var FilmSlider;
             this.hasBreadcrumbs = false;
         }
         this.stepSizes = (stepSizes) ? stepSizes : DEFAULT_IMAGE_SIZES;
+        this.slideShowTimeout = (slideShowTimeout) ? slideShowTimeout : DEFAULT_SLIDESHOW_TIMEOUT;
 
-        var buttons = toolbar.getElementsByTagName('img');
-        var b, name, i;
+        var buttons = toolbar.querySelectorAll('a');
+        var b, i;
         for(i = 0; i < buttons.length; i++) {
             b = buttons[i];
-            name = b.getAttribute('name');
-            if(name) {
-                this.buttons[name] = b;
-            }
+            this.buttons[b.getAttribute('name')] = b;
         }
 
         this.pendingImage = new Image();
@@ -168,6 +168,7 @@ var FilmSlider;
             raiseMouseEvent(target, 'click');
             this.centerSlide(slide);
         }
+        return slide;
     };
 
     FilmSlider.prototype.addEventListeners = function() {
@@ -238,34 +239,34 @@ var FilmSlider;
         this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + bestFitSize;
 
         // update buttons
-        var fullScreenLink = this.buttons.full_screen.parentNode;
-        fullScreenLink.href = canonicalImgUrl + '/zoom_view';
+        // var fullScreenLink = this.buttons.full_screen.parentNode;
+        // fullScreenLink.href = canonicalImgUrl + '/zoom_view';
+        //
+        // var toggleSelectionBtn = this.buttons.toggle_selection;
+        // var toggleSelectionLink = toggleSelectionBtn.parentNode;
+        // this.displayedSlideInSelection = target.classList.contains('selected');
+        // if(this.displayedSlideInSelection) {
+        //     toggleSelectionBtn.src = portal_url() + '/unselect_flag_btn.gif';
+        //     toggleSelectionBtn.alt = toggleSelectionLink.title = 'Retirer de la sélection';
+        //     toggleSelectionLink.href = canonicalImgUrl + '/remove_to_selection';
+        // }
+        // else {
+        //     toggleSelectionBtn.src = portal_url() + '/select_flag_btn.gif';
+        //     toggleSelectionBtn.alt = toggleSelectionLink.title = 'Ajouter à la sélection';
+        //     toggleSelectionLink.href = canonicalImgUrl + '/add_to_selection';
+        // }
+        //
+        // var showBuyableButtonLink = this.buttons.show_buyable.parentNode;
+        // showBuyableButtonLink.href = canonicalImgUrl + '/get_slide_buyable_items';
+        // this.cartSlide.innerHTML = '';
+        // this.cartSlide.style.visibility = 'hidden';
 
-        var toggleSelectionBtn = this.buttons.toggle_selection;
-        var toggleSelectionLink = toggleSelectionBtn.parentNode;
-        this.displayedSlideInSelection = target.classList.contains('selected');
-        if(this.displayedSlideInSelection) {
-            toggleSelectionBtn.src = portal_url() + '/unselect_flag_btn.gif';
-            toggleSelectionBtn.alt = toggleSelectionLink.title = 'Retirer de la sélection';
-            toggleSelectionLink.href = canonicalImgUrl + '/remove_to_selection';
-        }
-        else {
-            toggleSelectionBtn.src = portal_url() + '/select_flag_btn.gif';
-            toggleSelectionBtn.alt = toggleSelectionLink.title = 'Ajouter à la sélection';
-            toggleSelectionLink.href = canonicalImgUrl + '/add_to_selection';
-        }
 
-        var showBuyableButtonLink = this.buttons.show_buyable.parentNode;
-        showBuyableButtonLink.href = canonicalImgUrl + '/get_slide_buyable_items';
-        this.cartSlide.innerHTML = '';
-        this.cartSlide.style.visibility = 'hidden';
-
-
-        var metadataButton = this.buttons.edit_metadata;
-        if(metadataButton) {
-            var metadataEditLink = metadataButton.parentNode;
-            metadataEditLink.href = canonicalImgUrl + '/photo_edit_form';
-        }
+        // var metadataButton = this.buttons.edit_metadata;
+        // if(metadataButton) {
+        //     var metadataEditLink = metadataButton.parentNode;
+        //     metadataEditLink.href = canonicalImgUrl + '/photo_edit_form';
+        // }
 
 
         var req = new XMLHttpRequest();
@@ -307,116 +308,122 @@ var FilmSlider;
 
     FilmSlider.prototype.toolbarClickHandler = function(evt) {
         var target = evt.target;
-        var button, link, url;
-        if(target.tagName === 'IMG' && target.getAttribute('name')) {
-            switch(target.getAttribute('name')) {
-                case 'previous' :
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    button = target;
-                    link = button.parentNode;
-                    link.blur();
-                    this.loadSibling(true);
-                    break;
-                case 'next' :
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    button = target;
-                    link = button.parentNode;
-                    link.blur();
-                    this.loadSibling(false);
-                    break;
-                case 'full_screen':
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    target.parentNode.blur();
-                    this.toggleFullScreen();
-                    break;
+        while(target.tagName !== 'A' && target !== this.toolbar)
+            target = target.parentNode;
+        if(target === this.toolbar) return;
 
-                case 'toggle_selection':
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    button = target;
-                    link = button.parentNode;
-                    link.blur();
+        var isDefault = false;
+        switch(target.name) {
+            case 'previous' :
+                this._stopSlideShow();
+                this.loadSibling(true);
+                break;
 
-                    var req = new XMLHttpRequest();
-                    url = link.href;
-                    req.open("POST", url, true);
-                    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-                    req.send("ajax=1");
+            case 'next' :
+                this._stopSlideShow();
+                this.loadSibling(false);
+                break;
 
-                    // toggle button
-                    var parts = url.split('/');
-                    var canonicalImgUrl = parts.slice(0, parts.length - 1).join('/');
+            case 'full_screen' :
+                this.toggleFullScreen();
+                break;
 
-                    if(isAddToSelection.test(url)) {
-                        button.src = portal_url() + '/unselect_flag_btn.gif';
-                        button.alt = link.title = 'Retirer de la sélection';
-                        link.href = canonicalImgUrl + '/remove_to_selection';
-                        this.displayedSlide.classList.add('selected');
-                        this.image.parentNode.classList.add('selected');
-                        this.displayedSlideInSelection = true;
-                    }
-                    else {
-                        button.src = portal_url() + '/select_flag_btn.gif';
-                        button.alt = link.title = 'Ajouter à la sélection';
-                        link.href = canonicalImgUrl + '/add_to_selection';
-                        this.displayedSlide.classList.remove('selected');
-                        this.image.parentNode.classList.remove('selected');
-                        this.displayedSlideInSelection = false;
-                    }
-                    break;
+            case 'slide_show' :
+                this.toggleSlideShow();
+                break;
 
-                case 'show_buyable':
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    button = target;
-                    link = button.parentNode;
-                    link.blur();
-                    var slide = this.cartSlide;
-                    slide.innerHTML = '';
-                    slide.style.visibility = 'visible';
-                    var cw = new CartWidget(slide, link.href);
-                    cw.onCancel = function() {
-                        CartWidget.prototype.onCancel.apply(this);
-                        slide.style.visibility = 'hidden';
-                    };
-                    cw.onAfterConfirm = function() {
-                        slide.style.visibility = 'hidden';
-                    };
-                    break;
+            /*
+            case 'toggle_selection':
+                evt.preventDefault();
+                evt.stopPropagation();
+                button = target;
+                link = button.parentNode;
+                link.blur();
 
+                var req = new XMLHttpRequest();
+                url = link.href;
+                req.open("POST", url, true);
+                req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                req.send("ajax=1");
+
+                // toggle button
+                var parts = url.split('/');
+                var canonicalImgUrl = parts.slice(0, parts.length - 1).join('/');
+
+                if(isAddToSelection.test(url)) {
+                    button.src = portal_url() + '/unselect_flag_btn.gif';
+                    button.alt = link.title = 'Retirer de la sélection';
+                    link.href = canonicalImgUrl + '/remove_to_selection';
+                    this.displayedSlide.classList.add('selected');
+                    this.image.parentNode.classList.add('selected');
+                    this.displayedSlideInSelection = true;
+                }
+                else {
+                    button.src = portal_url() + '/select_flag_btn.gif';
+                    button.alt = link.title = 'Ajouter à la sélection';
+                    link.href = canonicalImgUrl + '/add_to_selection';
+                    this.displayedSlide.classList.remove('selected');
+                    this.image.parentNode.classList.remove('selected');
+                    this.displayedSlideInSelection = false;
+                }
+                break;
+
+            case 'show_buyable':
+                evt.preventDefault();
+                evt.stopPropagation();
+                button = target;
+                link = button.parentNode;
+                link.blur();
+                var slide = this.cartSlide;
+                slide.innerHTML = '';
+                slide.style.visibility = 'visible';
+                var cw = new CartWidget(slide, link.href);
+                cw.onCancel = function() {
+                    CartWidget.prototype.onCancel.apply(this);
+                    slide.style.visibility = 'hidden';
+                };
+                cw.onAfterConfirm = function() {
+                    slide.style.visibility = 'hidden';
+                };
+                break;
 
 
 
-                /*
-                case 'edit_metadata' :
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    target.blur();
-                    if (this.viewMode === 'full') {
-                        this.mosaique.unload();
-                        this.mosaique = null;
-                        this.viewMode = 'medium';
-                        return;
-                    }
-                    var fi = new FragmentImporter(absolute_url());
-                    fi.useMacro('metadata_edit_form_macros', 'iptc', 'image_metadata');
-                    break;
-                */
-            }
+
+            case 'edit_metadata' :
+                evt.preventDefault();
+                evt.stopPropagation();
+                target.blur();
+                if (this.viewMode === 'full') {
+                    this.mosaique.unload();
+                    this.mosaique = null;
+                    this.viewMode = 'medium';
+                    return;
+                }
+                var fi = new FragmentImporter(absolute_url());
+                fi.useMacro('metadata_edit_form_macros', 'iptc', 'image_metadata');
+                break;
+            */
+            default:
+                isDefault = true;
+        }
+        if(!isDefault) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            target.blur();
         }
     };
 
     FilmSlider.prototype.keyDownHandler = function(evt) {
         switch(evt.keyCode) {
             case keyLeft :
+                this._stopSlideShow();
                 this.loadSibling(true);
                 evt.preventDefault();
                 evt.stopPropagation();
                 break;
             case keyRight :
+                this._stopSlideShow();
                 this.loadSibling(false);
                 evt.preventDefault();
                 evt.stopPropagation();
@@ -437,6 +444,9 @@ var FilmSlider;
             case 'F':
                 this.toggleFullScreen();
                 break;
+            case ' ' : // space
+                this.toggleSlideShow();
+                break;
         }
     };
 
@@ -453,16 +463,16 @@ var FilmSlider;
                     }
                     break;
                 case 'imageattributes' :
-                    var link = this.buttons.back_to_portfolio.parentNode;
+                    var link = this.buttons.back_to_portfolio;
                     link.href = element.getAttribute('back_to_context_url');
-                    link = this.buttons.show_buyable.parentNode;
-                    var buyable = element.getAttribute('buyable');
-                    if(buyable === 'True') {
-                        link.className = null;
-                    }
-                    else if(buyable === 'False') {
-                        link.className = 'hidden';
-                    }
+                    // link = this.buttons.show_buyable.parentNode;
+                    // var buyable = element.getAttribute('buyable');
+                    // if(buyable === 'True') {
+                    //     link.className = null;
+                    // }
+                    // else if(buyable === 'False') {
+                    //     link.className = 'hidden';
+                    // }
                     this.image.alt = element.getAttribute('alt');
                     this.updateBreadcrumbs(element.getAttribute('last_bc_url'),
                                            element.getAttribute('img_id'));
@@ -541,6 +551,39 @@ var FilmSlider;
             }
         }
 
+    };
+
+    FilmSlider.prototype.toggleSlideShow = function() {
+        var slideShowBtn = this.buttons.slide_show.querySelector('i');
+        if(slideShowBtn.classList.contains('fa-play')) {
+            this._startSlideShow();
+        }
+        else {
+            this._stopSlideShow();
+        }
+    };
+
+    FilmSlider.prototype._startSlideShow = function() {
+        var slideShowBtn = this.buttons.slide_show.querySelector('i');
+        slideShowBtn.classList.remove('fa-play');
+        slideShowBtn.classList.add('fa-pause');
+        var self = this;
+        this.slideShowIntervalId = setInterval(
+            function() {
+                if(!self.loadSibling(false)){
+                    var firstSlide = self.film.querySelector('span');
+                    raiseMouseEvent(firstSlide.querySelector('a'), 'click');
+                    self.centerSlide(firstSlide)
+                }
+            },
+            this.slideShowTimeout);
+    };
+
+    FilmSlider.prototype._stopSlideShow = function() {
+        var slideShowBtn = this.buttons.slide_show.querySelector('i');
+        slideShowBtn.classList.remove('fa-pause');
+        slideShowBtn.classList.add('fa-play');
+        clearInterval(this.slideShowIntervalId);
     };
 
     FilmSlider.prototype._loadNextThumb = function() {

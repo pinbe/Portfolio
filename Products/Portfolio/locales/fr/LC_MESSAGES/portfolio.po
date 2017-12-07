@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Fri Sep  5 00:23:02 2014\n"
-"PO-Revision-Date: 2014-09-05 00:24+0200\n"
+"POT-Creation-Date: Thu Dec  7 11:49:08 2017\n"
+"PO-Revision-Date: 2017-12-07 11:51+0100\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -71,9 +71,8 @@ msgid "This %s is already in the selection."
 msgstr "Cette %s est déjà dans la sélection."
 
 # from portfolio-manual
-#: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:51
-#: o/skins/photo_layout_macros.pt:54 o/skins/photo_view.pt:91
-#: o/skins/photo_view.pt:94
+#: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:53
+#: o/skins/photo_view.pt:85 o/skins/photo_view.pt:88
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
@@ -117,11 +116,12 @@ msgstr ""
 "à présent seront automatiquement sauvegardées à cet endroit."
 
 #: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
+#: o/skins/portfolio_view.pt:91 o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr "supprimer"
 
-#: o/skins/lightbox_view_template.pt:31 o/skins/selection_view_template.pt:20
+#: o/skins/lightbox_view_template.pt:31 o/skins/photo_layout_macros.pt:44
+#: o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -217,28 +217,10 @@ msgstr "Modifié"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-# from portfolio-manual
-#: o/skins/photo_layout_macros.pt:32 o/skins/photo_layout_macros.pt:35
-msgid "Add to selection"
-msgstr "Ajouter à la sélection"
-
-# from portfolio-manual
-#: o/skins/photo_layout_macros.pt:41 o/skins/photo_layout_macros.pt:44
-msgid "Remove to selection"
-msgstr "Retirer de la sélection"
-
-#: o/skins/photo_layout_macros.pt:60 o/skins/photo_layout_macros.pt:63
+#: o/skins/photo_layout_macros.pt:60
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
 msgstr "Supprimer"
-
-#: o/skins/photo_layout_macros.pt:78 o/skins/photo_layout_macros.pt:81
-msgid "Hide for anonymous"
-msgstr "Masquer pour les anonymes"
-
-#: o/skins/photo_layout_macros.pt:91 o/skins/photo_layout_macros.pt:94
-msgid "Show for anonymous"
-msgstr "Montrer aux anonymes"
 
 #: o/skins/photo_medium.pt:37 o/skins/photo_medium.pt:38
 msgid "previous"
@@ -256,43 +238,39 @@ msgstr "zoom avant"
 msgid "zoom out"
 msgstr "zoom arrière"
 
-#: o/skins/photo_view.pt:31
-msgid "Empty image: upload an image file in \"Edit\" tab."
-msgstr "Image vide : envoyer un fichier d'image dans l'onglet « Modifier »."
-
-#: o/skins/photo_view.pt:46 o/skins/photo_view.pt:49
+#: o/skins/photo_view.pt:49
 msgid "Previous"
 msgstr "Précédente"
 
-#: o/skins/photo_view.pt:52 o/skins/photo_view.pt:55
+#: o/skins/photo_view.pt:54
 msgid "Next"
 msgstr "Suivante"
 
-#: o/skins/photo_view.pt:58
-msgid "slide show"
-msgstr "diaporama"
+#: o/skins/photo_view.pt:59
+msgid "Slide show"
+msgstr "Diaporama"
 
-#: o/skins/photo_view.pt:69 o/skins/photo_view.pt:72
-msgid "Back to portfolio..."
-msgstr "Retour à la collection"
+#: o/skins/photo_view.pt:64
+msgid "Back to portfolio…"
+msgstr "Retour à la collection…"
 
-#: o/skins/photo_view.pt:75 o/skins/photo_view.pt:77
+#: o/skins/photo_view.pt:69 o/skins/photo_view.pt:71
 msgid "Full screen (f)"
 msgstr "Plein écran (f)"
 
-#: o/skins/photo_view.pt:99 o/skins/photo_view.pt:104
+#: o/skins/photo_view.pt:93 o/skins/photo_view.pt:98
 msgid "Edit metadata"
 msgstr "Modifier les métadonnées"
 
-#: o/skins/photo_view.pt:118
+#: o/skins/photo_view.pt:112
 msgid "Keywords"
 msgstr "Mots-clefs"
 
-#: o/skins/photo_view.pt:125
+#: o/skins/photo_view.pt:119
 msgid "reference:"
 msgstr "référence :"
 
-#: o/skins/photo_view.pt:131
+#: o/skins/photo_view.pt:125
 msgid "download picture"
 msgstr "télécharger l'image"
 
@@ -312,19 +290,19 @@ msgstr "Rien à supprimer."
 msgid "Delete presentation"
 msgstr "Supprimer la présentation"
 
-#: o/skins/portfolio_view.pt:74
+#: o/skins/portfolio_view.pt:77
 msgid "sorting:"
 msgstr "tri :"
 
-#: o/skins/portfolio_view.pt:77
+#: o/skins/portfolio_view.pt:80
 msgid "manual"
 msgstr "manuel"
 
-#: o/skins/portfolio_view.pt:79
+#: o/skins/portfolio_view.pt:82
 msgid "shooting"
 msgstr "prise de vue"
 
-#: o/skins/portfolio_view.pt:81
+#: o/skins/portfolio_view.pt:84
 msgid "modification"
 msgstr "modification"
 
@@ -469,6 +447,29 @@ msgstr "Vous n'avez pas encore de collection."
 # Date et heure de prise de vue
 msgid "%m/%d/%Y %H:%M:%S"
 msgstr "%d/%m/%Y %H:%M:%S"
+
+#~ msgid "slide show"
+#~ msgstr "diaporama"
+
+#~ msgid "Back to portfolio..."
+#~ msgstr "Retour à la collection"
+
+# from portfolio-manual
+#~ msgid "Add to selection"
+#~ msgstr "Ajouter à la sélection"
+
+# from portfolio-manual
+#~ msgid "Remove to selection"
+#~ msgstr "Retirer de la sélection"
+
+#~ msgid "Hide for anonymous"
+#~ msgstr "Masquer pour les anonymes"
+
+#~ msgid "Show for anonymous"
+#~ msgstr "Montrer aux anonymes"
+
+#~ msgid "Empty image: upload an image file in \"Edit\" tab."
+#~ msgstr "Image vide : envoyer un fichier d'image dans l'onglet « Modifier »."
 
 #~ msgid "If a file already exists"
 #~ msgstr "Si un fichier existe déjà"

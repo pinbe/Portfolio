@@ -46,59 +46,56 @@
         </div>
         <div class="metadata_bar">
           <div id="image_toolbar" class="image_toolbar">
-            <a title="Previous" rel="prev"
+            <a title="Previous" rel="prev" name="previous"
                tal:attributes="href contextInfos/previous"
                i18n:attributes="title">
-              <img tal:attributes="src string:${portal_url}/prev_img_btn.gif" width="23" height="27" alt="Previous" i18n:attributes="alt"
-                   name="previous" />
+              <i class="fa fa-arrow-left"></i>
             </a>
-            <a title="Next" rel="next"
+            <a title="Next" rel="next" name="next"
                tal:attributes="href contextInfos/next"
                i18n:attributes="title">
-              <img tal:attributes="src string:${portal_url}/next_img_btn.gif" width="23" height="27" alt="Next" i18n:attributes="alt"
-                   name="next" />
+              <i class="fa fa-arrow-right"></i>
             </a>
-            <img tal:attributes="src string:${portal_url}/slide_show_btn.gif" width="33" height="27" alt="slide show" i18n:attributes="alt"
-                 id="slide_show"/>
-            <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
-            <a title="Back to portfolio..." rel="index"
+            <a title="Slide show" name="slide_show" href="#"
+               i18n:attributes="title">
+              <i class="fa fa-play"></i>
+            </a>
+            <i class="sep"></i>
+            <a title="Full screen (f)" name="full_screen" href="#"
+               i18n:attributes="title">
+              <i class="fa fa-arrows-alt"></i>
+            </a>
+            <a title="Back to portfolio…" rel="index" name="back_to_portfolio"
                tal:attributes="href contextInfos/backUrl"
                i18n:attributes="title" tal:on-error="string:">
-              <img tal:attributes="src string:${portal_url}/lightbox_btn.gif" width="31" height="27" alt="Back to portfolio..." i18n:attributes="alt"
-                   name="back_to_portfolio" />
+              <i class="fa fa-th"></i>
             </a>
-            <a title="Full screen (f)" i18n:attributes="title"
-               tal:attributes="href string:${here/absolute_url}/zoom_view">
-              <img tal:attributes="src string:${portal_url}/full_screen_btn.gif" width="31" height="27" alt="Full screen (f)" i18n:attributes="alt"
-                   name="full_screen"/>
-            </a>
-            <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
-            <a tal:define="selected contextInfos/isSelected;
-                           msg python:selected and 'Retirer de la sélection' or 'Ajouter à la sélection';
-                           action python:selected and 'remove_to_selection' or 'add_to_selection';
-                           imgSrc python:'%s/%s' % (portal_url, selected and 'unselect_flag_btn.gif' or 'select_flag_btn.gif');"
-               tal:attributes="href python:'%s/%s' % (here.absolute_url(), action); title msg">
-              <img tal:attributes="src imgSrc; alt msg" width="31" height="27"
-                   name="toggle_selection"/>
-            </a>
-            <div style="display:inline;position:relative">
-              <div id="cart_slide"></div>
-              <a tal:attributes="href python:'%s/get_slide_buyable_items' % here.absolute_url();
-                                 class python:(contextInfos.get('buyable') and [None] or['hidden'])[0]"
-                 title="Add to cart" i18n:attributes="title">
-                <img width="31" height="27" alt="Add to cart" name="show_buyable"
-                     tal:attributes="src string:$portal_url/cart_btn.gif" i18n:attributes="alt"/>
-              </a>
-            </div>
-            <img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />
-            <a title="Edit metadata"
-               tal:define="ModifyPortalContent python:modules['Products.CMFCore'].permissions.ModifyPortalContent"
-               tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"
-               tal:attributes="href string:${here/absolute_url}/photo_edit_form"
-               i18n:attributes="title">
-              <img tal:attributes="src string:${portal_url}/edit_metadata_btn.gif" width="31" height="27" alt="Edit metadata" i18n:attributes="alt"
-                   name="edit_metadata"/>
-            </a>
+            <!--?<a tal:define="selected contextInfos/isSelected;-->
+                           <!--?msg python:selected and 'Retirer de la sélection' or 'Ajouter à la sélection';-->
+                           <!--?action python:selected and 'remove_to_selection' or 'add_to_selection';-->
+                           <!--?imgSrc python:'%s/%s' % (portal_url, selected and 'unselect_flag_btn.gif' or 'select_flag_btn.gif');"-->
+               <!--?tal:attributes="href python:'%s/%s' % (here.absolute_url(), action); title msg">-->
+              <!--?<img tal:attributes="src imgSrc; alt msg" width="31" height="27"-->
+                   <!--?name="toggle_selection"/>-->
+            <!--?</a>-->
+            <!--?<div style="display:inline;position:relative">-->
+              <!--?<div id="cart_slide"></div>-->
+              <!--?<a tal:attributes="href python:'%s/get_slide_buyable_items' % here.absolute_url();-->
+                                 <!--?class python:(contextInfos.get('buyable') and [None] or['hidden'])[0]"-->
+                 <!--?title="Add to cart" i18n:attributes="title">-->
+                <!--?<img width="31" height="27" alt="Add to cart" name="show_buyable"-->
+                     <!--?tal:attributes="src string:$portal_url/cart_btn.gif" i18n:attributes="alt"/>-->
+              <!--?</a>-->
+            <!--?</div>-->
+            <!--?<img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />-->
+            <!--?<a title="Edit metadata"-->
+               <!--?tal:define="ModifyPortalContent python:modules['Products.CMFCore'].permissions.ModifyPortalContent"-->
+               <!--?tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"-->
+               <!--?tal:attributes="href string:${here/absolute_url}/photo_edit_form"-->
+               <!--?i18n:attributes="title">-->
+              <!--?<img tal:attributes="src string:${portal_url}/edit_metadata_btn.gif" width="31" height="27" alt="Edit metadata" i18n:attributes="alt"-->
+                   <!--?name="edit_metadata"/>-->
+            <!--?</a>-->
           </div>
           <div id="image_metadata" class="image_metadata">
             <div  metal:define-macro="image_metadata" tal:omit-tag="">

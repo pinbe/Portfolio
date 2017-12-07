@@ -14,10 +14,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Fri Sep  5 00:23:02 2014\n"
-"PO-Revision-Date: 2014-09-18 14:57+0200\n"
+"POT-Creation-Date: Thu Dec  7 11:49:08 2017\n"
+"PO-Revision-Date: 2017-12-07 11:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -75,9 +76,8 @@ msgstr "%s added to selection."
 msgid "This %s is already in the selection."
 msgstr "This %s is already in the selection."
 
-#: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:51
-#: o/skins/photo_layout_macros.pt:54 o/skins/photo_view.pt:91
-#: o/skins/photo_view.pt:94
+#: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:53
+#: o/skins/photo_view.pt:85 o/skins/photo_view.pt:88
 msgid "Add to cart"
 msgstr "Add to cart"
 
@@ -116,14 +116,17 @@ msgstr "Nothing to remove."
 #. Default: ""
 #: o/skins/lightbox_view_template.pt:19
 msgid "lightbox_selected_explanations"
-msgstr "This light box is selected: images that you select now will automatically be saved in that location."
+msgstr ""
+"This light box is selected: images that you select now will automatically be "
+"saved in that location."
 
 #: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
+#: o/skins/portfolio_view.pt:91 o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr "delete"
 
-#: o/skins/lightbox_view_template.pt:31 o/skins/selection_view_template.pt:20
+#: o/skins/lightbox_view_template.pt:31 o/skins/photo_layout_macros.pt:44
+#: o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
 msgstr "${DYNAMIC_CONTENT}"
 
@@ -219,26 +222,10 @@ msgstr "Modified"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-#: o/skins/photo_layout_macros.pt:32 o/skins/photo_layout_macros.pt:35
-msgid "Add to selection"
-msgstr "Add to selection"
-
-#: o/skins/photo_layout_macros.pt:41 o/skins/photo_layout_macros.pt:44
-msgid "Remove to selection"
-msgstr "Remove to selection"
-
-#: o/skins/photo_layout_macros.pt:60 o/skins/photo_layout_macros.pt:63
+#: o/skins/photo_layout_macros.pt:60
 #: o/skins/portfolio_presentation_template.pt:47
 msgid "Delete"
 msgstr "Delete"
-
-#: o/skins/photo_layout_macros.pt:78 o/skins/photo_layout_macros.pt:81
-msgid "Hide for anonymous"
-msgstr "Hide for anonymous"
-
-#: o/skins/photo_layout_macros.pt:91 o/skins/photo_layout_macros.pt:94
-msgid "Show for anonymous"
-msgstr "Show for anonymous"
 
 #: o/skins/photo_medium.pt:37 o/skins/photo_medium.pt:38
 msgid "previous"
@@ -256,43 +243,39 @@ msgstr "zoom in"
 msgid "zoom out"
 msgstr "zoom out"
 
-#: o/skins/photo_view.pt:31
-msgid "Empty image: upload an image file in \"Edit\" tab."
-msgstr "Empty image: upload an image file in \"Edit\" tab."
-
-#: o/skins/photo_view.pt:46 o/skins/photo_view.pt:49
+#: o/skins/photo_view.pt:49
 msgid "Previous"
 msgstr "Previous"
 
-#: o/skins/photo_view.pt:52 o/skins/photo_view.pt:55
+#: o/skins/photo_view.pt:54
 msgid "Next"
 msgstr "Next"
 
-#: o/skins/photo_view.pt:58
-msgid "slide show"
-msgstr "slide show"
+#: o/skins/photo_view.pt:59
+msgid "Slide show"
+msgstr "Slide show"
 
-#: o/skins/photo_view.pt:69 o/skins/photo_view.pt:72
-msgid "Back to portfolio..."
-msgstr "Back to portfolio..."
+#: o/skins/photo_view.pt:64
+msgid "Back to portfolio…"
+msgstr "Back to portfolio…"
 
-#: o/skins/photo_view.pt:75 o/skins/photo_view.pt:77
+#: o/skins/photo_view.pt:69 o/skins/photo_view.pt:71
 msgid "Full screen (f)"
 msgstr "Full screen (f)"
 
-#: o/skins/photo_view.pt:99 o/skins/photo_view.pt:104
+#: o/skins/photo_view.pt:93 o/skins/photo_view.pt:98
 msgid "Edit metadata"
 msgstr "Edit metadata"
 
-#: o/skins/photo_view.pt:118
+#: o/skins/photo_view.pt:112
 msgid "Keywords"
 msgstr "Keywords"
 
-#: o/skins/photo_view.pt:125
+#: o/skins/photo_view.pt:119
 msgid "reference:"
 msgstr "reference:"
 
-#: o/skins/photo_view.pt:131
+#: o/skins/photo_view.pt:125
 msgid "download picture"
 msgstr "download picture"
 
@@ -312,19 +295,19 @@ msgstr "Nothing to delete."
 msgid "Delete presentation"
 msgstr "Delete presentation"
 
-#: o/skins/portfolio_view.pt:74
+#: o/skins/portfolio_view.pt:77
 msgid "sorting:"
 msgstr "sorting:"
 
-#: o/skins/portfolio_view.pt:77
+#: o/skins/portfolio_view.pt:80
 msgid "manual"
 msgstr "manual"
 
-#: o/skins/portfolio_view.pt:79
+#: o/skins/portfolio_view.pt:82
 msgid "shooting"
 msgstr "shooting"
 
-#: o/skins/portfolio_view.pt:81
+#: o/skins/portfolio_view.pt:84
 msgid "modification"
 msgstr "modification"
 
@@ -470,3 +453,24 @@ msgstr "You don't have any album yet."
 # date et heure de prise de vue
 msgid "%m/%d/%Y %H:%M:%S"
 msgstr "%m/%d/%Y %H:%M:%S"
+
+#~ msgid "slide show"
+#~ msgstr "slide show"
+
+#~ msgid "Back to portfolio..."
+#~ msgstr "Back to portfolio..."
+
+#~ msgid "Add to selection"
+#~ msgstr "Add to selection"
+
+#~ msgid "Remove to selection"
+#~ msgstr "Remove to selection"
+
+#~ msgid "Hide for anonymous"
+#~ msgstr "Hide for anonymous"
+
+#~ msgid "Show for anonymous"
+#~ msgstr "Show for anonymous"
+
+#~ msgid "Empty image: upload an image file in \"Edit\" tab."
+#~ msgstr "Empty image: upload an image file in \"Edit\" tab."
