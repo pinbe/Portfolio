@@ -73,8 +73,8 @@
         <div id="lightbox_toolbar" class="image_toolbar"
              tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
              tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
-          <span>
-            <span i18n:translate="" tal:omit-tag="">sorting:</span>
+          <span tal:omit-tag="">
+            <span i18n:translate="">sorting:</span>
             <select tal:define="sort_on batchInfos/sorting/sort_on"
                     name="sort_on">
               <option tal:attributes="selected python:sort_on=='position'"
@@ -84,15 +84,16 @@
               <option tal:attributes="selected python:sort_on=='modified'"
                       value="modified" i18n:translate="">modification</option>
             </select>
-            <noscript>
-              <input type="submit" name="set_sorting" value="ok"/>
-            </noscript>
           </span>
-          <input type="image" width="17" height="27" alt="delete" title="delete"
-                 name="delete"
-                 tal:attributes="src string:$portal_url/trash_btn.gif"
-                 i18n:attributes="alt;title"/>
-          <br/>
+          <button type="submit" name="delete" title="delete"
+                  i18n:attributes="title">
+            <i class="fa fa-trash"></i>
+          </button>
+          <!--?<input type="image" width="17" height="27" alt="delete" title="delete"-->
+                 <!--?name="delete"-->
+                 <!--?tal:attributes="src string:$portal_url/trash_btn.gif"-->
+                 <!--?i18n:attributes="alt;title"/>-->
+          <!--?<br/>-->
         </div>
 
         <div metal:use-macro="here/photo_layout_macros/macros/grid">

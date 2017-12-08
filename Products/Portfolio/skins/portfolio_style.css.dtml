@@ -294,15 +294,40 @@ table.metadata_category select:focus {
 
 
 .image_toolbar {
-  /*border: 1px dotted silver;*/
   white-space: nowrap;
-  font-size: 30px;
-  color: silver;
   padding: 3px 0;
   border-top: 1px solid silver;
   border-bottom: 1px solid silver;
+  display: flex;
+  justify-content: space-around;
   opacity: 1;
   transition: opacity 500ms;
+  background: rgba(255,255,255, 0.95);
+  z-index: 1;
+}
+
+#lightbox_toolbar.image_toolbar {
+  justify-content: flex-end;
+}
+
+.image_toolbar > * {
+  /*border: 1px solid red;*/
+  display: inline-block;
+  align-self: center;
+}
+
+.image_toolbar i.fa {
+  font-size: 30px;
+  padding: 0 5px;
+}
+.image_toolbar button i.fa {
+  color: &dtml-highLightColor;;
+}
+
+.image_toolbar button {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .image_toolbar .sep {
