@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Thu Dec  7 11:49:08 2017\n"
-"PO-Revision-Date: 2017-12-07 11:50+0100\n"
+"POT-Creation-Date: Sat Dec  9 16:19:40 2017\n"
+"PO-Revision-Date: 2017-12-09 16:21+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -77,7 +77,6 @@ msgid "This %s is already in the selection."
 msgstr "This %s is already in the selection."
 
 #: o/skins/get_slide_buyable_items.pt:21 o/skins/photo_layout_macros.pt:53
-#: o/skins/photo_view.pt:85 o/skins/photo_view.pt:88
 msgid "Add to cart"
 msgstr "Add to cart"
 
@@ -121,7 +120,7 @@ msgstr ""
 "saved in that location."
 
 #: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:91 o/skins/selection_view_template.pt:31
+#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr "delete"
 
@@ -259,23 +258,19 @@ msgstr "Slide show"
 msgid "Back to portfolio…"
 msgstr "Back to portfolio…"
 
-#: o/skins/photo_view.pt:69 o/skins/photo_view.pt:71
+#: o/skins/photo_view.pt:69
 msgid "Full screen (f)"
 msgstr "Full screen (f)"
 
-#: o/skins/photo_view.pt:93 o/skins/photo_view.pt:98
-msgid "Edit metadata"
-msgstr "Edit metadata"
-
-#: o/skins/photo_view.pt:112
+#: o/skins/photo_view.pt:110
 msgid "Keywords"
 msgstr "Keywords"
 
-#: o/skins/photo_view.pt:119
+#: o/skins/photo_view.pt:117
 msgid "reference:"
 msgstr "reference:"
 
-#: o/skins/photo_view.pt:125
+#: o/skins/photo_view.pt:123
 msgid "download picture"
 msgstr "download picture"
 
@@ -434,12 +429,18 @@ msgstr "Country"
 msgid "back"
 msgstr "back"
 
+msgid "Add to selection"
+msgstr "Add to selection"
+
 # from portfolio-manual
 msgid "not saved yet"
 msgstr "not saved yet"
 
 msgid "Load in my selection"
 msgstr "Load in my selection"
+
+msgid "Remove from selection"
+msgstr "Remove from selection"
 
 msgid "Unload from my selection"
 msgstr "Unload from my selection"
@@ -454,14 +455,14 @@ msgstr "You don't have any album yet."
 msgid "%m/%d/%Y %H:%M:%S"
 msgstr "%m/%d/%Y %H:%M:%S"
 
+#~ msgid "Edit metadata"
+#~ msgstr "Edit metadata"
+
 #~ msgid "slide show"
 #~ msgstr "slide show"
 
 #~ msgid "Back to portfolio..."
 #~ msgstr "Back to portfolio..."
-
-#~ msgid "Add to selection"
-#~ msgstr "Add to selection"
 
 #~ msgid "Remove to selection"
 #~ msgstr "Remove to selection"

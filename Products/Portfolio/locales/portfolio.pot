@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Thu Dec  7 11:49:08 2017\n"
+"POT-Creation-Date: Sat Dec  9 16:22:44 2017\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -80,8 +80,6 @@ msgstr ""
 
 #: o/skins/get_slide_buyable_items.pt:21
 #: o/skins/photo_layout_macros.pt:53
-#: o/skins/photo_view.pt:85
-#: o/skins/photo_view.pt:88
 msgid "Add to cart"
 msgstr ""
 
@@ -126,8 +124,7 @@ msgstr ""
 #: o/skins/lightbox_view_template.pt:24
 #: o/skins/my_cart_template.pt:59
 #: o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:91
-#: o/skins/portfolio_view.pt:91
+#: o/skins/portfolio_view.pt:88
 #: o/skins/selection_view_template.pt:31
 #: o/skins/selection_view_template.pt:31
 msgid "delete"
@@ -275,24 +272,18 @@ msgid "Back to portfolio…"
 msgstr ""
 
 #: o/skins/photo_view.pt:69
-#: o/skins/photo_view.pt:71
 msgid "Full screen (f)"
 msgstr ""
 
-#: o/skins/photo_view.pt:93
-#: o/skins/photo_view.pt:98
-msgid "Edit metadata"
-msgstr ""
-
-#: o/skins/photo_view.pt:112
+#: o/skins/photo_view.pt:110
 msgid "Keywords"
 msgstr ""
 
-#: o/skins/photo_view.pt:119
+#: o/skins/photo_view.pt:117
 msgid "reference:"
 msgstr ""
 
-#: o/skins/photo_view.pt:125
+#: o/skins/photo_view.pt:123
 msgid "download picture"
 msgstr ""
 
@@ -457,10 +448,16 @@ msgstr ""
 
 # from portfolio-manual
 
+msgid "Add to selection"
+msgstr ""
+
 msgid "not saved yet"
 msgstr ""
 
 msgid "Load in my selection"
+msgstr ""
+
+msgid "Remove from selection"
 msgstr ""
 
 msgid "Unload from my selection"

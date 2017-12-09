@@ -1,9 +1,15 @@
 # from portfolio-manual
 
+msgid "Add to selection"
+msgstr ""
+
 msgid "not saved yet"
 msgstr ""
 
 msgid "Load in my selection"
+msgstr ""
+
+msgid "Remove from selection"
 msgstr ""
 
 msgid "Unload from my selection"

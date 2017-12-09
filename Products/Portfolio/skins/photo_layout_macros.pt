@@ -22,7 +22,7 @@
              tal:omit-tag="">
           <tal:block tal:repeat="info infos">
             <div metal:define-macro="thumbnail"
-                 tal:attributes="class python:'selected' if info['selected'] else None"
+                 tal:attributes="class python:'selected' if info.get('selected') else None"
                  draggable="true">
               <span tal:attributes="class python:'landscape' if info['thumbSize']['width'] > info['thumbSize']['height'] else 'portrait'">
                 <a tal:attributes="href info/href; title info/title">
@@ -46,7 +46,7 @@
                      tal:condition="python:features.has_key('select')"
                      tal:attributes="href python:features['select'](info['o'], selected);
                                      name python:'remove_to_selection' if selected else 'add_to_selection';
-                                     title python:'Remove to selection' if selected else 'Add to selection'"
+                                     title python:'Remove from selection' if selected else 'Add to selection'"
                      i18n:attributes="title">
                     <i class="fa"></i>
                   </a>

@@ -1,7 +1,10 @@
 ##parameters=
 from Products.CMFCore.utils import getUtilityByInterfaceName
 from Products.Portfolio.utils import translate
+
+
 def _(message) : return translate(message, context).encode('utf-8')
+
 
 req = context.REQUEST
 utool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IURLTool')
@@ -10,7 +13,7 @@ portal_url = utool()
 
 form = req.form
 fg = form.get
-sd = context.session_data_manager.getSessionData(create = 1)
+sd = context.session_data_manager.getSessionData(create=1)
 
 # check if a lightbox is currently selected
 lightboxpath = sd.get('lightboxpath', None)
@@ -19,7 +22,7 @@ if lightboxpath is not None :
     try :
         lightbox = portal.restrictedTraverse(lightboxpath)
         selectionIsLightbox = True
-    except:
+    except :
         sd['lightboxpath'] = None
 
 # form processing
@@ -29,15 +32,15 @@ if fg('delete.x') or form.has_key('delete') :
 
     # get selection from session data or from selected lightbox
     if not selectionIsLightbox :
-    	selection = sd.get('objects_selection', [])
+        selection = sd.get('objects_selection', [])
     else :
-    	try :
-    		lightbox = portal.restrictedTraverse(lightboxpath)
-    		selection = lightbox.getUidList()
-    	except KeyError :
-    		sd['lightboxpath'] = None
-    		selection = sd.get('objects_selection', [])
-        
+        try :
+            lightbox = portal.restrictedTraverse(lightboxpath)
+            selection = lightbox.getUidList()
+        except KeyError :
+            sd['lightboxpath'] = None
+            selection = sd.get('objects_selection', [])
+
     # remove items from selection
     rmCpt = 0
     for uid in [int(uid) for uid in fg('uids', [])] :
@@ -49,7 +52,7 @@ if fg('delete.x') or form.has_key('delete') :
             rmCpt = rmCpt + 1
     sd['objects_selection'] = selection
     sd['objects_selection_dict'] = selDict
-        
+
     # ui feedback message
     if rmCpt :
         if rmCpt == 1 :
@@ -58,7 +61,7 @@ if fg('delete.x') or form.has_key('delete') :
             msg = _('Deselected photos.')
     else :
         msg = _('Nothing to deselect.')
-    
+
     if fg('ajax') :
         req.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
         return '<deleted>%s</deleted>' % msg
@@ -72,15 +75,14 @@ else :
     lastBcTitle = _('My selection')
 
 breadcrumbs = [
-    { 'id'      : 'root'
-    , 'title'   : portal.title
-    , 'url'    : portal_url},
-    
-    {'id'       : 'selection_view'
-     ,'title'   : lastBcTitle
-     , 'url'    : '%s/selection_view' % portal_url}
-    ]
+    {'id' : 'root'
+        , 'title' : portal.title
+        , 'url' : portal_url},
 
+    {'id' : 'selection_view'
+        , 'title' : lastBcTitle
+        , 'url' : '%s/selection_view' % portal_url}
+]
 
 options = {}
 options.update(context.getSelectionPhotosInfos())
