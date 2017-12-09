@@ -87,11 +87,6 @@
                   i18n:attributes="title">
             <i class="fa fa-trash"></i>
           </button>
-          <!--?<input type="image" width="17" height="27" alt="delete" title="delete"-->
-                 <!--?name="delete"-->
-                 <!--?tal:attributes="src string:$portal_url/trash_btn.gif"-->
-                 <!--?i18n:attributes="alt;title"/>-->
-          <!--?<br/>-->
         </div>
 
         <div metal:use-macro="here/photo_layout_macros/macros/grid">
