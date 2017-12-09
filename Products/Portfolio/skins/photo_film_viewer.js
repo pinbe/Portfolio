@@ -9,9 +9,36 @@ var FilmSlider;
 
     var keyLeft = 37, keyRight = 39;
     var isTextMime = /^text\/.+/i;
-    var isAddToSelection = /.*\/add_to_selection$/;
+    // var isAddToSelection = /.*\/add_to_selection$/;
     var DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
     var DEFAULT_SLIDESHOW_TIMEOUT = 4000;
+
+    var getVendorSpecific, callVendorSpecific;
+    (function() {
+        var ua = navigator.userAgent.toLowerCase();
+        var vendorPrefix = '';
+        if(ua.indexOf('webkit') !== -1) {
+            vendorPrefix = 'webkit';
+        }
+        else if(ua.indexOf('gecko') !== -1) {
+            vendorPrefix = 'moz';
+        }
+
+        getVendorSpecific = function(ob, name) {
+            var vsName =
+                (vendorPrefix) ?
+                    vendorPrefix +
+                    name.charAt(0).toUpperCase() +
+                    name.substring(1) :
+                    name
+            ;
+            return ob[vsName];
+        };
+
+        callVendorSpecific = function(ob, name, args) {
+            return getVendorSpecific(ob, name).apply(ob, args);
+        };
+    }());
 
     function raiseMouseEvent(ob, eventName) {
         var event = document.createEvent("MouseEvents");
@@ -189,6 +216,17 @@ var FilmSlider;
         document.addEventListener('keypress', function(evt) {
             self.keyPressHandler(evt);
         });
+        var fullScreenEvents = [
+            'fullscreenchange',
+            'mozfullscreenchange',
+            'webkitfullscreenchange',
+            'msfullscreenchange'];
+        var _toggleFullScreen = function() {
+            self.onFullScreenChange();
+        };
+        for(var i = 0; i < fullScreenEvents.length; i++)
+            document.addEventListener(fullScreenEvents[i], _toggleFullScreen);
+
         window.addEventListener('resize', function() {
             self.fitViewer();
         });
@@ -272,15 +310,11 @@ var FilmSlider;
         var req = new XMLHttpRequest();
         req.onreadystatechange = function() {
             switch(req.readyState) {
-                case 1 :
-                    // showProgressImage();
-                    break;
                 case 2 :
                     try {
                         if(!isTextMime.exec(req.getResponseHeader('Content-Type'))) {
                             req.onreadystatechange = null;
                             req.abort();
-                            // hideProgressImage();
                             window.location.href = self._fallBackUrl;
                         }
                     }
@@ -288,10 +322,8 @@ var FilmSlider;
                     }
                     break;
                 case 4 :
-                    // hideProgressImage();
-                    if(req.status === 200) {
+                    if(req.status === 200)
                         self.populateViewer(req);
-                    }
                     break;
             }
         };
@@ -544,32 +576,27 @@ var FilmSlider;
     };
 
     FilmSlider.prototype.toggleFullScreen = function() {
-        var btn = this.buttons.full_screen.querySelector('i');
-        if(!document.mozFullScreen && !document.webkitFullScreen) {
-            // start fullscreen
-            if(this.stretchable.mozRequestFullScreen) {
-                this.stretchable.mozRequestFullScreen();
-            } else {
-                this.stretchable.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-            btn.classList.remove('fa-expand');
-            btn.classList.add('fa-compress');
-            this.onEnterFullScreen();
-        } else {
-            // stop fullscreen
-            if(document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else {
-                document.webkitCancelFullScreen();
-            }
-            btn.classList.remove('fa-compress');
-            btn.classList.add('fa-expand');
-            this.onExitFullScreen();
-        }
+        if(getVendorSpecific(document, 'fullscreenElement') === null ||
+            getVendorSpecific(document, 'fullScreenElement') === null)
+            callVendorSpecific(this.stretchable, 'requestFullScreen');
+        else
+            callVendorSpecific(document, 'cancelFullScreen');
+    };
 
+
+    FilmSlider.prototype.onFullScreenChange = function() {
+        if(getVendorSpecific(document, 'fullscreenElement') === null ||
+            getVendorSpecific(document, 'fullScreenElement') === null)
+            this.onExitFullScreen();
+        else
+            this.onEnterFullScreen();
     };
 
     FilmSlider.prototype.onEnterFullScreen = function() {
+        var btn = this.buttons.full_screen.querySelector('i');
+        btn.classList.remove('fa-expand');
+        btn.classList.add('fa-compress');
+
         this._showToolbar();
         this._fullScreenMouseMoveHandler = function() {
             self._showToolbar();
@@ -582,6 +609,9 @@ var FilmSlider;
     };
 
     FilmSlider.prototype.onExitFullScreen = function() {
+        var btn = this.buttons.full_screen.querySelector('i');
+        btn.classList.remove('fa-compress');
+        btn.classList.add('fa-expand');
         clearTimeout(this.toolBarTimeoutID);
         this.toolbar.classList.remove('zero_opacity'); // just to be pretty
         this.stretchable.removeEventListener('mousemove',
