@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Sat Dec  9 16:19:40 2017\n"
-"PO-Revision-Date: 2017-12-09 16:21+0100\n"
+"POT-Creation-Date: Sat Dec  9 18:39:02 2017\n"
+"PO-Revision-Date: 2017-12-09 18:41+0100\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -115,14 +115,14 @@ msgstr ""
 "à présent seront automatiquement sauvegardées à cet endroit."
 
 #: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
+#: o/skins/portfolio_view.pt:92 o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr "supprimer"
 
 #: o/skins/lightbox_view_template.pt:31 o/skins/photo_layout_macros.pt:44
 #: o/skins/selection_view_template.pt:20
 msgid "${DYNAMIC_CONTENT}"
-msgstr ""
+msgstr "${DYNAMIC_CONTENT}"
 
 #: o/skins/metadata_edit_form_macros.pt:258
 msgid "Save"
@@ -285,19 +285,23 @@ msgstr "Rien à supprimer."
 msgid "Delete presentation"
 msgstr "Supprimer la présentation"
 
-#: o/skins/portfolio_view.pt:77
+#: o/skins/portfolio_view.pt:76
+msgid "My selection (${sellength})"
+msgstr "Ma sélection (${sellength})"
+
+#: o/skins/portfolio_view.pt:82
 msgid "sorting:"
 msgstr "tri :"
 
-#: o/skins/portfolio_view.pt:80
+#: o/skins/portfolio_view.pt:85
 msgid "manual"
 msgstr "manuel"
 
-#: o/skins/portfolio_view.pt:82
+#: o/skins/portfolio_view.pt:87
 msgid "shooting"
 msgstr "prise de vue"
 
-#: o/skins/portfolio_view.pt:84
+#: o/skins/portfolio_view.pt:89
 msgid "modification"
 msgstr "modification"
 
@@ -309,19 +313,19 @@ msgstr "Enregistrer la sélection dans une table lumineuse"
 msgid "Description"
 msgstr "Description"
 
-#: o/skins/selection_view.py:56
+#: o/skins/selection_view.py:59
 msgid "Photo deselected."
 msgstr "Photo désélectionnée."
 
-#: o/skins/selection_view.py:58
+#: o/skins/selection_view.py:61
 msgid "Deselected photos."
 msgstr "Photos désélectionnées."
 
-#: o/skins/selection_view.py:60
+#: o/skins/selection_view.py:63
 msgid "Nothing to deselect."
 msgstr "Rien à désélectionner."
 
-#: o/skins/selection_view.py:70 o/skins/selection_view.py:72
+#: o/skins/selection_view.py:73 o/skins/selection_view.py:75
 #: o/skins/selection_view_template.pt:18 o/skins/selectioncontext.py:116
 #: o/skins/selectioncontext.py:118
 msgid "My selection"

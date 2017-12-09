@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Sat Dec  9 16:19:40 2017\n"
-"PO-Revision-Date: 2017-12-09 16:21+0100\n"
+"POT-Creation-Date: Sat Dec  9 18:39:02 2017\n"
+"PO-Revision-Date: 2017-12-09 18:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -120,7 +120,7 @@ msgstr ""
 "saved in that location."
 
 #: o/skins/lightbox_view_template.pt:24 o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88 o/skins/selection_view_template.pt:31
+#: o/skins/portfolio_view.pt:92 o/skins/selection_view_template.pt:31
 msgid "delete"
 msgstr "delete"
 
@@ -290,19 +290,23 @@ msgstr "Nothing to delete."
 msgid "Delete presentation"
 msgstr "Delete presentation"
 
-#: o/skins/portfolio_view.pt:77
+#: o/skins/portfolio_view.pt:76
+msgid "My selection (${sellength})"
+msgstr "My selection (${sellength})"
+
+#: o/skins/portfolio_view.pt:82
 msgid "sorting:"
 msgstr "sorting:"
 
-#: o/skins/portfolio_view.pt:80
+#: o/skins/portfolio_view.pt:85
 msgid "manual"
 msgstr "manual"
 
-#: o/skins/portfolio_view.pt:82
+#: o/skins/portfolio_view.pt:87
 msgid "shooting"
 msgstr "shooting"
 
-#: o/skins/portfolio_view.pt:84
+#: o/skins/portfolio_view.pt:89
 msgid "modification"
 msgstr "modification"
 
@@ -314,19 +318,19 @@ msgstr "Save current selection as lightbox"
 msgid "Description"
 msgstr "Description"
 
-#: o/skins/selection_view.py:56
+#: o/skins/selection_view.py:59
 msgid "Photo deselected."
 msgstr "Photo deselected."
 
-#: o/skins/selection_view.py:58
+#: o/skins/selection_view.py:61
 msgid "Deselected photos."
 msgstr "Deselected photos."
 
-#: o/skins/selection_view.py:60
+#: o/skins/selection_view.py:63
 msgid "Nothing to deselect."
 msgstr "Nothing to deselect."
 
-#: o/skins/selection_view.py:70 o/skins/selection_view.py:72
+#: o/skins/selection_view.py:73 o/skins/selection_view.py:75
 #: o/skins/selection_view_template.pt:18 o/skins/selectioncontext.py:116
 #: o/skins/selectioncontext.py:118
 msgid "My selection"

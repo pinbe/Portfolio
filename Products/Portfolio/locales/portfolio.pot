@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
-"POT-Creation-Date: Sat Dec  9 16:22:44 2017\n"
+"POT-Creation-Date: Sat Dec  9 18:39:02 2017\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -124,7 +124,7 @@ msgstr ""
 #: o/skins/lightbox_view_template.pt:24
 #: o/skins/my_cart_template.pt:59
 #: o/skins/my_cart_template.pt:59
-#: o/skins/portfolio_view.pt:88
+#: o/skins/portfolio_view.pt:92
 #: o/skins/selection_view_template.pt:31
 #: o/skins/selection_view_template.pt:31
 msgid "delete"
@@ -303,19 +303,23 @@ msgstr ""
 msgid "Delete presentation"
 msgstr ""
 
-#: o/skins/portfolio_view.pt:77
-msgid "sorting:"
-msgstr ""
-
-#: o/skins/portfolio_view.pt:80
-msgid "manual"
+#: o/skins/portfolio_view.pt:76
+msgid "My selection (${sellength})"
 msgstr ""
 
 #: o/skins/portfolio_view.pt:82
+msgid "sorting:"
+msgstr ""
+
+#: o/skins/portfolio_view.pt:85
+msgid "manual"
+msgstr ""
+
+#: o/skins/portfolio_view.pt:87
 msgid "shooting"
 msgstr ""
 
-#: o/skins/portfolio_view.pt:84
+#: o/skins/portfolio_view.pt:89
 msgid "modification"
 msgstr ""
 
@@ -327,20 +331,20 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: o/skins/selection_view.py:56
+#: o/skins/selection_view.py:59
 msgid "Photo deselected."
 msgstr ""
 
-#: o/skins/selection_view.py:58
+#: o/skins/selection_view.py:61
 msgid "Deselected photos."
 msgstr ""
 
-#: o/skins/selection_view.py:60
+#: o/skins/selection_view.py:63
 msgid "Nothing to deselect."
 msgstr ""
 
-#: o/skins/selection_view.py:70
-#: o/skins/selection_view.py:72
+#: o/skins/selection_view.py:73
+#: o/skins/selection_view.py:75
 #: o/skins/selection_view_template.pt:18
 #: o/skins/selectioncontext.py:116
 #: o/skins/selectioncontext.py:118

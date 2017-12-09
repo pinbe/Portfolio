@@ -74,5 +74,6 @@ return {'infos':infos,
         'batch':batch,
         'features':features,
         'sorting' : {'sort_on' : sort_on,
-                     'sort_order' : sort_order}
+                     'sort_order' : sort_order},
+        'seldict' : selDict
         }

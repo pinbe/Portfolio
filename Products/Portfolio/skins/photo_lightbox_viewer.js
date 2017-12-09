@@ -44,7 +44,11 @@ var Lightbox;
         (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
 
 
-    Lightbox = function(grid, toolbar, complete, container_type, orderable) {
+    Lightbox = function(grid,
+                        toolbar,
+                        complete,
+                        container_type,
+                        orderable) {
         var self = this;
         this.grid = grid;
         this._buildSlidesIndex(); // set this.slides and this.lastSlide;
@@ -173,33 +177,11 @@ var Lightbox;
 
             switch(link.name) {
                 case 'add_to_selection':
-                    req = new XMLHttpRequest();
-                    url = link.href;
-                    req.open("POST", url, true);
-                    req.setRequestHeader("Content-Type",
-                                         "application/x-www-form-urlencoded;charset=utf-8");
-                    req.send("ajax=1");
-
-                    slide.className = 'selected';
-
-                    link.name = 'remove_to_selection';
-                    link.href = url.replace(/(.*\/)add_to_selection$/, '$1remove_to_selection');
-                    link.title = 'Retirer de la sélection';
-                    slide.classList.add('selected');
+                    this.selectionAdd(link);
                     break;
 
                 case 'remove_to_selection':
-                    req = new XMLHttpRequest();
-                    url = link.href;
-                    req.open("POST", url, true);
-                    req.setRequestHeader("Content-Type",
-                                         "application/x-www-form-urlencoded;charset=utf-8");
-                    req.send("ajax=1");
-                    link.name = 'add_to_selection';
-                    link.href = url.replace(/(.*\/)remove_to_selection$/,
-                                            '$1add_to_selection');
-                    link.title = 'Ajouter à la sélection';
-                    slide.classList.remove('selected');
+                    this.selectionRemove(link);
                     break;
 
                 // case 'add_to_cart' :
@@ -245,6 +227,61 @@ var Lightbox;
             cb.checked = !cb.checked;
             this.selectCBRange(cb, evt);
         }
+    };
+
+    Lightbox.prototype.selectionAdd = function(link) {
+        var req = new XMLHttpRequest();
+        var url = link.href;
+        req.open("POST", url, true);
+        req.setRequestHeader("Content-Type",
+                             "application/x-www-form-urlencoded;charset=utf-8");
+        req.send("ajax=1");
+
+        var self = this;
+        req.onload = function() {
+            if(req.status === 200) {
+                link.name = 'remove_to_selection';
+                link.href = url.replace(/(.*\/)add_to_selection$/,
+                                        '$1remove_to_selection');
+                link.title = 'Retirer de la sélection';
+                self.getSlide(link).classList.add('selected');
+
+                var json = JSON.parse(req.responseText);
+                if(self.toolbar) {
+                    var selcpt = self.toolbar.querySelector('.selcpt');
+                    if(selcpt)
+                        selcpt.innerText = json.sellength;
+                }
+            }
+        };
+    };
+
+    Lightbox.prototype.selectionRemove = function(link) {
+        var req = new XMLHttpRequest();
+        var url = link.href;
+        req.open("POST", url, true);
+        req.setRequestHeader("Content-Type",
+                             "application/x-www-form-urlencoded;charset=utf-8");
+        req.send("ajax=1");
+
+        var self = this;
+        req.onload = function() {
+            if(req.status === 200) {
+                link.name = 'add_to_selection';
+                link.href = url.replace(/(.*\/)remove_to_selection$/,
+                                        '$1add_to_selection');
+                link.title = 'Ajouter à la sélection';
+                self.getSlide(link).classList.remove('selected');
+
+                var json = JSON.parse(req.responseText);
+                if(self.toolbar) {
+                    var selcpt = self.toolbar.querySelector('.selcpt');
+                    if(selcpt)
+                        selcpt.innerText = json.sellength;
+                }
+            }
+        };
+
     };
 
     Lightbox.prototype.onChangeHandler = function(evt) {
@@ -506,7 +543,7 @@ var Lightbox;
             /* on gecko browser, <img> and <a> elements have default dragging behavior
             *  that must be disabled in order to drag only the slide container */
             element = (element) ? element : this.grid;
-            for(var i=0, all = element.querySelectorAll('a, img') ; i < all.length ; i++)
+            for(var i = 0, all = element.querySelectorAll('a, img'); i < all.length; i++)
                 all[i].draggable = false;
         } :
         function() {
@@ -557,7 +594,7 @@ var Lightbox;
     Lightbox.prototype.onDragOver = function(evt) {
         if(!this.dragged) return;
         var slide = this.getSlide(evt.target);
-        if(!slide)return;
+        if(!slide) return;
 
         if(slide !== this.dragged)
             slide.classList.add('dragover');
@@ -590,7 +627,7 @@ var Lightbox;
         var self = this;
         req.onreadystatechange = function() {
             if(req.readyState === 4)
-                    self._moveSelectedPhotos(req);
+                self._moveSelectedPhotos(req);
         };
 
         var url = absolute_url() + '/portfolio_move_photos';

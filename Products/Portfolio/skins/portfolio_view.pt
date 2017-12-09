@@ -70,23 +70,31 @@
                      features batchInfos/features"
          tal:omit-tag="">
       <form tal:attributes="action string:${here/absolute_url}/portfolio_edit_form" method="post">
-        <div id="lightbox_toolbar" class="image_toolbar"
-             tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
-             tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)">
-          <span i18n:translate="">sorting:</span>
-          <select tal:define="sort_on batchInfos/sorting/sort_on"
-                  name="sort_on">
-            <option tal:attributes="selected python:sort_on=='position'"
-                    value="position" i18n:translate="">manual</option>
-            <option tal:attributes="selected python:sort_on=='DateTimeOriginal'"
-                    value="DateTimeOriginal" i18n:translate="">shooting</option>
-            <option tal:attributes="selected python:sort_on=='modified'"
-                    value="modified" i18n:translate="">modification</option>
-          </select>
-          <button type="submit" name="delete" title="delete"
-                  i18n:attributes="title">
-            <i class="fa fa-trash"></i>
-          </button>
+        <div id="lightbox_toolbar" class="image_toolbar">
+          <a tal:attributes="href string:$portal_url/selection_view"
+             i18n:translate="">
+            My selection (<span class="selcpt"
+                                tal:content="python:len(batchInfos['seldict'])"
+                                i18n:name="sellength"></span>)
+          </a>
+          <span tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
+                tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"
+                tal:omit-tag="">
+            <span i18n:translate="">sorting:</span>
+            <select tal:define="sort_on batchInfos/sorting/sort_on"
+                    name="sort_on">
+              <option tal:attributes="selected python:sort_on=='position'"
+                      value="position" i18n:translate="">manual</option>
+              <option tal:attributes="selected python:sort_on=='DateTimeOriginal'"
+                      value="DateTimeOriginal" i18n:translate="">shooting</option>
+              <option tal:attributes="selected python:sort_on=='modified'"
+                      value="modified" i18n:translate="">modification</option>
+            </select>
+            <button type="submit" name="delete" title="delete"
+                    i18n:attributes="title">
+              <i class="fa fa-trash"></i>
+            </button>
+          </span>
         </div>
 
         <div metal:use-macro="here/photo_layout_macros/macros/grid">
