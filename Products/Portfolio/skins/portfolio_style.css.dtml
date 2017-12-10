@@ -599,6 +599,47 @@ th.num {
 }
 
 
+.fakefullscreen #content-outer {
+  z-index: 3;
+}
+
+.fakefullscreen .photo_viewer {
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  background: radial-gradient(ellipse at center, rgb(59, 59, 59) 0%,rgb(0,0,0) 60%);
+  z-index: 4;
+}
+
+.fakefullscreen .metadata_bar {
+  position: fixed;
+  right: 0;
+  bottom: 5px;
+  width: unset;
+  background: transparent;
+}
+
+.fakefullscreen .image_metadata {
+  display: none;
+}
+
+.fakefullscreen .image_toolbar {
+  padding: 0 5px;
+  background: rgba(0, 0, 0, 0.60);
+}
+
+.fakefullscreen .image_toolbar.zero_opacity {
+  opacity: 0;
+}
+
+.fakefullscreen .image_toolbar.zero_opacity:hover {
+  opacity: 1; /* yeah :-) */
+}
+
+
+
 /*
 </dtml-with> 
 </dtml-with>

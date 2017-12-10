@@ -588,6 +588,19 @@ var FilmSlider;
             else
                 callVendorSpecific(document, 'cancelFullScreen');
         }
+        else {
+            if(document.body.classList.contains('fakefullscreen')) {
+                document.body.classList.remove('fakefullscreen');
+                this.onExitFullScreen();
+                window.dispatchEvent(new Event('resize'));
+                window.scrollTo(0, 0);
+            }
+            else {
+                document.body.classList.add('fakefullscreen');
+                this.onEnterFullScreen();
+                window.dispatchEvent(new Event('resize'));
+            }
+        }
     };
 
 
