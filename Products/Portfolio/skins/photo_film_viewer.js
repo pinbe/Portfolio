@@ -539,7 +539,6 @@ var FilmSlider;
             this.image.parentNode.classList.remove('selected');
         }
         this._pendImgLoading = false;
-        this.optimizeImg(this.image);
     };
 
     FilmSlider.prototype.updateBreadcrumbs = function(url, title) {
