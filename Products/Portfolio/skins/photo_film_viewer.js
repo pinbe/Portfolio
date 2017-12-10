@@ -83,6 +83,8 @@ var FilmSlider;
         }
         this.stepSizes = (stepSizes) ? stepSizes : DEFAULT_IMAGE_SIZES;
         this.slideShowTimeout = (slideShowTimeout) ? slideShowTimeout : DEFAULT_SLIDESHOW_TIMEOUT;
+        this.fullScreenCapable = getVendorSpecific(document, 'fullScreenEnabled') === true ||
+            getVendorSpecific(document, 'fullscreenEnabled') === true;
 
         var buttons = toolbar.querySelectorAll('a');
         var b, i;
@@ -216,16 +218,19 @@ var FilmSlider;
         document.addEventListener('keypress', function(evt) {
             self.keyPressHandler(evt);
         });
-        var fullScreenEvents = [
-            'fullscreenchange',
-            'mozfullscreenchange',
-            'webkitfullscreenchange',
-            'msfullscreenchange'];
-        var _toggleFullScreen = function() {
-            self.onFullScreenChange();
-        };
-        for(var i = 0; i < fullScreenEvents.length; i++)
-            document.addEventListener(fullScreenEvents[i], _toggleFullScreen);
+
+        if(this.fullScreenCapable) {
+            var fullScreenEvents = [
+                'fullscreenchange',
+                'mozfullscreenchange',
+                'webkitfullscreenchange',
+                'msfullscreenchange'];
+            var _toggleFullScreen = function() {
+                self.onFullScreenChange();
+            };
+            for(var i = 0; i < fullScreenEvents.length; i++)
+                document.addEventListener(fullScreenEvents[i], _toggleFullScreen);
+        }
 
         window.addEventListener('resize', function() {
             self.fitViewer();
@@ -576,11 +581,13 @@ var FilmSlider;
     };
 
     FilmSlider.prototype.toggleFullScreen = function() {
-        if(getVendorSpecific(document, 'fullscreenElement') === null ||
-            getVendorSpecific(document, 'fullScreenElement') === null)
-            callVendorSpecific(this.stretchable, 'requestFullScreen');
-        else
-            callVendorSpecific(document, 'cancelFullScreen');
+        if(this.fullScreenCapable) {
+            if(getVendorSpecific(document, 'fullscreenElement') === null ||
+                getVendorSpecific(document, 'fullScreenElement') === null)
+                callVendorSpecific(this.stretchable, 'requestFullScreen');
+            else
+                callVendorSpecific(document, 'cancelFullScreen');
+        }
     };
 
 
