@@ -640,12 +640,6 @@ th.num {
   opacity: 0;
 }
 
-.fakefullscreen .image_toolbar.zero_opacity:hover {
-  opacity: 1; /* yeah :-) */
-}
-
-
-
 /*
 </dtml-with> 
 </dtml-with>
