@@ -613,6 +613,12 @@ th.num {
   z-index: 4;
 }
 
+.fakefullscreen .image_toolbar i.fa {
+  font-size: 40px;
+  padding: 0 10px;
+}
+
+
 .fakefullscreen .metadata_bar {
   position: fixed;
   right: 0;
