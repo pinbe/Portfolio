@@ -48,14 +48,27 @@ var Lightbox;
                         toolbar,
                         complete,
                         container_type,
-                        orderable) {
+                        orderable,
+                        options) {
         var self = this;
+        options = (options === undefined) ? {} : options;
         this.grid = grid;
         this._buildSlidesIndex(); // set this.slides and this.lastSlide;
         this.fetchingDisabled = false;
         this.complete = complete;
         this.container_type = container_type;
         this.toolbar = toolbar;
+        this._toolbarMinTop = function() {
+            return 0;
+        };
+        if(options.toolbarMagnetEltSelector) {
+            var toolbarMagnetElt = document.querySelector(options.toolbarMagnetEltSelector);
+            if(toolbarMagnetElt)
+                this._toolbarMinTop = function() {
+                    return Math.max(toolbarMagnetElt.getBoundingClientRect().bottom,
+                                    0);
+                };
+        }
         if(toolbar) {
             this.toolbarFixed = false;
             window.addEventListener('scroll', function(evt) {
@@ -133,10 +146,10 @@ var Lightbox;
     };
 
     Lightbox.prototype.windowScrollToolbarlHandler = function() {
-        if(this.toolbar.getBoundingClientRect().top <= 0 &&
+        if(this.toolbar.getBoundingClientRect().top <= this._toolbarMinTop() &&
             !this.toolbarFixed) {
             this.toolbarFixed = true;
-            this.backThreshold = getWindowScrollY() + this.toolbar.getBoundingClientRect().top;
+            this.backThreshold = getWindowScrollY();
             this.switchToolBarPositioning(true);
         }
         else if(this.toolbarFixed && getWindowScrollY() < this.backThreshold) {
@@ -331,7 +344,7 @@ var Lightbox;
             tbs.width = String(this.toolbar.offsetWidth) + 'px';
             tbs.height = String(this.toolbar.offsetHeight) + 'px';
             tbs.position = 'fixed';
-            tbs.top = '0';
+            tbs.top = this._toolbarMinTop() + 'px';
             this.toolbarPlaceholder = document.createElement('div');
             var phs = this.toolbarPlaceholder.style;
             phs.cssText = tbs.cssText;

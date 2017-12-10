@@ -81,7 +81,9 @@
               new Lightbox(document.querySelector('.lightbox'),
                            document.getElementById('lightbox_toolbar'),
                            %(complete)s,
-                           '%(container_type)s');
+                           '%(container_type)s',
+                           undefined,
+                           {toolbarMagnetEltSelector: '#top-bar'});
                            ''' % {'complete' : 'true' if not batch.next else 'false',
                                   'container_type' : options.get('container_type', 'portfolio')}">
       </script>
@@ -94,7 +96,8 @@
                                       document.getElementById('lightbox_toolbar'),
                                       %(complete)s,
                                       '%(container_type)s',
-                                      %(orderable)s);
+                                      %(orderable)s,
+                                      {toolbarMagnetEltSelector: '#top-bar'});
                 var uploadUrl = '%(putUrl)s';
                 var options = {'slideSize' : %(slideSize)d,
                                'thumbnailSize' : %(thumbnailSize)d};

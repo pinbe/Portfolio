@@ -302,7 +302,7 @@ table.metadata_category select:focus {
   justify-content: space-around;
   opacity: 1;
   transition: opacity 500ms;
-  background: rgba(255,255,255, 0.95);
+  background: rgba(255,255,255, 0.85);
   z-index: 1;
 }
 
