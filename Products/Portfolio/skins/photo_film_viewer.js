@@ -477,13 +477,15 @@ var FilmSlider;
         }
         var isDefault = false;
         var charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
-        switch(charPress) {
+        switch(charPress.toLowerCase()) {
             case 'f':
-            case 'F':
                 this.toggleFullScreen();
                 break;
             case ' ' : // space
                 this.toggleSlideShow();
+                break;
+            case 'g' :
+                raiseMouseEvent(this.buttons.back_to_portfolio, 'click');
                 break;
             default:
                 isDefault = true;
