@@ -1,16 +1,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      metal:use-macro="here/main_template/macros/master">
+         metal:use-macro="here/main_template/macros/master">
 
   <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
     <metal:block metal:fill-slot="javascript_head_slot">
       <script type="text/javascript" tal:attributes="src string:$portal_url/cart_widgets.js"></script>
       <script type="text/javascript" tal:attributes="src string:$portal_url/photo_lightbox_viewer.js"></script>
       <tal:block
-        tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent"
-        tal:condition="python: mtool.checkPermission(AddPortalContent, here)">
-        <script type="text/javascript" tal:attributes="src string:$portal_url/js/fileupload.js" charset="utf-8"></script>
-        <script type="text/javascript" tal:attributes="src string:$portal_url/portfolio_upload.js" charset="utf-8"></script>
+               tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent"
+               tal:condition="python: mtool.checkPermission(AddPortalContent, here)">
+        <script type="text/javascript" tal:attributes="src string:$portal_url/js/fileupload.js"
+                charset="utf-8"></script>
+        <script type="text/javascript" tal:attributes="src string:$portal_url/portfolio_upload.js"
+                charset="utf-8"></script>
       </tal:block>
     </metal:block>
     <title>portfolio_view</title>
@@ -27,59 +29,60 @@
     </div>
 
     <div metal:fill-slot="main" tal:omit-tag=""
-         tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent;
-                     ManageProperties modules/Products/CMFCore/permissions/ManageProperties;
-                     dropable python:mtool.checkPermission(AddPortalContent, here);
-                     orderable python:mtool.checkPermission(ManageProperties, here) and here.getDefaultSorting()[0] == 'position';
-                     Batch python:modules['Products.Plinn'].Batch;
-                     pho_start python:request.get('pho_start', 0);
-                     port_start python:request.get('port_start', 0);
-                     portfolios python:Batch(here.listNearestFolderContents(contentFilter={'portal_type' : 'Portfolio'}),
-                                             16, port_start, orphan=1, quantumleap=1, b_start_str='port_start');">
-    <div tal:condition="python:here.hasPresentationPage() and pho_start < 20"
-     tal:content="structure here/presentation_page">custom presentation</div>
-    <div tal:condition="portfolios" tal:omit-tag="">
-      <div tal:define="batch portfolios" tal:omit-tag="">
-        <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
-        <div class="portfolio_lightbox">
-          <a tal:repeat="portfolio batch"
-             tal:attributes="href portfolio/absolute_url">
+             tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent;
+                         ManageProperties modules/Products/CMFCore/permissions/ManageProperties;
+                         dropable python:mtool.checkPermission(AddPortalContent, here);
+                         orderable python:mtool.checkPermission(ManageProperties, here) and here.getDefaultSorting()[0] == 'position';
+                         Batch python:modules['Products.Plinn'].Batch;
+                         pho_start python:request.get('pho_start', 0);
+                         port_start python:request.get('port_start', 0);
+                         portfolios python:Batch(here.listNearestFolderContents(contentFilter={'portal_type' : 'Portfolio'}),
+                                                 16, port_start, orphan=1, quantumleap=1, b_start_str='port_start');">
+      <div tal:condition="python:here.hasPresentationPage() and pho_start < 20"
+           tal:content="structure here/presentation_page">custom presentation
+      </div>
+      <div tal:condition="portfolios" tal:omit-tag="">
+        <div tal:define="batch portfolios" tal:omit-tag="">
+          <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
+          <div class="portfolio_lightbox">
+            <a tal:repeat="portfolio batch"
+                     tal:attributes="href portfolio/absolute_url">
             <span tal:define="sphoto portfolio/samplePhoto" tal:omit-tag="">
               <span tal:condition="sphoto" tal:omit-tag="">
                 <img tal:attributes="src sphoto/src;
-                                     alt sphoto/alt;
-                                     height sphoto/height;
-                                     width sphoto/width;"/>
+                        alt sphoto/alt;
+                        height sphoto/height;
+                        width sphoto/width;"/>
               </span>
               <span tal:condition="not:sphoto" tal:omit-tag="">
                 <img tal:attributes="src here/empty_portfolio.gif/absolute_url;
-                                     alt portfolio/title_or_id"/>
+                        alt portfolio/title_or_id"/>
               </span>
             </span>
-            <h3 tal:content="portfolio/Title">Portfolio title or id</h3>
-            <div tal:content="portfolio/Description"></div>
-          </a>
+              <h3 tal:content="portfolio/Title">Portfolio title or id</h3>
+              <div tal:content="portfolio/Description"></div>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div tal:define="batchInfos python:here.getPhotosInfos(here,
-                                                           request.get('pho_start', 0));
-                     batch batchInfos/batch;
-                     infos batchInfos/infos;
-                     features batchInfos/features"
-         tal:omit-tag="">
-      <form tal:attributes="action string:${here/absolute_url}/portfolio_edit_form" method="post">
-        <div id="lightbox_toolbar" class="image_toolbar">
-          <a tal:attributes="href string:$portal_url/selection_view"
-             i18n:translate="">
-            My selection (<span class="selcpt"
-                                tal:content="python:len(batchInfos['seldict'])"
-                                i18n:name="sellength"></span>)
-          </a>
-          <span tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
-                tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"
-                tal:omit-tag="">
+
+      <div tal:define="batchInfos python:here.getPhotosInfos(here,
+                       request.get('pho_start', 0));
+                       batch batchInfos/batch;
+                       infos batchInfos/infos;
+                       features batchInfos/features"
+           tal:omit-tag="">
+        <form tal:attributes="action string:${here/absolute_url}/portfolio_edit_form" method="post">
+          <div id="lightbox_toolbar" class="image_toolbar">
+            <a tal:attributes="href string:$portal_url/selection_view"
+               i18n:translate="">
+              My selection (<span class="selcpt"
+                                  tal:content="python:len(batchInfos['seldict'])"
+                                  i18n:name="sellength"></span>)
+            </a>
+            <span tal:define="ModifyPortalContent modules/Products/CMFCore/permissions/ModifyPortalContent"
+                  tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"
+                  tal:omit-tag="">
             <span i18n:translate="">sorting:</span>
             <select tal:define="sort_on batchInfos/sorting/sort_on"
                     name="sort_on">
@@ -91,18 +94,18 @@
                       value="modified" i18n:translate="">modification</option>
             </select>
             <button type="submit" name="delete" title="delete"
-                    i18n:attributes="title">
+                     i18n:attributes="title">
               <i class="fa fa-trash"></i>
             </button>
           </span>
-        </div>
+          </div>
 
-        <div metal:use-macro="here/photo_layout_macros/macros/grid">
-          affichage grille
-        </div>
-      </form>
-    </div>
-    <br clear="all"/>
+          <div metal:use-macro="here/photo_layout_macros/macros/grid">
+            affichage grille
+          </div>
+        </form>
+      </div>
+      <br clear="all"/>
     </div>
   </body>
 
