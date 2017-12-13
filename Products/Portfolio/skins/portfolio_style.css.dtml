@@ -19,6 +19,10 @@
   justify-content: center;
 }
 
+.image-wrapper img {
+  position: absolute;
+}
+
 .image-wrapper.selected {
   background: &dtml-medium_image_background;;
 }
