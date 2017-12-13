@@ -365,7 +365,6 @@ table.metadata_category select:focus {
   position:fixed;
   bottom: 0;
   width:100%;
-  /*height: <dtml-var expr="thumb_size/2 + 12">px;*/
 }
 
 .film_bar > div {
@@ -642,6 +641,54 @@ th.num {
 
 .fakefullscreen .image_toolbar.zero_opacity {
   opacity: 0;
+}
+
+
+@media all and (max-width: 800px) {
+  body.pt-photo #content-outer {
+    z-index: 3;
+  }
+
+  .photo_viewer {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    background: radial-gradient(ellipse at center, rgb(59, 59, 59) 0%,rgb(0,0,0) 60%);
+    z-index: 4;
+  }
+
+  .image_toolbar i.fa {
+    font-size: 40px;
+    padding: 0 10px;
+  }
+
+
+  .metadata_bar {
+    position: fixed;
+    right: 0;
+    bottom: 5px;
+    width: unset;
+    background: transparent;
+  }
+
+  .image_metadata {
+    display: none;
+  }
+
+  .image_toolbar {
+    padding: 0 5px;
+    background: rgba(0, 0, 0, 0.60);
+  }
+
+  .image_toolbar.zero_opacity {
+    opacity: 0;
+  }
+
+  #image_toolbar a[name="full_screen"] {
+    display: none;
+  }
 }
 
 /*
