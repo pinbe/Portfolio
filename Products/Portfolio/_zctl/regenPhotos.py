@@ -20,7 +20,7 @@ def main(app, portal_path, userid, skipfile) :
     user = portal.acl_users.getUser(userid)
     sm = getSecurityManager()
     sm._context.user = user
-    
+
     absSkipFilePath = os.path.abspath(os.path.expanduser(skipfile))
     if os.path.exists(absSkipFilePath) :
         skipFile = open(absSkipFilePath, 'r+')
@@ -32,8 +32,7 @@ def main(app, portal_path, userid, skipfile) :
         _skipDict = {}
 
     toSkip = _skipDict.has_key
-    
-    
+
     thumb_size = portal.thumb_size
     ctool = portal.portal_catalog
     brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=1)
@@ -45,10 +44,10 @@ def main(app, portal_path, userid, skipfile) :
                 path = b.getPath()
                 p = b._unrestrictedGetObject()
 
-                print '%d/%d: %s' % (i+1, len(brains), p.absolute_url())
+                print '%d/%d: %s' % (i + 1, len(brains), p.absolute_url())
 
                 try :
-                    if hasattr(p, 'thumbnail'):
+                    if hasattr(p, 'thumbnail') :
                         print 'make thumbnail'
                         delattr(p, 'thumbnail')
                         p.thumb_width = thumb_size
@@ -68,17 +67,17 @@ def main(app, portal_path, userid, skipfile) :
                     zMax = p.tiles_max_zoom
                     zStep = p.tiles_step_zoom
                     levels = range(zMin, zMax + zStep, zStep)
-                    zooms = [l/100. for l in levels]
+                    zooms = [l / 100. for l in levels]
 
                     if p.tileGenerationLock.locked() :
                         print 'skip %s: already tiling.' % p.absolute_url()
                         continue
-                   
+
                     p.tileGenerationLock.acquire()
                     try :
                         ppm = p._getPPM()
                         for zoom in zooms :
-                   
+
                             print 'tiling at', zoom
                             if zoom < 1 :
                                 rppm = ppm.resize(ratio=zoom)
@@ -88,15 +87,17 @@ def main(app, portal_path, userid, skipfile) :
                             del rppm
                             transaction.commit()
                     finally :
-                        try : del ppm
-                        except UnboundLocalError : pass
+                        try :
+                            del ppm
+                        except UnboundLocalError :
+                            pass
                         p.tileGenerationLock.release()
-                    
+
                     try :
                         delattr(p, '_v__methodResultsCache')
-                    except AttributeError:
+                    except AttributeError :
                         pass
-                    
+
                     _skipDict[path] = True
                     skipFile.write('%s\n' % path)
 
@@ -108,7 +109,7 @@ def main(app, portal_path, userid, skipfile) :
                     brains = [b for b in brains if not toSkip(b.getPath())]
                     break
 
-                except KeyboardInterrupt:
+                except KeyboardInterrupt :
                     raise
                 else :
                     p.tiles_available = 1
@@ -118,7 +119,7 @@ def main(app, portal_path, userid, skipfile) :
             else :
                 print 'queue finished.'
                 break
-            
+
         except KeyError :
             print 'Objects deleted during processing'
             portal._p_jar.sync()
@@ -132,14 +133,13 @@ def main(app, portal_path, userid, skipfile) :
             brains = ctool.unrestrictedSearchResults(portal_type='Photo', tiles_available=1)
             brains = [b for b in brains if not toSkip(b.getPath())]
 
-        except KeyboardInterrupt:
+        except KeyboardInterrupt :
             break
-        
-    skipFile.close()
-    
-    
 
-if __name__ == '__main__':
+    skipFile.close()
+
+
+if __name__ == '__main__' :
     parser = ArgumentParser(description="Thumbnails regeneration")
     parser.add_argument('portal_path', help='portal object path')
     parser.add_argument('userid', help='zope user id')
