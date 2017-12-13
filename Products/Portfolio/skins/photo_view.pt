@@ -10,11 +10,6 @@
     <metal:block metal:fill-slot="css_slot">
       <link rel="stylesheet" media="screen"
             tal:attributes="href string:$portal_url/css/perfect-scrollbar.css"/>
-      <style>
-        #content-outer > div:first-child {
-          width: 100%;
-        }
-      </style>
       <style tal:content="structure python:'''
         #portal-logo {
           display: inline-block;

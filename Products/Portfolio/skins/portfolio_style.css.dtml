@@ -296,13 +296,13 @@ table.metadata_category select:focus {
 .image_toolbar {
   white-space: nowrap;
   padding: 3px 0;
-  border-top: 1px solid silver;
-  border-bottom: 1px solid silver;
+  border-top: 1px solid &dtml-image_toolbar_border_color;;
+  border-bottom: 1px solid &dtml-image_toolbar_border_color;;
   display: flex;
   justify-content: space-around;
   opacity: 1;
   transition: opacity 500ms;
-  background: rgba(255,255,255, 0.85);
+  background: &dtml-image_toolbar_background;;
   z-index: 1;
 }
 
