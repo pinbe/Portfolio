@@ -665,7 +665,7 @@ th.num {
   }
 
 
-  .metadata_bar {
+  .photo_viewer .metadata_bar {
     position: fixed;
     right: 0;
     bottom: 5px;
