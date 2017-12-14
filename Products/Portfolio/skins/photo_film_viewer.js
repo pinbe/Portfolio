@@ -136,9 +136,11 @@ var FilmSlider;
         var optiSize = this.getBestFitSize({width: img.width, height: img.height});
         if(currentSize === optiSize) {
             this.adjustImageSize(this.image);
+            this.centerImage();
             return;
         }
 
+        this.centerImage();
         if(this._pendImgLoading)
             return;
         this._pendImgLoading = true;
@@ -190,6 +192,12 @@ var FilmSlider;
 
         img.width = imgWidth * scale;
         img.height = imgHeight * scale;
+    };
+
+    FilmSlider.prototype.centerImage = function() {
+        var rect = this.viewPort.getBoundingClientRect();
+        this.image.style.left = (rect.width - this.image.width) / 2 + 'px';
+        this.image.style.top = (rect.height - this.image.height) / 2 + 'px';
     };
 
     FilmSlider.prototype.centerSlide = function(slide) {
@@ -546,6 +554,7 @@ var FilmSlider;
         this.image.src = this.pendingImage.src;
         this.image.width = this.pendingImage.width;
         this.image.height = this.pendingImage.height;
+        this.centerImage();
         this.image.style.visibility = 'visible';
         if(this.displayedSlideInSelection) {
             this.image.parentNode.classList.add('selected');
