@@ -677,7 +677,7 @@ th.num {
     display: none;
   }
 
-  .image_toolbar {
+  body.pt-photo .image_toolbar {
     padding: 0 5px;
     background: rgba(0, 0, 0, 0.60);
   }
