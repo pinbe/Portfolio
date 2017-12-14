@@ -12,6 +12,7 @@ var FilmSlider;
     // var isAddToSelection = /.*\/add_to_selection$/;
     var DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
     var DEFAULT_SLIDESHOW_TIMEOUT = 4000;
+    var AUTO_FULLSCREEN_THRESHOLD = 800;
 
     var getVendorSpecific, callVendorSpecific;
     (function() {
@@ -85,6 +86,9 @@ var FilmSlider;
         this.slideShowTimeout = (slideShowTimeout) ? slideShowTimeout : DEFAULT_SLIDESHOW_TIMEOUT;
         this.fullScreenCapable = getVendorSpecific(document, 'fullScreenEnabled') === true ||
             getVendorSpecific(document, 'fullscreenEnabled') === true;
+        this._fullScreenMouseMoveHandler = function() {
+            self._showToolbar();
+        };
 
         var buttons = toolbar.querySelectorAll('a');
         var b, i;
@@ -109,6 +113,15 @@ var FilmSlider;
 
     // adjust viewer to available height
     FilmSlider.prototype.fitViewer = function() {
+        /* The following if / else if is used to enable "auto fullscreen"
+           when device' screen is too small to display thumbnails bar and metadata. */
+        if(document.body.getBoundingClientRect().width <= AUTO_FULLSCREEN_THRESHOLD)
+            this.onEnterFullScreen();
+        else if(document.body.getBoundingClientRect().width > AUTO_FULLSCREEN_THRESHOLD &&
+                !(getVendorSpecific(document, 'fullscreenElement') || getVendorSpecific(document, 'fullScreenElement')) &&
+                !document.body.classList.contains('fakefullscreen'))
+            this.onExitFullScreen();
+
         var start = this.stretchable.getBoundingClientRect().top;
         var end = this.stretchable.nextElementSibling.getBoundingClientRect().top;
         this.stretchable.style.height = end - start + 'px';
@@ -591,23 +604,30 @@ var FilmSlider;
         }
         else {
             if(document.body.classList.contains('fakefullscreen')) {
+                // exit fullscreen
                 document.body.classList.remove('fakefullscreen');
-                this.onExitFullScreen();
-                window.dispatchEvent(new Event('resize'));
+                // this.onExitFullScreen();
+                // window.dispatchEvent(new Event('resize'));
+                this.fitViewer();
+                this.onFullScreenChange(false);
                 window.scrollTo(0, 0);
             }
             else {
+                // enter fullscreen
                 document.body.classList.add('fakefullscreen');
-                this.onEnterFullScreen();
-                window.dispatchEvent(new Event('resize'));
+                this.fitViewer();
+                // this.onEnterFullScreen();
+                this.onFullScreenChange(true);
+                // window.dispatchEvent(new Event('resize'));
             }
         }
     };
 
 
-    FilmSlider.prototype.onFullScreenChange = function() {
+    FilmSlider.prototype.onFullScreenChange = function(toggle) {
         if(getVendorSpecific(document, 'fullscreenElement') === null ||
-            getVendorSpecific(document, 'fullScreenElement') === null)
+            getVendorSpecific(document, 'fullScreenElement') === null ||
+            toggle === false)
             this.onExitFullScreen();
         else
             this.onEnterFullScreen();
@@ -619,14 +639,9 @@ var FilmSlider;
         btn.classList.add('fa-compress');
 
         this._showToolbar();
-        this._fullScreenMouseMoveHandler = function() {
-            self._showToolbar();
-        };
-
-        var self = this;
         this.stretchable.addEventListener(
             'mousemove',
-            self._fullScreenMouseMoveHandler);
+            this._fullScreenMouseMoveHandler);
     };
 
     FilmSlider.prototype.onExitFullScreen = function() {
