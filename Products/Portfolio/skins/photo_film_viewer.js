@@ -118,8 +118,8 @@ var FilmSlider;
         if(document.body.getBoundingClientRect().width <= AUTO_FULLSCREEN_THRESHOLD)
             this.onEnterFullScreen();
         else if(document.body.getBoundingClientRect().width > AUTO_FULLSCREEN_THRESHOLD &&
-                !(getVendorSpecific(document, 'fullscreenElement') || getVendorSpecific(document, 'fullScreenElement')) &&
-                !document.body.classList.contains('fakefullscreen'))
+            !(getVendorSpecific(document, 'fullscreenElement') || getVendorSpecific(document, 'fullScreenElement')) &&
+            !document.body.classList.contains('fakefullscreen'))
             this.onExitFullScreen();
 
         var start = this.stretchable.getBoundingClientRect().top;
@@ -253,9 +253,18 @@ var FilmSlider;
                 document.addEventListener(fullScreenEvents[i], _toggleFullScreen);
         }
 
-        window.addEventListener('resize', function() {
+        var _fitViewer = function() {
             self.fitViewer();
-        });
+        };
+        window.addEventListener('resize', _fitViewer);
+        window.addEventListener('orientationchange',
+                                function() {
+                                    /* On iOS with Chrome and Firefox
+                                    * orientationchange is raised too early,
+                                    * so, screen size is up to date after
+                                    * the end of the animation */
+                                    setTimeout(_fitViewer, 250);
+                                });
     };
 
     FilmSlider.prototype.translateImgUrl = function(url) {
