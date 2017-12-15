@@ -41,7 +41,7 @@
                            width python:size[0];
                            height python:size[1];"
                tal:attributes="src string:${here/absolute_url}/getResizedImage?size=600;
-                               alt here/Title;
+                               alt python:('%s - %s' % (here.Title(), here.Description())).strip(' -');
                                width width;
                                height height"/>
         </div>
