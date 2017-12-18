@@ -10,6 +10,7 @@
 ############################################################
 """ container classes for photo storage.
 """
+import json
 
 from AccessControl import ClassSecurityInfo, Unauthorized
 from Globals import InitializeClass
@@ -97,6 +98,14 @@ class Portfolio(HugePlinnFolder) :
         #         return self.randomPhoto()
         #     except Unauthorized :
         #         return self.randomPhoto()
+
+    security.declareProtected(View, 'samplePhotoJson')
+    def samplePhotoJson(self, REQUEST, RESPONSE) :
+        """ return sample photo as json object"""
+        jinfos = json.dumps(self.samplePhoto())
+        RESPONSE.setHeader('Content-Type', 'application/json')
+        RESPONSE.setHeader('Content-Length', len(jinfos))
+        RESPONSE.write(jinfos.encode('utf-8'))
 
     security.declareProtected(View, 'hasPresentationPage')
 
