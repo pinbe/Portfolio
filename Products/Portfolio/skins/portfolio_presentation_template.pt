@@ -33,10 +33,10 @@
           </span>
           <span tal:condition="here/samplePhotoPath" tal:omit-tag="">
             <span tal:define="sample here/samplePhoto" tal:condition="sample" tal:omit-tag="">
-              <img tal:attributes="src sample/src;
-                                   alt sample/alt;
-                                   width sample/width;
-                                   height sample/height"
+              <img tal:attributes="src string:${sample/url}/getThumbnail;
+                                   alt sample/title;
+                                   width sample/thumb_size/width;
+                                   height sample/thumb_size/height"
                    id="sampleImageThumbnail"/>
             </span>
           </span>

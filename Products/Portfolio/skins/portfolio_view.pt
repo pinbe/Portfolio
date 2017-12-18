@@ -49,10 +49,11 @@
                      tal:attributes="href portfolio/absolute_url">
             <span tal:define="sphoto portfolio/samplePhoto" tal:omit-tag="">
               <span tal:condition="sphoto" tal:omit-tag="">
-                <img tal:attributes="src sphoto/src;
-                        alt sphoto/alt;
-                        height sphoto/height;
-                        width sphoto/width;"/>
+                <img tal:attributes="src string:${sphoto/url}/getThumbnail;
+                                     alt sphoto/title;
+                                     width sphoto/thumb_size/width;
+                                     height sphoto/thumb_size/height;
+                                     "/>
               </span>
               <span tal:condition="not:sphoto" tal:omit-tag="">
                 <img tal:attributes="src here/empty_portfolio.gif/absolute_url;

@@ -33,23 +33,14 @@ class Portfolio(HugePlinnFolder) :
         self.samplePhotoPath = None
         self.presentation_page = None
 
-    security.declareProtected(View, 'randomPhoto')
-
     def randomPhoto(self) :
-        " return a ramdom photo or None "
+        """ returns random brain or None """
         ctool = getToolByName(self, 'portal_catalog')
         res = ctool(path='/'.join(self.getPhysicalPath()),
                     portal_type='Photo')
         length = len(res)
         if length :
-            brain = res[randrange(length)]
-            infos = {'src' : '%s/getThumbnail' % brain.getURL()
-                , 'alt' : brain.Title}
-            size = brain.getThumbnailSize
-            infos.update(size)
-            return infos
-        else :
-            return None
+            return res[randrange(length)]
 
     security.declareProtected(ModifyPortalContent, 'setSamplePhoto')
 
@@ -62,24 +53,50 @@ class Portfolio(HugePlinnFolder) :
     security.declareProtected(View, 'samplePhoto')
 
     def samplePhoto(self) :
-        """ returns sample photo or random photo if not found.
+        """ returns sample photo infos dict.
+            May be random if no sample photo has been set.
+            May be empty dict.
         """
-        if self.samplePhotoPath is None :
-            return self.randomPhoto()
-        else :
+
+        infos = {}
+        brain = None
+        if self.samplePhotoPath :
             try :
                 sample = self.restrictedTraverse(self.samplePhotoPath)
-                infos = {'src' : '%s/getThumbnail' % sample.absolute_url()
-                    , 'alt' : sample.Title()}
-                size = sample.getThumbnailSize()
-                infos.update(size)
-                return infos
+                infos['url'] =  sample.absolute_url()
+                infos['title'] = sample.Title()
+                infos['thumb_size'] = sample.getThumbnailSize()
 
             except (KeyError, NotFound) :
                 self.samplePhotoPath = None
-                return self.randomPhoto()
+                brain = self.randomPhoto()
             except Unauthorized :
-                return self.randomPhoto()
+                brain = self.randomPhoto()
+        else :
+            brain = self.randomPhoto()
+
+        if brain :
+            infos['url'] = brain.getURL()
+            infos['title'] = brain.Title
+            infos['thumb_size'] = brain.getThumbnailSize
+
+        return infos
+        # if self.samplePhotoPath is None :
+        #     return self.randomPhoto()
+        # else :
+        #     try :
+        #         sample = self.restrictedTraverse(self.samplePhotoPath)
+        #         infos = {'src' : '%s/getThumbnail' % sample.absolute_url()
+        #             , 'alt' : sample.Title()}
+        #         size = sample.getThumbnailSize()
+        #         infos.update(size)
+        #         return infos
+        #
+        #     except (KeyError, NotFound) :
+        #         self.samplePhotoPath = None
+        #         return self.randomPhoto()
+        #     except Unauthorized :
+        #         return self.randomPhoto()
 
     security.declareProtected(View, 'hasPresentationPage')
 
