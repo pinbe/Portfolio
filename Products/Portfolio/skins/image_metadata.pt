@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <head>
+    <title>Metadata macros</title>
+  </head>
+  <body>
+    <div  metal:define-macro="image_metadata"
+          tal:omit-tag=""
+          i18n:domain="portfolio">
+      <span tal:define="title here/Title"
+            tal:condition="title"
+            tal:omit-tag="">
+        <span class="photographer"
+              tal:define="creator here/Creator"
+              tal:content="python:'%s :' % creator"
+              tal:condition="creator">Benoît Pin</span>
+        <span class="title_summary" tal:content="title"></span>
+      </span>
+      <div tal:condition="here/showDateTimeOriginal|nothing"
+           tal:content="python:here.DateTimeOriginal().strftime(_('%m/%d/%Y %H:%M:%S'))"></div>
+      <div class="description"
+           tal:content="here/Description"></div>
+      <div tal:define="keywords here/Subject"
+           tal:condition="keywords">
+        <h4 i18n:translate="">Keywords</h4>
+        <ul class="keywords"
+            tal:define="mq nocall:modules/ZTUtils/make_query;
+                        kwurl python:lambda k: '%s/search?%s' % (portal_url, mq(Subject=k, portal_type=['Photo']))">
+          <li tal:repeat="k keywords">
+            <a tal:content="k" tal:attributes="href python:kwurl(k)">bla</a>
+          </li>
+        </ul>
+      </div>
+      <div><span i18n:translate="" tal:omit-tag="">reference:</span> <span tal:replace="context/getId">bidule.jpg</span>
+      </div>
+      <div tal:define="rights here/Rights"
+               tal:condition="rights"
+               tal:content="python:rights.startswith('©') and rights or '© %s' % rights"></div>
+      <div tal:define="ViewRawImage python:modules['Products.Portfolio.permissions'].ViewRawImage"
+               tal:condition="python:mtool.checkPermission(ViewRawImage, here)"
+              style="font-weight:bold; margin-top:1em">
+        <a tal:attributes="href string:${here/absolute_url}/photo_download" i18n:translate="">download picture</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -71,61 +71,11 @@
                i18n:attributes="title">
               <i class="fa fa-expand"></i>
             </a>
-            <!--?<a tal:define="selected contextInfos/isSelected;-->
-                           <!--?msg python:selected and 'Retirer de la sélection' or 'Ajouter à la sélection';-->
-                           <!--?action python:selected and 'remove_to_selection' or 'add_to_selection';-->
-                           <!--?imgSrc python:'%s/%s' % (portal_url, selected and 'unselect_flag_btn.gif' or 'select_flag_btn.gif');"-->
-               <!--?tal:attributes="href python:'%s/%s' % (here.absolute_url(), action); title msg">-->
-              <!--?<img tal:attributes="src imgSrc; alt msg" width="31" height="27"-->
-                   <!--?name="toggle_selection"/>-->
-            <!--?</a>-->
-            <!--?<div style="display:inline;position:relative">-->
-              <!--?<div id="cart_slide"></div>-->
-              <!--?<a tal:attributes="href python:'%s/get_slide_buyable_items' % here.absolute_url();-->
-                                 <!--?class python:(contextInfos.get('buyable') and [None] or['hidden'])[0]"-->
-                 <!--?title="Add to cart" i18n:attributes="title">-->
-                <!--?<img width="31" height="27" alt="Add to cart" name="show_buyable"-->
-                     <!--?tal:attributes="src string:$portal_url/cart_btn.gif" i18n:attributes="alt"/>-->
-              <!--?</a>-->
-            <!--?</div>-->
-            <!--?<img tal:attributes="src string:${portal_url}/imgtoolbar_sep.gif" style="padding:0" width="2" height="27" alt="|" />-->
-            <!--?<a title="Edit metadata"-->
-               <!--?tal:define="ModifyPortalContent python:modules['Products.CMFCore'].permissions.ModifyPortalContent"-->
-               <!--?tal:condition="python:mtool.checkPermission(ModifyPortalContent, here)"-->
-               <!--?tal:attributes="href string:${here/absolute_url}/photo_edit_form"-->
-               <!--?i18n:attributes="title">-->
-              <!--?<img tal:attributes="src string:${portal_url}/edit_metadata_btn.gif" width="31" height="27" alt="Edit metadata" i18n:attributes="alt"-->
-                   <!--?name="edit_metadata"/>-->
-            <!--?</a>-->
-          </div>
-          <div id="image_metadata" class="image_metadata">
-            <div  metal:define-macro="image_metadata" tal:omit-tag="">
-              <span tal:define="title here/Title" tal:condition="title" tal:omit-tag="">
-                <span class="photographer" tal:define="creator here/Creator" tal:content="python:'%s :' % creator" tal:condition="creator">Benoît PIN</span>
-                <span class="title_summary" tal:content="title"></span>
-              </span>
-              <div tal:condition="here/showDateTimeOriginal|nothing"
-                   tal:content="python:here.DateTimeOriginal().strftime(_('%m/%d/%Y %H:%M:%S'))"></div>
-              <div class="description" tal:content="here/Description"></div>
-              <div tal:define="keywords here/Subject" tal:condition="keywords">
-                <h4 i18n:translate="">Keywords</h4>
-                <ul class="keywords"
-                    tal:define="mq nocall:modules/ZTUtils/make_query;
-                                kwurl python:lambda k: '%s/search?%s' % (portal_url, mq(Subject=k, portal_type=['Photo']))">
-                  <li tal:repeat="k keywords"><a tal:content="k" tal:attributes="href python:kwurl(k)">bla</a></li>
-                </ul>
-              </div>
-              <div><span i18n:translate="" tal:omit-tag="">reference:</span> <span tal:replace="context/getId">bidule.jpg</span></div>
-              <div tal:define="rights here/Rights"
-                   tal:condition="rights"
-                   tal:content="python:rights.startswith('©') and rights or '© %s' % rights"></div>
-              <div tal:define="ViewRawImage python:modules['Products.Portfolio.permissions'].ViewRawImage"
-                   tal:condition="python:mtool.checkPermission(ViewRawImage, here)" style="font-weight:bold; margin-top:1em">
-                   <a tal:attributes="href string:${here/absolute_url}/photo_download" i18n:translate="">download picture</a>
-              </div>
-            </div>
           </div>
 
+          <div id="image_metadata" class="image_metadata">
+            <div metal:use-macro="here/image_metadata/macros/image_metadata">Metadata display</div>
+          </div>
         </div>
       </div>
 

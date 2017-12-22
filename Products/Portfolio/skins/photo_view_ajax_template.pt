@@ -12,7 +12,7 @@
                                    img_id imgId;
                                    buyable options/buyable"/>
   <fragment id="image_metadata"><span tal:replace="structure string:&lt;![CDATA[" />
-    <div metal:use-macro="here/photo_view/macros/image_metadata">image metadata</div>
+    <div metal:use-macro="here/image_metadata/macros/image_metadata">image metadata</div>
   <span tal:replace="structure string:]]>" /></fragment>
   <fragment id="BC_Object_URL" tal:content="options/lastBcUrl"></fragment>
   <tal:block tal:define="dummy python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')"/>
