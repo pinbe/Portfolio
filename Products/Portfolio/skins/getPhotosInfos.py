@@ -18,7 +18,9 @@ if mtool.isAnonymousUser() :
         features['select'] = toggleSelection
 else :
     features['select'] = toggleSelection
-features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.getURL()
+
+# TODO: activer le panier
+# features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.getURL()
 
 if mtool.checkPermission(ReviewPortalContent, context) :
     features['hideAnonymous'] = True
