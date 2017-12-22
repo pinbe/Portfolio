@@ -13,7 +13,11 @@ def toggleSelection(o, selected) :
     else :
         return '%s/add_to_selection' % o.getURL()
     
-features['select'] = toggleSelection
+if mtool.isAnonymousUser() :
+    if context.anonymous_selection_allowed :
+        features['select'] = toggleSelection
+else :
+    features['select'] = toggleSelection
 features['cart'] = lambda o : '%s/get_slide_buyable_items' % o.getURL()
 
 if mtool.checkPermission(ReviewPortalContent, context) :
