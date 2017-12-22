@@ -54,20 +54,35 @@
 }
 
 .photo_viewer ul.keywords {
-  padding: 0 0 1em 0;
-  margin:0;
-  text-align:left;
+  margin: 1em 0;
+  list-style: none;
 }
 
 .photo_viewer .keywords li {
+  position: relative;
   display: inline;
-  padding-left: 10px;
-  background: url(&dtml-portal_url;/keyword_sep.gif) left no-repeat;
+  /*margin-right: 1em;*/
+  white-space: nowrap;
+  text-align: left;
+  /*padding-left: 10px;*/
+  /*background: url(&dtml-portal_url;/keyword_sep.gif) left no-repeat;*/
 }
 
+.photo_viewer .keywords li:before {
+  content: "#";
+  color: &dtml-linkColor;;
+  margin-right: -4px;
+  /*position: absolute;*/
+  /*left: -9px;*/
+}
+.photo_viewer .keywords li:hover:before {
+  color: &dtml-linkHoverColor;;
+}
+
+
 .photo_viewer .keywords li:first-child {
-  padding-left:0;
-  background:none;
+  /*padding-left:0;*/
+  /*background:none;*/
 }
 
 

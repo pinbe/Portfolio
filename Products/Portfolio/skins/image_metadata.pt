@@ -23,7 +23,6 @@
            tal:content="here/Description"></div>
       <div tal:define="keywords here/Subject"
            tal:condition="keywords">
-        <h4 i18n:translate="">Keywords</h4>
         <ul class="keywords"
             tal:define="mq nocall:modules/ZTUtils/make_query;
                         kwurl python:lambda k: '%s/search?%s' % (portal_url, mq(Subject=k, portal_type=['Photo']))">
