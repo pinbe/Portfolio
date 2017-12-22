@@ -74,8 +74,11 @@
                        features batchInfos/features"
            tal:omit-tag="">
         <form tal:attributes="action string:${here/absolute_url}/portfolio_edit_form" method="post">
-          <div id="lightbox_toolbar" class="image_toolbar">
-            <a tal:attributes="href string:$portal_url/selection_view"
+          <div id="lightbox_toolbar"
+               class="image_toolbar"
+               tal:condition="python:features">
+            <a tal:condition="python:features.has_key('select')"
+               tal:attributes="href string:$portal_url/selection_view"
                i18n:translate="">
               My selection (<span class="selcpt"
                                   tal:content="python:len(batchInfos['seldict'])"
