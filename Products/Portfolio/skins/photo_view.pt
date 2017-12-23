@@ -91,6 +91,7 @@
     <div metal:fill-slot="footer" tal:omit-tag="">
       <div metal:use-macro="here/viewThreadsAtBottom/macros/threadsDisplay" />
     </div>
+    <div metal:fill-slot="main_footer" tal:replace="nothing"></div>
   </body>
 
 </html>
