@@ -382,7 +382,7 @@ table.metadata_category select:focus {
 
 .film_bar > div {
   white-space: nowrap;
-  display: flex;
+  display: inline-flex;
 }
 
 .film_bar > div > span {
