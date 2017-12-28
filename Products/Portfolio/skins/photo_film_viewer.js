@@ -536,6 +536,9 @@ var FilmSlider;
                     var dest = document.getElementById(element.getAttribute('id'));
                     if(dest) {
                         dest.innerHTML = element.firstChild.nodeValue;
+                        var scripts = dest.getElementsByTagName('script')
+                        for (var j=0 ; j<scripts.length ; j++)
+                            globalScriptRegistry.loadScript(scripts[j]);
                     }
                     break;
                 case 'imageattributes' :

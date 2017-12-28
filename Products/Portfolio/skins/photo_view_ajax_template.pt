@@ -13,6 +13,10 @@
                                    buyable options/buyable"/>
   <fragment id="image_metadata"><span tal:replace="structure string:&lt;![CDATA[" />
     <div metal:use-macro="here/image_metadata/macros/image_metadata">image metadata</div>
+    <tal:block tal:define="analytics_template nocall:here/analytics_template|nothing"
+               tal:condition="analytics_template">
+      <script metal:use-macro="analytics_template/macros/virtual_pageview"></script>
+    </tal:block>
   <span tal:replace="structure string:]]>" /></fragment>
   <fragment id="BC_Object_URL" tal:content="options/lastBcUrl"></fragment>
   <tal:block tal:define="dummy python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')"/>
