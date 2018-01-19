@@ -21,8 +21,6 @@
       <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>
       <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>
       <script type="text/javascript" tal:attributes="src string:${portal_url}/js/perfect-scrollbar.min.js"></script>
-    <!--?<script type="text/javascript" tal:attributes="src string:${portal_url}/navigateur.js"></script>-->
-    <!--?<script type="text/javascript" tal:attributes="src string:${portal_url}/mosaique.js"></script>-->
     </metal:block>
     <title>photo_view</title>
   </head>
@@ -36,14 +34,11 @@
       <div class="photo_viewer">
         <div class="image-wrapper"
              tal:attributes="class python:('image-wrapper %s' % ('selected' if contextInfos['isSelected'] else '')).strip()">
-          <img tal:define="dummy python:here.getOrSetSessionVar(key='preferedImageSize', value=(600, 600));
-                           size python:here.getResizedImageSize(request);
-                           width python:size[0];
-                           height python:size[1];"
+          <img tal:define="size python:here.getResizedImageSize(size=(600, 600))"
                tal:attributes="src string:${here/absolute_url}/getResizedImage?size=600;
                                alt python:('%s - %s' % (here.Title(), here.Description())).strip(' -');
-                               width width;
-                               height height"/>
+                               width python:size[0];
+                               height python:size[1]"/>
         </div>
         <div class="metadata_bar">
           <div id="image_toolbar" class="image_toolbar">
