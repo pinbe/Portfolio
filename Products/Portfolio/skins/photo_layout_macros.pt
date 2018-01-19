@@ -118,8 +118,7 @@
           <span tal:repeat="info contextInfos/infos">
             <a tal:attributes="href info/href;
                                title info/title;
-                               class info/className;
-                               portfolio:position info/index;">
+                               class info/className;">
               <img tal:define="size info/thumbSize"
                    tal:attributes="src python:info['src'] if info['displayed'] else blank_img;
                                    alt info/title;
@@ -132,7 +131,6 @@
 
       <script type="text/javascript"
               tal:content="python:'''
-              var startSlideShow, slideShowNext, stopSlideShow;
               (function(){
               var ctxInfos = {center: %(center)s,
                               ctxUrlTranslation : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
