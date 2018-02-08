@@ -118,6 +118,12 @@ class Photo(DynamicType, CMFCatalogAware, BasePhoto, DefaultDublinCoreImpl) :
         """
         return self.getXmpValue('dc:rights')
 
+    security.declareProtected(ModifyPortalContent, 'setTitle')
+
+    def setTitle(self, title) :
+        # will be reindexed by editMetadata
+        self.editMetadata(**{'dc:title': title})
+
     security.declareProtected(ModifyPortalContent, 'editMetadata')
 
     def editMetadata(self, **kw) :
