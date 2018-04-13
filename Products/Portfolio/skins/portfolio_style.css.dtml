@@ -144,7 +144,7 @@ table.metadata_category select:focus {
 
 .portfolio_lightbox a {
   background: &dtml-portfolio_slide_background;;
-  color: &dtml-fontColor;;
+  color: #ddd;
   display:block;
   width: <dtml-var expr="thumb_size + 16">px;
   height: <dtml-var expr="thumb_size + 102">px;
@@ -157,7 +157,8 @@ table.metadata_category select:focus {
   overflow:hidden;
 }
 
-.portfolio_lightbox a:hover {
+.portfolio_lightbox a:hover,
+.portfolio_lightbox a:hover h3 {
   background:&dtml-portfolio_slide_hover_background;;
   color: &dtml-linkHoverColor;; 
 }
@@ -167,10 +168,12 @@ table.metadata_category select:focus {
 }
 
 .portfolio_lightbox h3 {
+  color: #ddd;
   margin:5px 0;
   padding:0 8px;
   text-align:left;
 }
+
 .portfolio_lightbox div {
   padding:0 8px;
   text-align:left;
