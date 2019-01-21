@@ -45,12 +45,12 @@
             <a title="Previous" rel="prev" name="previous"
                tal:attributes="href contextInfos/previous"
                i18n:attributes="title">
-              <i class="fa fa-arrow-left"></i>
+              <i class="fa fa-angle-left"></i>
             </a>
             <a title="Next" rel="next" name="next"
                tal:attributes="href contextInfos/next"
                i18n:attributes="title">
-              <i class="fa fa-arrow-right"></i>
+              <i class="fa fa-angle-right"></i>
             </a>
             <a title="Slide show" name="slide_show" href="#"
                i18n:attributes="title">
