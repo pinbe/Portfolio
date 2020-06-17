@@ -267,11 +267,13 @@ table.metadata_category select:focus {
 }
 
 .lightbox a.button.selection i::before {
-  content: "\f11d"; /* fa-flag-o */
+  content: "\f024"; /* far fa-flag */
+  font-weight: 400;
 }
 
 .lightbox .selected a.button.selection i::before {
-  content: "\f024"; /* fa-flag */
+  content: "\f024"; /* fas fa-flag */
+  font-weight: 900;
 }
 
 .lightbox input.button.cb {
@@ -287,12 +289,14 @@ table.metadata_category select:focus {
 }
 
 .lightbox input.button.cb + label.fa:before {
-  content: "\f096";
+  content: "\f0c8"; /* far fa-square */
+  font-weight: 400;
 }
 
 
 .lightbox input.button.cb:checked + label.button.fa:before {
-  content: "\f046";
+  content: "\f14a"; /* far fa-check-square */
+  font-weight: 400;
 }
 
 .lightbox input.button.cb:checked + label.button.fa {
@@ -336,11 +340,11 @@ table.metadata_category select:focus {
   align-self: center;
 }
 
-.image_toolbar i.fa {
+.image_toolbar i.fas {
   font-size: 30px;
   padding: 0 5px;
 }
-.image_toolbar button i.fa {
+.image_toolbar button i.fas {
   color: &dtml-highLightColor;;
 }
 

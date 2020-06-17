@@ -99,7 +99,7 @@
             </select>
             <button type="submit" name="delete" title="delete"
                      i18n:attributes="title">
-              <i class="fa fa-trash"></i>
+              <i class="fas fa-trash-alt"></i>
             </button>
           </span>
           </div>

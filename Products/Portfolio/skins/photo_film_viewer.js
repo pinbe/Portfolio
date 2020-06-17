@@ -656,8 +656,8 @@ var FilmSlider;
 
     FilmSlider.prototype.onEnterFullScreen = function() {
         var btn = this.buttons.full_screen.querySelector('i');
-        btn.classList.remove('fa-expand');
-        btn.classList.add('fa-compress');
+        btn.classList.remove('fa-expand-arrows-alt');
+        btn.classList.add('fa-compress-arrows-alt');
 
         this._showToolbar();
         this.stretchable.addEventListener(
@@ -667,8 +667,8 @@ var FilmSlider;
 
     FilmSlider.prototype.onExitFullScreen = function() {
         var btn = this.buttons.full_screen.querySelector('i');
-        btn.classList.remove('fa-compress');
-        btn.classList.add('fa-expand');
+        btn.classList.remove('fa-compress-arrows-alt');
+        btn.classList.add('fa-expand-arrows-alt');
         clearTimeout(this.toolBarTimeoutID);
         this.toolbar.classList.remove('zero_opacity'); // just to be pretty
         this.stretchable.removeEventListener('mousemove',

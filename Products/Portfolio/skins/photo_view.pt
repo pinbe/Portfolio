@@ -45,26 +45,26 @@
             <a title="Previous" rel="prev" name="previous"
                tal:attributes="href contextInfos/previous"
                i18n:attributes="title">
-              <i class="fa fa-angle-left"></i>
+              <i class="fas fa-angle-left"></i>
             </a>
             <a title="Next" rel="next" name="next"
                tal:attributes="href contextInfos/next"
                i18n:attributes="title">
-              <i class="fa fa-angle-right"></i>
+              <i class="fas fa-angle-right"></i>
             </a>
             <a title="Slide show" name="slide_show" href="#"
                i18n:attributes="title">
-              <i class="fa fa-play"></i>
+              <i class="fas fa-play"></i>
             </a>
             <i class="sep"></i>
             <a title="Back to portfolio…" rel="index" name="back_to_portfolio"
                tal:attributes="href contextInfos/backUrl"
                i18n:attributes="title" tal:on-error="string:">
-              <i class="fa fa-th"></i>
+              <i class="fas fa-th"></i>
             </a>
             <a title="Full screen (f)" name="full_screen" href="#"
                i18n:attributes="title">
-              <i class="fa fa-expand"></i>
+              <i class="fas fa-expand-arrows-alt"></i>
             </a>
           </div>
 
