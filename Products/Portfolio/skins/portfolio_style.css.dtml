@@ -22,7 +22,7 @@
 }
 
 .image-wrapper.selected {
-  background: &dtml-medium_image_background;;
+  background: &dtml-selected_medium_image_background;;
 }
 
 .photo_viewer .metadata_bar {
@@ -61,19 +61,14 @@
 .photo_viewer .keywords li {
   position: relative;
   display: inline;
-  /*margin-right: 1em;*/
   white-space: nowrap;
   text-align: left;
-  /*padding-left: 10px;*/
-  /*background: url(&dtml-portal_url;/keyword_sep.gif) left no-repeat;*/
 }
 
 .photo_viewer .keywords li:before {
   content: "#";
   color: &dtml-linkColor;;
   margin-right: -4px;
-  /*position: absolute;*/
-  /*left: -9px;*/
 }
 .photo_viewer .keywords li:hover:before {
   color: &dtml-linkHoverColor;;
@@ -144,7 +139,7 @@ table.metadata_category select:focus {
 
 .portfolio_lightbox a {
   background: &dtml-portfolio_slide_background;;
-  color: #ddd;
+  color: &dtml-portfolio_slide_text_color;;
   display:block;
   width: <dtml-var expr="thumb_size + 16">px;
   height: <dtml-var expr="thumb_size + 102">px;
@@ -160,7 +155,7 @@ table.metadata_category select:focus {
 .portfolio_lightbox a:hover,
 .portfolio_lightbox a:hover h3 {
   background:&dtml-portfolio_slide_hover_background;;
-  color: &dtml-linkHoverColor;; 
+  color: &dtml-linkHoverColor;;
 }
 
 .portfolio_lightbox img {
@@ -168,7 +163,6 @@ table.metadata_category select:focus {
 }
 
 .portfolio_lightbox h3 {
-  color: #ddd;
   margin:5px 0;
   padding:0 8px;
   text-align:left;
@@ -358,33 +352,15 @@ table.metadata_category select:focus {
   display: inline-block;
   /*position: relative;*/
   height: 24px;
-  border-left: 1px solid silver;
+  border-left: 1px solid &dtml-image_toolbar_border_color;;
 }
 
-/*.image_toolbar {*/
-  /*background: url(&dtml-portal_url;/image_toolbar_bg.gif) repeat-x;*/
-  /*position:relative;*/
-  /*z-index:3;*/
-  /*font-size:12px;*/
-  /*white-space:nowrap;*/
-/*}*/
-
-/*.image_toolbar span {*/
-	/*vertical-align:9px;*/
-/*}*/
-
-/*
-.image_toolbar img {
-  margin-left: 4px;
-  border:0;
-}*/
-
 .film_bar {
-  background:#555;
-  overflow:hidden;
-  position:fixed;
+  background: &dtml-filmbar_background;;
+  overflow: hidden;
+  position: fixed;
   bottom: 0;
-  width:100%;
+  width: 100%;
 }
 
 .film_bar > div {
@@ -404,13 +380,13 @@ table.metadata_category select:focus {
   align-items: center;
 }
 
-.film_bar a:hover, 
+.film_bar a:hover,
 .film_bar a.selected {
-  background:#727272;
+  background: &dtml-filmbar_hover_img_background;;
 }
 
 .film_bar a.displayed {
-  background:#bfbfbf;
+  background: &dtml-filmbar_displayed_img_background;;
 }
 
 #cart_slide {

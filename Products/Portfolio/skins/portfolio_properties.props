@@ -1,4 +1,4 @@
-medium_image_background:string=#fff
+selected_medium_image_background:string=#fff
 metadata_bar_background:string=#f6f6f6
 photographer_font_color:string=#000
 title_font_color:string=#000
@@ -14,6 +14,10 @@ metadata_input_focus_background:string=#fff
 metadata_input_border_focus_color:string=#96b6d6
 portfolio_slide_background:string=#555
 portfolio_slide_hover_background:string=#606060
+portfolio_slide_text_color:string=#000
 slide_background:string=#e0e0e0
 slide_hover_background:string=#ebebeb
 slide_selected_background:string=#e6ecf2
+filmbar_background:string=#fff
+filmbar_displayed_img_background:string=#bfbfbf
+filmbar_hover_img_background:string=#e8e8e8
