@@ -1,8 +1,6 @@
 /*
 <dtml-with base_properties>
 <dtml-with portfolio_properties>
-
-
 */
 /* Photo / Portfolio */
 .photo_viewer {
