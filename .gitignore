@@ -1,0 +1,7 @@
+node_modules/
+*.pyc
+*.egg-info
+.DS_Store
+*~
+jsbuild/
+.idea

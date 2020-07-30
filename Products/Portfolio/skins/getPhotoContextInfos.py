@@ -70,5 +70,5 @@ return {'infos' : infos,
 		'index' : index,
 		'previous' : previous,
 		'next' : next,
-		'reBaseCtxUrl':'null',
-		'canonicalUrl':'null'}
+		'reBaseCtxUrl': None,
+		'canonicalUrl': None}

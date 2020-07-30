@@ -18,8 +18,8 @@
         }''' % here.base_properties.fontMenuSize"></style>
     </metal:block>
     <metal:block metal:fill-slot="javascript_head_slot">
-      <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>
-      <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>
+<!--?      <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>-->
+<!--?      <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>-->
       <script type="text/javascript" tal:attributes="src string:${portal_url}/js/perfect-scrollbar.min.js"></script>
     </metal:block>
     <title>photo_view</title>

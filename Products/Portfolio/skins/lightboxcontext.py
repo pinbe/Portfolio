@@ -94,8 +94,8 @@ contextInfos = {'infos':infos,
                 'index' : posOfPhoto,
                 'previous' : previous,
                 'next' : next,
-                'reBaseCtxUrl':'/^%s/' % ('%s/lightboxcontext/' % lightboxUrl).replace('/', '\/'),
-                'canonicalUrl': "'%s/'" % portal_url}
+                'reBaseCtxUrl':'^%s' % ('%s/lightboxcontext/' % lightboxUrl).replace('/', '\/'),
+                'canonicalUrl': '%s/' % portal_url}
 
 options['contextInfos'] = contextInfos
 

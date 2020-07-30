@@ -113,7 +113,12 @@
     </div>
     <div metal:define-macro="film_bar" tal:omit-tag="">
       <nav class="film_bar"
-           tal:define="blank_img string:$portal_url/transparent.gif">
+           tal:define="blank_img string:$portal_url/transparent.gif;
+                       json_dumps python: modules['Products.Plinn.utils'].json_dumps"
+           tal:attributes="data-filmSliderContext python:json_dumps(
+                  {'center': contextInfos['index'],
+                   'reBaseCtxUrl' : contextInfos['reBaseCtxUrl'],
+                   'canonicalUrl' : contextInfos['canonicalUrl']})">
         <div>
           <span tal:repeat="info contextInfos/infos">
             <a tal:attributes="href info/href;
@@ -128,29 +133,8 @@
           </span>
         </div>
       </nav>
-
       <script type="text/javascript"
-              tal:content="python:'''
-              (function(){
-              var ctxInfos = {center: %(center)s,
-                              ctxUrlTranslation : [%(reBaseCtxUrl)s, %(canonicalUrl)s]};
-              fs = new FilmSlider(document.querySelector('.photo_viewer'),
-                             document.querySelector('.photo_viewer .image-wrapper img'),
-                             document.querySelector('.film_bar'),
-                             ctxInfos,
-                             document.querySelector('.image_toolbar'),
-                             document.getElementById('Breadcrumbs'));
-
-              new PerfectScrollbar(document.querySelector('.film_bar'), {
-                suppressScrollY: true
-              });
-
-              })();
-              ''' % {'filmLength' : len(contextInfos['infos']),
-                     'center' : index,
-                     'reBaseCtxUrl' : contextInfos['reBaseCtxUrl'],
-                     'canonicalUrl' : contextInfos['canonicalUrl']}">
-      </script>
+              tal:attributes="src here/portfolio/jsbuild/photo_view.js/absolute_url"></script>
     </div>
   </body>
 </html>
