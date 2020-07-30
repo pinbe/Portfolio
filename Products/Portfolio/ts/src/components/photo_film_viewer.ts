@@ -480,8 +480,8 @@ export class FilmSlider {
         if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
             return;
         }
-        var isDefault = false;
-        var charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
+        let isDefault = false;
+        const charPress = String.fromCharCode((evt.keyCode) ? evt.keyCode : evt.which);
         switch (charPress.toLowerCase()) {
             case 'f':
                 this.toggleFullScreen();
@@ -502,24 +502,19 @@ export class FilmSlider {
     }
 
     populateViewer(req: XMLHttpRequest) {
-        var elements = req.responseXML.documentElement.childNodes;
-        var i, element;
+        const elements = req.responseXML.documentElement.childNodes;
+        let i, element;
         for (i = 0; i < elements.length; i++) {
             element = <Element>elements[i];
             switch (element.nodeName) {
                 case 'fragment' :
-                    var dest = document.getElementById(element.getAttribute('id'));
+                    const dest = document.getElementById(element.getAttribute('id'));
                     if (dest) {
                         dest.innerHTML = element.firstChild.nodeValue;
-                        var scripts = dest.getElementsByTagName('script');
-                        if (scripts.length > 0)
-                            console.warn('scripts founds:', scripts);
-                        // for (var j = 0; j < scripts.length; j++)
-                        //     globalScriptRegistry.loadScript(scripts[j]);
                     }
                     break;
                 case 'imageattributes' :
-                    var link = this.buttons.back_to_portfolio;
+                    const link = this.buttons.back_to_portfolio;
                     link.href = element.getAttribute('back_to_context_url');
                     // link = this.buttons.show_buyable.parentNode;
                     // var buyable = element.getAttribute('buyable');
@@ -561,14 +556,14 @@ export class FilmSlider {
     }
 
     startThumbnailsLoadQueue() {
-        var thumbnails = this.film.getElementsByTagName('img');
+        const thumbnails = this.film.getElementsByTagName('img');
         if (thumbnails.length === 1) {
             return;
         }
         this.thumbnailsLoadingOrder = [];
-        var leftSize = this.center;
-        var rightSize = thumbnails.length - this.center - 1;
-        var i;
+        const leftSize = this.center;
+        const rightSize = thumbnails.length - this.center - 1;
+        let i;
         for (i = 1; i <= Math.min(leftSize, rightSize); i++) {
             this.thumbnailsLoadingOrder.push(thumbnails[this.center + i]);
             this.thumbnailsLoadingOrder.push(thumbnails[this.center - i]);
@@ -582,7 +577,7 @@ export class FilmSlider {
                 this.thumbnailsLoadingOrder.push(thumbnails[i]);
             }
         }
-        var next = this.thumbnailsLoadingOrder.shift();
+        const next = this.thumbnailsLoadingOrder.shift();
         next.addEventListener('load', () => {
             this._loadNextThumb();
         });
@@ -626,7 +621,7 @@ export class FilmSlider {
     }
 
     onEnterFullScreen() {
-        var btn = this.buttons.full_screen.querySelector('i');
+        const btn = this.buttons.full_screen.querySelector('i');
         btn.classList.remove('fa-expand-arrows-alt');
         btn.classList.add('fa-compress-arrows-alt');
 
@@ -637,7 +632,7 @@ export class FilmSlider {
     }
 
     onExitFullScreen() {
-        var btn = this.buttons.full_screen.querySelector('i');
+        const btn = this.buttons.full_screen.querySelector('i');
         btn.classList.remove('fa-compress-arrows-alt');
         btn.classList.add('fa-expand-arrows-alt');
         clearTimeout(this.toolBarTimeoutID);
@@ -650,16 +645,15 @@ export class FilmSlider {
     _showToolbar() {
         this.toolbar.classList.remove('zero_opacity');
         clearTimeout(this.toolBarTimeoutID);
-        var self = this;
         this.toolBarTimeoutID = setTimeout(
-            function () {
-                self.toolbar.classList.add('zero_opacity');
+            () => {
+                this.toolbar.classList.add('zero_opacity');
             },
             3500);
     }
 
     toggleSlideShow() {
-        var slideShowBtn = this.buttons.slide_show.querySelector('i');
+        const slideShowBtn = this.buttons.slide_show.querySelector('i');
         if (slideShowBtn.classList.contains('fa-play')) {
             this._startSlideShow();
         } else {
@@ -668,30 +662,29 @@ export class FilmSlider {
     }
 
     _startSlideShow() {
-        var slideShowBtn = this.buttons.slide_show.querySelector('i');
+        const slideShowBtn = this.buttons.slide_show.querySelector('i');
         slideShowBtn.classList.remove('fa-play');
         slideShowBtn.classList.add('fa-pause');
-        var self = this;
         this.slideShowIntervalId = setInterval(
-            function () {
-                if (!self.loadSibling(false)) {
-                    var firstSlide = self.film.querySelector('span');
+            () => {
+                if (!this.loadSibling(false)) {
+                    const firstSlide = this.film.querySelector('span');
                     raiseMouseEvent(firstSlide.querySelector('a'), 'click');
-                    self.centerSlide(firstSlide);
+                    this.centerSlide(firstSlide);
                 }
             },
             this.slideShowTimeout);
     }
 
     _stopSlideShow() {
-        var slideShowBtn = this.buttons.slide_show.querySelector('i');
+        const slideShowBtn = this.buttons.slide_show.querySelector('i');
         slideShowBtn.classList.remove('fa-pause');
         slideShowBtn.classList.add('fa-play');
         clearInterval(this.slideShowIntervalId);
     }
 
     _loadNextThumb() {
-        var next = this.thumbnailsLoadingOrder.shift();
+        const next = this.thumbnailsLoadingOrder.shift();
         if (!next) {
             return;
         }
