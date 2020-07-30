@@ -2,7 +2,6 @@ import {FilmSlider} from "./components/photo_film_viewer";
 import PerfectScrollbar from "perfect-scrollbar";
 
 window.addEventListener('load', () => {
-    console.info('current script:',document.currentScript);
     const bar = document.querySelector('.film_bar');
     const ctx = JSON.parse(bar.getAttribute('data-filmSliderContext'));
     new FilmSlider(
