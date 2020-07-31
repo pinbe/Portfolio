@@ -8,19 +8,12 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
     <metal:block metal:fill-slot="css_slot">
-      <link rel="stylesheet" media="screen"
-            tal:attributes="href string:$portal_url/css/perfect-scrollbar.css"/>
       <style tal:content="structure python:'''
         #portal-logo {
           display: inline-block;
           height: %s;
           width: auto;
         }''' % here.base_properties.fontMenuSize"></style>
-    </metal:block>
-    <metal:block metal:fill-slot="javascript_head_slot">
-<!--?      <script type="text/javascript" tal:attributes="src string:${portal_url}/cart_widgets.js"></script>-->
-<!--?      <script type="text/javascript" tal:attributes="src string:${portal_url}/photo_film_viewer.js"></script>-->
-      <script type="text/javascript" tal:attributes="src string:${portal_url}/js/perfect-scrollbar.min.js"></script>
     </metal:block>
     <title>photo_view</title>
   </head>

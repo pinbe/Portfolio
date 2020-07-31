@@ -1,5 +1,6 @@
 import {FilmSlider} from "./components/photo_film_viewer";
 import PerfectScrollbar from "perfect-scrollbar";
+import "../node_modules/perfect-scrollbar/css/perfect-scrollbar.css";
 
 window.addEventListener('load', () => {
     const bar = document.querySelector('.film_bar');
