@@ -1,85 +1,85 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal"
-      xmlns:portfolio="http://xml.plinn.org/namespaces/portoflio"
-      metal:use-macro="here/main_template/macros/master"
-      >
+<metal:block metal:define-macro="master">
+  <html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:tal="http://xml.zope.org/namespaces/tal"
+        xmlns:metal="http://xml.zope.org/namespaces/metal"
+        xmlns:portfolio="http://xml.plinn.org/namespaces/portoflio"
+        metal:use-macro="here/main_template/macros/master">
+    <head>
+      <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+      <metal:block metal:fill-slot="css_slot">
+        <style tal:content="structure python:'''
+          #portal-logo {
+            display: inline-block;
+            height: %s;
+            width: auto;
+          }''' % here.base_properties.fontMenuSize"></style>
+      </metal:block>
+      <title>photo_view</title>
+    </head>
 
-  <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    <metal:block metal:fill-slot="css_slot">
-      <style tal:content="structure python:'''
-        #portal-logo {
-          display: inline-block;
-          height: %s;
-          width: auto;
-        }''' % here.base_properties.fontMenuSize"></style>
-    </metal:block>
-    <title>photo_view</title>
-  </head>
-
-  <body i18n:domain="portfolio">
-    <div metal:fill-slot="main_no_tabs" tal:omit-tag=""
-         tal:define="contextInfos options/contextInfos|here/getPhotoContextInfos;
-                     index contextInfos/index;
-                     translate nocall:modules/Products/Portfolio/utils/translate;
-                     _ python:lambda msg : translate(msg, here)">
-      <div class="photo_viewer">
-        <div class="image-wrapper"
-             tal:attributes="class python:('image-wrapper %s' % ('selected' if contextInfos['isSelected'] else '')).strip()">
-          <img tal:define="size python:here.getResizedImageSize(size=(600, 600))"
-               tal:attributes="src string:${here/absolute_url}/getResizedImage?size=600;
-                               alt python:('%s - %s' % (here.Title(), here.Description())).strip(' -');
-                               width python:size[0];
-                               height python:size[1]"/>
-        </div>
-        <div class="metadata_bar">
-          <div id="image_toolbar" class="image_toolbar">
-            <a title="Previous" rel="prev" name="previous"
-               tal:attributes="href contextInfos/previous"
-               i18n:attributes="title">
-              <i class="fas fa-angle-left"></i>
-            </a>
-            <a title="Next" rel="next" name="next"
-               tal:attributes="href contextInfos/next"
-               i18n:attributes="title">
-              <i class="fas fa-angle-right"></i>
-            </a>
-            <a title="Slide show" name="slide_show" href="#"
-               i18n:attributes="title">
-              <i class="fas fa-play"></i>
-            </a>
-            <i class="sep"></i>
-            <a title="Back to portfolio…" rel="index" name="back_to_portfolio"
-               tal:attributes="href contextInfos/backUrl"
-               i18n:attributes="title" tal:on-error="string:">
-              <i class="fas fa-th"></i>
-            </a>
-            <a title="Full screen (f)" name="full_screen" href="#"
-               i18n:attributes="title">
-              <i class="fas fa-expand-arrows-alt"></i>
-            </a>
+    <body i18n:domain="portfolio">
+      <div metal:fill-slot="main_no_tabs" tal:omit-tag=""
+           tal:define="contextInfos options/contextInfos|here/getPhotoContextInfos;
+                       index contextInfos/index;
+                       translate nocall:modules/Products/Portfolio/utils/translate;
+                       _ python:lambda msg : translate(msg, here)">
+        <div class="photo_viewer">
+          <div class="image-wrapper"
+               tal:attributes="class python:('image-wrapper %s' % ('selected' if contextInfos['isSelected'] else '')).strip()">
+            <img tal:define="size python:here.getResizedImageSize(size=(600, 600))"
+                 tal:attributes="src string:${here/absolute_url}/getResizedImage?size=600;
+                                 alt python:('%s - %s' % (here.Title(), here.Description())).strip(' -');
+                                 width python:size[0];
+                                 height python:size[1]"/>
           </div>
+          <div class="metadata_bar">
+            <div id="image_toolbar" class="image_toolbar">
+              <a title="Previous" rel="prev" name="previous"
+                 tal:attributes="href contextInfos/previous"
+                 i18n:attributes="title">
+                <i class="fas fa-angle-left"></i>
+              </a>
+              <a title="Next" rel="next" name="next"
+                 tal:attributes="href contextInfos/next"
+                 i18n:attributes="title">
+                <i class="fas fa-angle-right"></i>
+              </a>
+              <a title="Slide show" name="slide_show" href="#"
+                 i18n:attributes="title">
+                <i class="fas fa-play"></i>
+              </a>
+              <i class="sep"></i>
+              <a title="Back to portfolio…" rel="index" name="back_to_portfolio"
+                 tal:attributes="href contextInfos/backUrl"
+                 i18n:attributes="title" tal:on-error="string:">
+                <i class="fas fa-th"></i>
+              </a>
+              <a title="Full screen (f)" name="full_screen" href="#"
+                 i18n:attributes="title">
+                <i class="fas fa-expand-arrows-alt"></i>
+              </a>
+            </div>
 
-          <div id="image_metadata" class="image_metadata">
-            <div metal:use-macro="here/image_metadata/macros/image_metadata">Metadata display</div>
+            <div id="image_metadata" class="image_metadata">
+              <div metal:use-macro="here/image_metadata/macros/image_metadata">Metadata display</div>
+              <div metal:define-slot="side-bar"
+                   tal:omit-tag=""></div>
+            </div>
           </div>
         </div>
+
+        <!-- film bar -->
+        <div metal:use-macro="here/photo_layout_macros/macros/film_bar">
+          film bar
+        </div>
+
       </div>
 
-      <!-- film bar -->
-      <div metal:use-macro="here/photo_layout_macros/macros/film_bar">
-        film bar
+      <div metal:fill-slot="footer" tal:omit-tag="">
+        <div metal:use-macro="here/viewThreadsAtBottom/macros/threadsDisplay" />
       </div>
 
-    </div>
-
-
-
-    <div metal:fill-slot="footer" tal:omit-tag="">
-      <div metal:use-macro="here/viewThreadsAtBottom/macros/threadsDisplay" />
-    </div>
-    <div metal:fill-slot="main_footer" tal:replace="nothing"></div>
-  </body>
-
-</html>
+      <div metal:fill-slot="main_footer" tal:replace="nothing"></div>
+    </body>
+  </html>
+</metal:block>

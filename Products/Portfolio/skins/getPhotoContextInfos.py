@@ -71,4 +71,5 @@ return {'infos' : infos,
 		'previous' : previous,
 		'next' : next,
 		'reBaseCtxUrl': None,
-		'canonicalUrl': None}
+		'canonicalUrl': None,
+		'cmf_uid' : contextUid}
