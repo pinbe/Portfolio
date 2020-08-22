@@ -252,7 +252,7 @@ export class FilmSlider {
         return slide;
     }
 
-    addEventListeners() {
+    private addEventListeners() {
         this.filmBar.addEventListener('click', (evt) => {
             this.thumbnailClickHandler(evt);
         });
@@ -374,78 +374,6 @@ export class FilmSlider {
                 this.toggleSlideShow();
                 break;
 
-            /*
-            case 'toggle_selection':
-                evt.preventDefault();
-                evt.stopPropagation();
-                button = target;
-                link = button.parentNode;
-                link.blur();
-
-                var req = new XMLHttpRequest();
-                url = link.href;
-                req.open("POST", url, true);
-                req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-                req.send("ajax=1");
-
-                // toggle button
-                var parts = url.split('/');
-                var canonicalImgUrl = parts.slice(0, parts.length - 1).join('/');
-
-                if(isAddToSelection.test(url)) {
-                    button.src = portal_url() + '/unselect_flag_btn.gif';
-                    button.alt = link.title = 'Retirer de la sélection';
-                    link.href = canonicalImgUrl + '/remove_to_selection';
-                    this.displayedSlide.classList.add('selected');
-                    this.image.parentNode.classList.add('selected');
-                    this.displayedSlideInSelection = true;
-                }
-                else {
-                    button.src = portal_url() + '/select_flag_btn.gif';
-                    button.alt = link.title = 'Ajouter à la sélection';
-                    link.href = canonicalImgUrl + '/add_to_selection';
-                    this.displayedSlide.classList.remove('selected');
-                    this.image.parentNode.classList.remove('selected');
-                    this.displayedSlideInSelection = false;
-                }
-                break;
-
-            case 'show_buyable':
-                evt.preventDefault();
-                evt.stopPropagation();
-                button = target;
-                link = button.parentNode;
-                link.blur();
-                var slide = this.cartSlide;
-                slide.innerHTML = '';
-                slide.style.visibility = 'visible';
-                var cw = new CartWidget(slide, link.href);
-                cw.onCancel = function() {
-                    CartWidget.prototype.onCancel.apply(this);
-                    slide.style.visibility = 'hidden';
-                };
-                cw.onAfterConfirm = function() {
-                    slide.style.visibility = 'hidden';
-                };
-                break;
-
-
-
-
-            case 'edit_metadata' :
-                evt.preventDefault();
-                evt.stopPropagation();
-                target.blur();
-                if (this.viewMode === 'full') {
-                    this.mosaique.unload();
-                    this.mosaique = null;
-                    this.viewMode = 'medium';
-                    return;
-                }
-                var fi = new FragmentImporter(absolute_url());
-                fi.useMacro('metadata_edit_form_macros', 'iptc', 'image_metadata');
-                break;
-            */
             default:
                 isDefault = true;
         }

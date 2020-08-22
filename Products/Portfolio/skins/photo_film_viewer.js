@@ -311,37 +311,6 @@ var FilmSlider;
                                               });
         this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + bestFitSize;
 
-        // update buttons
-        // var fullScreenLink = this.buttons.full_screen.parentNode;
-        // fullScreenLink.href = canonicalImgUrl + '/zoom_view';
-        //
-        // var toggleSelectionBtn = this.buttons.toggle_selection;
-        // var toggleSelectionLink = toggleSelectionBtn.parentNode;
-        // this.displayedSlideInSelection = target.classList.contains('selected');
-        // if(this.displayedSlideInSelection) {
-        //     toggleSelectionBtn.src = portal_url() + '/unselect_flag_btn.gif';
-        //     toggleSelectionBtn.alt = toggleSelectionLink.title = 'Retirer de la sélection';
-        //     toggleSelectionLink.href = canonicalImgUrl + '/remove_to_selection';
-        // }
-        // else {
-        //     toggleSelectionBtn.src = portal_url() + '/select_flag_btn.gif';
-        //     toggleSelectionBtn.alt = toggleSelectionLink.title = 'Ajouter à la sélection';
-        //     toggleSelectionLink.href = canonicalImgUrl + '/add_to_selection';
-        // }
-        //
-        // var showBuyableButtonLink = this.buttons.show_buyable.parentNode;
-        // showBuyableButtonLink.href = canonicalImgUrl + '/get_slide_buyable_items';
-        // this.cartSlide.innerHTML = '';
-        // this.cartSlide.style.visibility = 'hidden';
-
-
-        // var metadataButton = this.buttons.edit_metadata;
-        // if(metadataButton) {
-        //     var metadataEditLink = metadataButton.parentNode;
-        //     metadataEditLink.href = canonicalImgUrl + '/photo_edit_form';
-        // }
-
-
         var req = new XMLHttpRequest();
         req.onreadystatechange = function() {
             switch(req.readyState) {
@@ -398,79 +367,6 @@ var FilmSlider;
             case 'slide_show' :
                 this.toggleSlideShow();
                 break;
-
-            /*
-            case 'toggle_selection':
-                evt.preventDefault();
-                evt.stopPropagation();
-                button = target;
-                link = button.parentNode;
-                link.blur();
-
-                var req = new XMLHttpRequest();
-                url = link.href;
-                req.open("POST", url, true);
-                req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-                req.send("ajax=1");
-
-                // toggle button
-                var parts = url.split('/');
-                var canonicalImgUrl = parts.slice(0, parts.length - 1).join('/');
-
-                if(isAddToSelection.test(url)) {
-                    button.src = portal_url() + '/unselect_flag_btn.gif';
-                    button.alt = link.title = 'Retirer de la sélection';
-                    link.href = canonicalImgUrl + '/remove_to_selection';
-                    this.displayedSlide.classList.add('selected');
-                    this.image.parentNode.classList.add('selected');
-                    this.displayedSlideInSelection = true;
-                }
-                else {
-                    button.src = portal_url() + '/select_flag_btn.gif';
-                    button.alt = link.title = 'Ajouter à la sélection';
-                    link.href = canonicalImgUrl + '/add_to_selection';
-                    this.displayedSlide.classList.remove('selected');
-                    this.image.parentNode.classList.remove('selected');
-                    this.displayedSlideInSelection = false;
-                }
-                break;
-
-            case 'show_buyable':
-                evt.preventDefault();
-                evt.stopPropagation();
-                button = target;
-                link = button.parentNode;
-                link.blur();
-                var slide = this.cartSlide;
-                slide.innerHTML = '';
-                slide.style.visibility = 'visible';
-                var cw = new CartWidget(slide, link.href);
-                cw.onCancel = function() {
-                    CartWidget.prototype.onCancel.apply(this);
-                    slide.style.visibility = 'hidden';
-                };
-                cw.onAfterConfirm = function() {
-                    slide.style.visibility = 'hidden';
-                };
-                break;
-
-
-
-
-            case 'edit_metadata' :
-                evt.preventDefault();
-                evt.stopPropagation();
-                target.blur();
-                if (this.viewMode === 'full') {
-                    this.mosaique.unload();
-                    this.mosaique = null;
-                    this.viewMode = 'medium';
-                    return;
-                }
-                var fi = new FragmentImporter(absolute_url());
-                fi.useMacro('metadata_edit_form_macros', 'iptc', 'image_metadata');
-                break;
-            */
             default:
                 isDefault = true;
         }
