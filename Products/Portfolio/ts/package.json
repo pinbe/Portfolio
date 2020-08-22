@@ -20,7 +20,8 @@
     "ts-loader": "^8.0.2",
     "typescript": "^3.9.7",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "webpack-obfuscator": "^1.11.0"
   },
   "dependencies": {
     "perfect-scrollbar": "^1.5.0"
