@@ -10,9 +10,11 @@
                                    back_to_context_url options/backToContextUrl;
                                    last_bc_url options/lastBcUrl;
                                    img_id imgId;
-                                   buyable options/buyable"/>
+                                   buyable options/buyable;
+                                   cmf_uid options/cmf_uid"/>
   <fragment id="image_metadata"><span tal:replace="structure string:&lt;![CDATA[" />
     <div metal:use-macro="here/image_metadata/macros/image_metadata">image metadata</div>
+    <div id="sale-options"></div>
     <tal:block tal:define="analytics_template nocall:here/analytics_template|nothing"
                tal:condition="analytics_template">
       <script metal:use-macro="analytics_template/macros/virtual_pageview"></script>

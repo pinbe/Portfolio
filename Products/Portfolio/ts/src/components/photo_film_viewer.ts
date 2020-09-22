@@ -9,6 +9,7 @@ const keyLeft = 37, keyRight = 39;
 const DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
 const DEFAULT_SLIDESHOW_TIMEOUT = 4000;
 const AUTO_FULLSCREEN_THRESHOLD = 800;
+const PHOTO_LOADED_EVENT = 'PHOTO_LOADED_EVENT';
 
 const ua = navigator.userAgent.toLowerCase();
 let vendorPrefix = '';
@@ -431,7 +432,7 @@ export class FilmSlider {
 
     populateViewer(req: XMLHttpRequest) {
         const elements = req.responseXML.documentElement.childNodes;
-        let i, element;
+        let i, element, cmf_uid;
         for (i = 0; i < elements.length; i++) {
             element = <Element>elements[i];
             switch (element.nodeName) {
@@ -444,19 +445,15 @@ export class FilmSlider {
                 case 'imageattributes' :
                     const link = this.buttons.back_to_portfolio;
                     link.href = element.getAttribute('back_to_context_url');
-                    // link = this.buttons.show_buyable.parentNode;
-                    // var buyable = element.getAttribute('buyable');
-                    // if(buyable === 'True') {
-                    //     link.className = null;
-                    // }
-                    // else if(buyable === 'False') {
-                    //     link.className = 'hidden';
-                    // }
                     this.image.alt = element.getAttribute('alt');
                     this.updateBreadcrumbs(element.getAttribute('last_bc_url'),
                         element.getAttribute('img_id'));
+                    cmf_uid = element.getAttribute('cmf_uid');
                     break;
             }
+        }
+        if (cmf_uid) {
+            document.dispatchEvent(new CustomEvent(PHOTO_LOADED_EVENT, {detail: {cmf_uid: cmf_uid}}));
         }
     }
 
