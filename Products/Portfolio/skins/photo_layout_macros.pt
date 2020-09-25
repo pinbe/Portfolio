@@ -50,13 +50,6 @@
                      i18n:attributes="title">
                     <i class="fa"></i>
                   </a>
-<!--?                  <a class="button slide-cart"-->
-<!--?                     name="add_to_cart" title="Add to cart"-->
-<!--?                     tal:condition="python:info.get('buyable')"-->
-<!--?                     tal:attributes="href python:features['cart'](info['o'])"-->
-<!--?                     i18n:attributes="title">-->
-<!--?                    <i class="fas fa-cart-arrow-down"></i>-->
-<!--?                  </a>-->
                   <a class="button slide-del"
                      title="Delete"
                      tal:condition="python:features.has_key('del')"

@@ -38,7 +38,7 @@ if pptool :
         buyable = False
 else :
     buyable = False
-options['buyable'] = buyable
+
 
 infos = []
 posOfPhoto = 0
@@ -50,6 +50,8 @@ if ajax == True :
     relPhotoPath = '/'.join(photo.getPhysicalPath()[portalDepth:])
     lastBcUrl = '%s/lightboxcontext/%s' % (lightboxUrl, relPhotoPath)
     options['lastBcUrl'] = lastBcUrl
+    options['buyable'] = buyable
+    options['cmf_uid'] = photouid
     app = context.restrictedTraverse('/')
     meth = app.restrictedTraverse(photo.getPhysicalPath() + ('photo_view_ajax_template',))
     return meth(**options)
@@ -90,6 +92,8 @@ else :
 
 contextInfos = {'infos':infos,
                 'isSelected': selDict.has_key(photouid),
+                'buyable' : buyable,
+                'cmf_uid' : photouid,
                 'backUrl' : '%s?b_start:int=%s' % (lightboxUrl, posOfPhoto/bsize*bsize),
                 'index' : posOfPhoto,
                 'previous' : previous,

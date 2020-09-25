@@ -432,7 +432,7 @@ export class FilmSlider {
 
     populateViewer(req: XMLHttpRequest) {
         const elements = req.responseXML.documentElement.childNodes;
-        let i, element, cmf_uid;
+        let i, element, cmf_uid, buyable = false;
         for (i = 0; i < elements.length; i++) {
             element = <Element>elements[i];
             switch (element.nodeName) {
@@ -449,11 +449,18 @@ export class FilmSlider {
                     this.updateBreadcrumbs(element.getAttribute('last_bc_url'),
                         element.getAttribute('img_id'));
                     cmf_uid = element.getAttribute('cmf_uid');
+                    buyable = element.getAttribute('buyable') == 'True';
                     break;
             }
         }
         if (cmf_uid) {
-            document.dispatchEvent(new CustomEvent(PHOTO_LOADED_EVENT, {detail: {cmf_uid: cmf_uid}}));
+            document.dispatchEvent(new CustomEvent(PHOTO_LOADED_EVENT,
+                {
+                    detail: {
+                        cmf_uid: cmf_uid,
+                        buyable: buyable
+                    }
+                }));
         }
     }
 
