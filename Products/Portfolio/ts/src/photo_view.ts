@@ -20,4 +20,4 @@ function main() {
 
 }
 
-$(()=>main());
+$(() => main());

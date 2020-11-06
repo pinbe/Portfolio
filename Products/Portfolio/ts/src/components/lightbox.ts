@@ -1,3 +1,5 @@
+import {FormManager} from "plinn/src/components/form_manager";
+
 const getWindowScrollY = (window.scrollY !== undefined) ?
     function () {
         return window.scrollY;
@@ -73,6 +75,9 @@ const isTrident = ua.indexOf('trident') !== -1;
 const isGecko = (!isTrident &&
     (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
 
+interface LightboxOptions {
+    toolbarMagnetEltSelector?: string;
+}
 
 export class Lightbox {
     private readonly grid: HTMLDivElement;
@@ -99,13 +104,14 @@ export class Lightbox {
     private pendingMovedSlides: HTMLDivElement[];
     private draggedSelection: HTMLDivElement[];
     private dragged: HTMLElement;
+    private fm: FormManager;
 
     constructor(grid: HTMLDivElement,
                 toolbar: HTMLDivElement,
                 complete: boolean,
                 container_type: string,
                 orderable: boolean,
-                options: any = {}) {
+                options: LightboxOptions = {} ) {
         this.grid = grid;
         this._buildSlidesIndex(); // set this.slides and this.lastSlide;
         this.fetchingDisabled = false;
@@ -148,20 +154,12 @@ export class Lightbox {
             (evt) => this.mouseClickHandler(evt));
 
 
-        /** TODO !
-         */
-        // if(this.form) {
-        //     var fm = this.fm = new FormManager(this.form);
-        //     this.form.addEventListener('change', function(evt) {
-        //         self.onChangeHandler(evt);
-        //     });
-        //     fm.onBeforeSubmit = function(fm_, evt) {
-        //         return self.onBeforeSubmit(fm_, evt);
-        //     };
-        //     fm.onResponseLoad = function(req) {
-        //         return self.onResponseLoad(req);
-        //     };
-        // }
+        if(this.form) {
+            const fm = this.fm = new FormManager(this.form);
+            this.form.addEventListener('change', (evt) =>this.onChangeHandler(evt));
+            fm.onBeforeSubmit = (fm_) => this.onBeforeSubmit(fm_);
+            fm.onResponseLoad = (req) => this.onResponseLoad(req);
+        }
 
         // drag and drop
         this.disableDefaultDragging();
@@ -308,24 +306,19 @@ export class Lightbox {
             } else {
                 this.disableDDOrdering();
             }
-            /**
-             * TODO: FormManager
-             */
-            // this.fm.submitButton = {'name': 'set_sorting', 'value': 'ok'};
-            // this.fm.submit(evt);
+            this.fm.submitButton = {'name': 'set_sorting', 'value': 'ok'};
+            this.fm.submit(evt);
         }
     }
 
-    /**
-     * TODO: FormManager
-     */
-    // private onBeforeSubmit(fm) {
-    //     switch(fm.submitButton.name) {
-    //         case 'delete' :
-    //             this.hideSelection();
-    //             break;
-    //     }
-    // }
+    private onBeforeSubmit(fm: FormManager): string {
+        switch(fm.submitButton.name) {
+            case 'delete' :
+                this.hideSelection();
+                return '';
+        }
+        return '';
+    }
 
     private onResponseLoad(req: XMLHttpRequest) {
         switch (req.responseXML.documentElement.nodeName) {
@@ -336,16 +329,11 @@ export class Lightbox {
                 this.showSelection();
                 break;
             case 'sorted' :
-                /** TODO FormManager
-                 *
-                 */
-                // this.fm.submitButton = undefined;
+                this.fm.submitButton = undefined;
                 this.refreshGrid();
                 break;
             default :
-                /** TODO: FormManager
-                 */
-                // this.fm.loadResponse(req);
+                this.fm.loadResponse(req);
                 break;
         }
     }
