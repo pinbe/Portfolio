@@ -1,4 +1,5 @@
 import {FormManager} from "plinn/src/components/form_manager";
+import {getCopyOfNode} from "plinn/src/components/utils";
 
 const getWindowScrollY = (window.scrollY !== undefined) ?
     function () {
@@ -44,32 +45,6 @@ function absolute_url(): string {
     }
 }
 
-function getCopyOfNode(node: Node): Node {
-    const ELEMENT_NODE = 1;
-    const TEXT_NODE = 3;
-    switch (node.nodeType) {
-        case ELEMENT_NODE:
-            const attributes = (<Element>node).attributes;
-            const childs = node.childNodes;
-
-            const e = document.createElement(node.nodeName);
-
-            for (let i = 0; i < attributes.length; i++) {
-                const attribute = attributes[i];
-                e.setAttribute(attribute.name, attribute.value);
-            }
-
-            for (let i = 0; i < childs.length; i++) {
-                e.appendChild(getCopyOfNode(childs[i]));
-            }
-            return e;
-
-        case TEXT_NODE:
-            return document.createTextNode(node.nodeValue);
-    }
-}
-
-
 const ua = navigator.userAgent.toLocaleLowerCase();
 const isTrident = ua.indexOf('trident') !== -1;
 const isGecko = (!isTrident &&
@@ -80,7 +55,7 @@ interface LightboxOptions {
 }
 
 export class Lightbox {
-    private readonly grid: HTMLDivElement;
+    public readonly grid: HTMLDivElement;
     private fetchingDisabled: boolean;
     private complete: boolean;
     private readonly container_type: string;
@@ -111,7 +86,7 @@ export class Lightbox {
                 complete: boolean,
                 container_type: string,
                 orderable: boolean,
-                options: LightboxOptions = {} ) {
+                options: LightboxOptions = {}) {
         this.grid = grid;
         this._buildSlidesIndex(); // set this.slides and this.lastSlide;
         this.fetchingDisabled = false;
@@ -154,9 +129,9 @@ export class Lightbox {
             (evt) => this.mouseClickHandler(evt));
 
 
-        if(this.form) {
+        if (this.form) {
             const fm = this.fm = new FormManager(this.form);
-            this.form.addEventListener('change', (evt) =>this.onChangeHandler(evt));
+            this.form.addEventListener('change', (evt) => this.onChangeHandler(evt));
             fm.onBeforeSubmit = (fm_) => this.onBeforeSubmit(fm_);
             fm.onResponseLoad = (req) => this.onResponseLoad(req);
         }
@@ -312,7 +287,7 @@ export class Lightbox {
     }
 
     private onBeforeSubmit(fm: FormManager): string {
-        switch(fm.submitButton.name) {
+        switch (fm.submitButton.name) {
             case 'delete' :
                 this.hideSelection();
                 return '';
@@ -479,11 +454,11 @@ export class Lightbox {
 
     private fetchTail() {
         const req = new XMLHttpRequest();
-        req.addEventListener('load', (e) =>{
+        req.addEventListener('load', (e) => {
             const resp = <XMLHttpRequest>e.target;
-                    if (resp.status === 200) {
-                        this._appendTail(req);
-                    }
+            if (resp.status === 200) {
+                this._appendTail(req);
+            }
         });
 
         const url = absolute_url() +
@@ -520,7 +495,7 @@ export class Lightbox {
     };
 
 
-    private disableDefaultDragging(element: Element=null) {
+    private disableDefaultDragging(element: Element = null) {
         if (isGecko) {
             /* on gecko browser, <img> and <a> elements have default dragging behavior
             *  that must be disabled in order to drag only the slide container */

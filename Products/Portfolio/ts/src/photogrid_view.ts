@@ -1,5 +1,6 @@
 import {Lightbox} from "./components/lightbox";
 import * as $ from "jquery";
+import {DDImageUploader} from "./components/ddimgupload";
 
 function main() {
     const lightboxWrapper = document.querySelector<HTMLDivElement>('.lightbox');
@@ -16,7 +17,11 @@ function main() {
     );
 
     if(options.dropable) {
-        console.log('TODO: upload drop support !');
+        new DDImageUploader(lb,
+            options.putUrl,
+            {slideSize: options.slideSize,
+            thumbnailSize: options.thumbnailSize}
+            );
     }
 }
 

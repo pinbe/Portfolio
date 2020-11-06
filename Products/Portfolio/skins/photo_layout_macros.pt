@@ -23,7 +23,11 @@
         {'complete': bool(not batch.next),
         'container_type' : options.get('container_type', 'portfolio'),
         'orderable' : orderable,
-        'dropable': dropable});">
+        'dropable': dropable,
+        'putUrl' : '%s/put_upload' % here.absolute_url() if dropable else None,
+        'slideSize' : portal_object.slide_size,
+        'thumbnailSize' : portal_object.thumb_size,
+        });">
         <div metal:define-macro="thumbnails"
              tal:omit-tag="">
           <tal:block tal:repeat="info infos">
