@@ -1,194 +1,172 @@
-/*
-* 2008-2017 Benoit Pin - MINES ParisTech
-* http://plinn.org
-* Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
-*/
+import {FormManager} from "plinn/src/components/form_manager";
+import {
+    clearSelection,
+    getWindowHeight,
+    getWindowScrollY,
+    absolute_url,
+    getCopyOfNode
+} from "plinn/src/components/utils";
+
+const ua = navigator.userAgent.toLocaleLowerCase();
+const isTrident = ua.indexOf('trident') !== -1;
+const isGecko = (!isTrident &&
+    (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
 
 
-var Lightbox;
+enum ContainerType {
+    PORTFOLIO = 'portfolio',
+    LIGHTBOX = 'lightbox',
+    SELECTION = 'selection'
+}
 
-(function() {
-
-    var getWindowScrollY = (window.scrollY !== undefined) ?
-        function() {
-            return window.scrollY;
-        } :
-        function() {
-            return document.documentElement.scrollTop;
-        };
-
-    var getWindowHeight = (window.innerHeight !== undefined) ?
-        function() {
-            return window.innerHeight;
-        } :
-        function() {
-            return document.documentElement.clientHeight;
-        };
-
-    var clearSelection = function() {
-        if(window.getSelection) {
-            if(window.getSelection().empty) {  // Chrome
-                window.getSelection().empty();
-            } else if(window.getSelection().removeAllRanges) {  // Firefox
-                window.getSelection().removeAllRanges();
-            }
-        } else if(document.selection) {  // IE?
-            document.selection.empty();
-        }
+export class Lightbox {
+    private readonly grid: HTMLDivElement;
+    private fetchingDisabled: boolean;
+    private complete: boolean;
+    private readonly container_type: ContainerType;
+    private readonly toolbar: HTMLDivElement;
+    private _toolbarMinTop: () => number;
+    private toolbarFixed: boolean;
+    private _resizeWindowToolbarListener: () => void;
+    private lastCBChecked: HTMLInputElement;
+    private readonly form: HTMLFormElement;
+    private fm: FormManager;
+    private _DDOrderingListeners: {
+        dragstart: (evt: Event) => void;
+        dragover: (evt: Event) => void;
+        dragend: (evt: Event) => void
     };
+    private slides: HTMLDivElement[];
+    private lastSlide: HTMLDivElement;
+    private backThreshold: number;
+    private toolbarPlaceholder: HTMLDivElement;
+    private cbIndex: HTMLInputElement[];
+    private dragged: HTMLElement;
+    private draggedSelection: HTMLDivElement[];
+    private lastDropTarget: HTMLDivElement;
+    private pendingMovedSlides: HTMLDivElement[];
 
-
-    var ua = navigator.userAgent.toLocaleLowerCase();
-    var isTrident = ua.indexOf('trident') !== -1;
-    var isGecko = (!isTrident &&
-        (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
-
-
-    Lightbox = function(grid,
-                        toolbar,
-                        complete,
-                        container_type,
-                        orderable,
-                        options) {
-        var self = this;
-        options = (options === undefined) ? {} : options;
+    constructor(grid: HTMLDivElement,
+                toolbar: HTMLDivElement,
+                complete: boolean,
+                container_type: ContainerType,
+                orderable: boolean,
+                options:
+                    {
+                        slideSize: number,
+                        thumbnailSize: number,
+                        toolbarMagnetEltSelector: string
+                    }) {
         this.grid = grid;
         this._buildSlidesIndex(); // set this.slides and this.lastSlide;
         this.fetchingDisabled = false;
         this.complete = complete;
         this.container_type = container_type;
         this.toolbar = toolbar;
-        this._toolbarMinTop = function() {
-            return 0;
-        };
-        if(options.toolbarMagnetEltSelector) {
-            var toolbarMagnetElt = document.querySelector(options.toolbarMagnetEltSelector);
-            if(toolbarMagnetElt)
-                this._toolbarMinTop = function() {
-                    return Math.max(toolbarMagnetElt.getBoundingClientRect().bottom,
-                                    0);
-                };
+        this._toolbarMinTop = () => 0;
+
+        if (options.toolbarMagnetEltSelector) {
+            const toolbarMagnetElt = document.querySelector(options.toolbarMagnetEltSelector);
+            if (toolbarMagnetElt)
+                this._toolbarMinTop = () => Math.max(toolbarMagnetElt.getBoundingClientRect().bottom, 0);
         }
-        if(toolbar) {
+
+        if (toolbar) {
             this.toolbarFixed = false;
-            window.addEventListener('scroll', function(evt) {
-                self.windowScrollToolbarlHandler(evt);
-            });
-            this._resizeWindowToolbarListener = function() {
-                self.fitToolBarWidth();
-            };
+            window.addEventListener('scroll', () => this.windowScrollToolbarlHandler());
+            this._resizeWindowToolbarListener = () => this.fitToolBarWidth();
         }
-        window.addEventListener('scroll', function(evt) {
-            self.windowScrollGridHandler(evt);
-        });
-        window.addEventListener('load', function() {
-            self.windowScrollGridHandler();
-        });
+
+        window.addEventListener('scroll', () => this.windowScrollGridHandler());
+        window.addEventListener('load', () => this.windowScrollGridHandler());
+
         this.lastCBChecked = undefined;
         this.form = undefined;
-        var parent = this.grid.parentNode;
-        while(parent) {
-            parent = parent.parentNode;
-            if(parent.tagName === 'FORM') {
-                this.form = parent;
+        let parent = this.grid.parentElement;
+        while (parent) {
+            parent = parent.parentElement;
+            if (parent.tagName === 'FORM') {
+                this.form = <HTMLFormElement>parent;
                 break;
-            }
-            else if(parent.tagName === 'BODY') {
+            } else if (parent.tagName === 'BODY') {
                 break;
             }
         }
-        this.grid.addEventListener('click', function(evt) {
-            self.mouseClickHandler(evt);
-        });
-        if(this.form) {
-            var fm = this.fm = new FormManager(this.form);
-            this.form.addEventListener('change', function(evt) {
-                self.onChangeHandler(evt);
-            });
-            fm.onBeforeSubmit = function(fm_, evt) {
-                return self.onBeforeSubmit(fm_, evt);
-            };
-            fm.onResponseLoad = function(req) {
-                return self.onResponseLoad(req);
-            };
+
+        this.grid.addEventListener('click', (evt) => this.mouseClickHandler(evt));
+
+        if (this.form) {
+            const fm = this.fm = new FormManager(this.form);
+            this.form.addEventListener('change', (evt) => this.onChangeHandler(evt));
+            fm.onBeforeSubmit = (fm_, evt) => this.onBeforeSubmit(fm_);
+            fm.onResponseLoad = (req) => this.onResponseLoad(req);
         }
 
         // drag and drop
         this.disableDefaultDragging();
         this._DDOrderingListeners = {
-            'dragstart': function(evt) {
-                self.onDragStart(evt);
-            },
-            'dragover': function(evt) {
-                self.onDragOver(evt);
-            },
-            'dragend': function(evt) {
-                self.onDragEnd(evt);
-            }
+            'dragstart': (evt: DragEvent) => this.onDragStart(evt),
+            'dragover': (evt: DragEvent) => this.onDragOver(evt),
+            'dragend': (evt: DragEvent) => this.onDragEnd(),
         };
-        if(orderable) {
+        if (orderable)
             this.enableDDOrdering();
-        }
-    };
+    }
 
-    Lightbox.prototype._buildSlidesIndex = function() {
+    private _buildSlidesIndex() {
         this.slides = [];
-        var node, i;
-        for(i = 0; i < this.grid.childNodes.length; i++) {
-            node = this.grid.childNodes[i];
-            if(node.nodeType === 1) { // is element
-                this.slides.push(node);
+        for (let i = 0; i < this.grid.childNodes.length; i++) {
+            const node = this.grid.childNodes[i];
+            if (node.nodeType === 1) { // is element
+                this.slides.push(<HTMLDivElement>node);
             }
         }
         this.lastSlide = this.slides[this.slides.length - 1];
-        if(!this.slides.length)
+        if (!this.slides.length)
             this.grid.classList.add('empty');
-    };
+    }
 
-    Lightbox.prototype.windowScrollToolbarlHandler = function() {
-        if(this.toolbar.getBoundingClientRect().top <= this._toolbarMinTop() &&
+    private windowScrollToolbarlHandler() {
+        if (this.toolbar.getBoundingClientRect().top <= this._toolbarMinTop() &&
             !this.toolbarFixed) {
             this.toolbarFixed = true;
             this.backThreshold = getWindowScrollY();
             this.switchToolBarPositioning(true);
-        }
-        else if(this.toolbarFixed && getWindowScrollY() < this.backThreshold) {
+        } else if (this.toolbarFixed && getWindowScrollY() < this.backThreshold) {
             this.toolbarFixed = false;
             this.switchToolBarPositioning(false);
         }
-    };
+    }
 
-    Lightbox.prototype.windowScrollGridHandler = function() {
-        if(!this.complete &&
+    private windowScrollGridHandler() {
+        if (!this.complete &&
             !this.fetchingDisabled &&
-            getWindowScrollY() > (this.lastSlide.firstElementChild ||
-                this.lastSlide.children[0]).offsetTop - getWindowHeight()) {
+            getWindowScrollY() > (<HTMLElement>(this.lastSlide.firstElementChild ||
+                this.lastSlide.children[0])).offsetTop - getWindowHeight()) {
             this.fetchingDisabled = true;
             this.fetchTail();
         }
-    };
+    }
 
-    Lightbox.prototype.mouseClickHandler = function(evt) {
-        var target = evt.target;
-        while(!target.classList.contains('button') && target !== this.grid)
-            target = target.parentNode;
+    private mouseClickHandler(evt: MouseEvent) {
+        let target = <HTMLElement>evt.target;
+        while (!target.classList.contains('button') && target !== this.grid)
+            target = target.parentElement;
 
-        if(target.tagName === 'INPUT' && target.type === 'checkbox') {
+        if (target.tagName === 'INPUT' && (<HTMLInputElement>target).type === 'checkbox') {
             // Firefox bug workarround
             evt.preventDefault();
             return;
         }
-        if(target === this.grid)
+        if (target === this.grid)
             return;
 
-        if(target.tagName === 'A') {
+        if (target.tagName === 'A') {
             evt.preventDefault();
-            var link = target;
-            var slide = this.getSlide(link);
-            var req, url;
+            const link = <HTMLAnchorElement>target;
             link.blur();
 
-            switch(link.name) {
+            switch (link.name) {
                 case 'add_to_selection':
                     this.selectionAdd(link);
                     break;
@@ -196,131 +174,93 @@ var Lightbox;
                 case 'remove_to_selection':
                     this.selectionRemove(link);
                     break;
-
-                // case 'add_to_cart' :
-                //     evt.preventDefault();
-                //     slide.widget = new CartWidget(slide, link.href);
-                //     break;
-                //
-                // case 'hide_for_anonymous':
-                //     evt.preventDefault();
-                //     link.blur();
-                //     req = new XMLHttpRequest();
-                //     url = link.href;
-                //     req.open("POST", url, true);
-                //     req.setRequestHeader("Content-Type",
-                //                          "application/x-www-form-urlencoded;charset=utf-8");
-                //     req.send(null);
-                //     slide.className = 'hidden-slide';
-                //     link.setAttribute('name', 'show_for_anonymous');
-                //     link.href = url.replace(/(.*\/)hideForAnonymous$/, '$1resetHide');
-                //     link.title = img.alt = 'Montrer au anonymes';
-                //     button.className = "button slide-show";
-                //     break;
-                //
-                // case 'show_for_anonymous':
-                //     evt.preventDefault();
-                //     link.blur();
-                //     req = new XMLHttpRequest();
-                //     url = link.href;
-                //     req.open("POST", url, true);
-                //     req.setRequestHeader("Content-Type",
-                //                          "application/x-www-form-urlencoded;charset=utf-8");
-                //     req.send(null);
-                //     slide.className = null;
-                //     link.setAttribute('name', 'hide_for_anonymous');
-                //     link.href = url.replace(/(.*\/)resetHide$/, '$1hideForAnonymous');
-                //     link.title = img.alt = 'Masquer pour les anonymes';
-                //     button.className = "button slide-hide";
-                //     break;
             }
-        } else if(target.tagName === 'LABEL' &&
-            target.previousElementSibling.type === 'checkbox') {
-            var cb = target.previousElementSibling;
+        } else if (target.tagName === 'LABEL' &&
+            (<HTMLInputElement>target.previousElementSibling).type === 'checkbox') {
+            const cb = <HTMLInputElement>target.previousElementSibling;
             cb.checked = !cb.checked;
             this.selectCBRange(cb, evt);
         }
-    };
+    }
 
-    Lightbox.prototype.selectionAdd = function(link) {
-        var req = new XMLHttpRequest();
-        var url = link.href;
+    private selectionAdd(link: HTMLAnchorElement) {
+        const req = new XMLHttpRequest();
+        const url = link.href;
         req.open("POST", url, true);
         req.setRequestHeader("Content-Type",
-                             "application/x-www-form-urlencoded;charset=utf-8");
+            "application/x-www-form-urlencoded;charset=utf-8");
         req.send("ajax=1");
-
-        var self = this;
-        req.onload = function() {
-            if(req.status === 200) {
-                link.name = 'remove_to_selection';
-                link.href = url.replace(/(.*\/)add_to_selection$/,
-                                        '$1remove_to_selection');
-                link.title = 'Retirer de la sélection';
-                self.getSlide(link).classList.add('selected');
-
-                var json = JSON.parse(req.responseText);
-                if(self.toolbar) {
-                    var selcpt = self.toolbar.querySelector('.selcpt');
-                    if(selcpt)
-                        selcpt.innerText = json.sellength;
+        req.addEventListener('load', (evt) => {
+                const resp = <XMLHttpRequest>evt.target;
+                if (resp.status === 200) {
+                    link.name = 'remove_to_selection';
+                    link.href = url.replace(/(.*\/)add_to_selection$/,
+                        '$1remove_to_selection');
+                    link.title = 'Retirer de la sélection';
+                    this.getSlide(link).classList.add('selected');
+                    const json = JSON.parse(req.responseText);
+                    if (this.toolbar) {
+                        const selcpt = <HTMLElement>this.toolbar.querySelector('.selcpt');
+                        if (selcpt)
+                            selcpt.innerText = json.sellength;
+                    }
                 }
             }
-        };
-    };
+        );
+    }
 
-    Lightbox.prototype.selectionRemove = function(link) {
-        var req = new XMLHttpRequest();
-        var url = link.href;
+    private selectionRemove(link: HTMLAnchorElement) {
+        const req = new XMLHttpRequest();
+        const url = link.href;
         req.open("POST", url, true);
         req.setRequestHeader("Content-Type",
-                             "application/x-www-form-urlencoded;charset=utf-8");
+            "application/x-www-form-urlencoded;charset=utf-8");
         req.send("ajax=1");
 
-        var self = this;
-        req.onload = function() {
-            if(req.status === 200) {
-                link.name = 'add_to_selection';
-                link.href = url.replace(/(.*\/)remove_to_selection$/,
-                                        '$1add_to_selection');
-                link.title = 'Ajouter à la sélection';
-                self.getSlide(link).classList.remove('selected');
+        req.addEventListener('load', (evt) => {
+                const resp = <XMLHttpRequest>evt.target;
+                if (resp.status === 200) {
+                    link.name = 'add_to_selection';
+                    link.href = url.replace(/(.*\/)remove_to_selection$/,
+                        '$1add_to_selection');
+                    link.title = 'Ajouter à la sélection';
+                    this.getSlide(link).classList.remove('selected');
 
-                var json = JSON.parse(req.responseText);
-                if(self.toolbar) {
-                    var selcpt = self.toolbar.querySelector('.selcpt');
-                    if(selcpt)
-                        selcpt.innerText = json.sellength;
+                    const json = JSON.parse(req.responseText);
+                    if (self.toolbar) {
+                        const selcpt = <HTMLElement>this.toolbar.querySelector('.selcpt');
+                        if (selcpt)
+                            selcpt.innerText = json.sellength;
+                    }
                 }
             }
-        };
+        );
+    }
 
-    };
-
-    Lightbox.prototype.onChangeHandler = function(evt) {
-        var target = evt.target;
-        if(target.name === 'sort_on') {
-            if(target.value === 'position') {
+    private onChangeHandler(evt: Event) {
+        const target = <HTMLInputElement>evt.target;
+        if (target.name === 'sort_on') {
+            if (target.value === 'position') {
                 this.enableDDOrdering();
-            }
-            else {
+            } else {
                 this.disableDDOrdering();
             }
             this.fm.submitButton = {'name': 'set_sorting', 'value': 'ok'};
             this.fm.submit(evt);
         }
-    };
+    }
 
-    Lightbox.prototype.onBeforeSubmit = function(fm) {
-        switch(fm.submitButton.name) {
+    private onBeforeSubmit(fm: FormManager): string {
+        switch (fm.submitButton.name) {
             case 'delete' :
                 this.hideSelection();
                 break;
         }
-    };
+        return '';
+    }
 
-    Lightbox.prototype.onResponseLoad = function(req) {
-        switch(req.responseXML.documentElement.nodeName) {
+    private onResponseLoad(req: XMLHttpRequest) {
+        switch (req.responseXML.documentElement.nodeName) {
             case 'deleted' :
                 this.deleteSelection();
                 break;
@@ -335,337 +275,301 @@ var Lightbox;
                 this.fm.loadResponse(req);
                 break;
         }
-    };
+    }
 
-    Lightbox.prototype.switchToolBarPositioning = function(fixed) {
-        var tbs = this.toolbar.style;
-        if(fixed) {
-            this.toolbar.defaultCssText = this.toolbar.style.cssText;
+    private switchToolBarPositioning(fixed: boolean) {
+        const tbs = this.toolbar.style;
+        if (fixed) {
+            (<any>this.toolbar).defaultCssText = this.toolbar.style.cssText;
             tbs.width = String(this.toolbar.offsetWidth) + 'px';
             tbs.height = String(this.toolbar.offsetHeight) + 'px';
             tbs.position = 'fixed';
             tbs.top = this._toolbarMinTop() + 'px';
             this.toolbarPlaceholder = document.createElement('div');
-            var phs = this.toolbarPlaceholder.style;
+            const phs = this.toolbarPlaceholder.style;
             phs.cssText = tbs.cssText;
             phs.position = 'relative';
             this.toolbar.parentNode.insertBefore(this.toolbarPlaceholder, this.toolbar);
             window.addEventListener('resize', this._resizeWindowToolbarListener);
-        }
-        else {
+        } else {
             this.toolbarPlaceholder.parentNode.removeChild(this.toolbarPlaceholder);
-            tbs.cssText = this.toolbar.defaultCssText;
+            tbs.cssText = (<any>this.toolbar).defaultCssText;
             window.removeEventListener('resize', this._resizeWindowToolbarListener);
         }
-    };
+    }
 
-    Lightbox.prototype.fitToolBarWidth = function() {
-        if(!this.toolbarFixed)
+    private fitToolBarWidth() {
+        if (!this.toolbarFixed)
             return;
-        this.toolbar.style.width = this.toolbar.parentNode.offsetWidth + 'px';
-    };
+        this.toolbar.style.width = this.toolbar.parentElement.offsetWidth + 'px';
+    }
 
-    Lightbox.prototype.hideSelection = function() {
-        var i, e;
-        for(i = 0; i < this.form.elements.length; i++) {
-            e = this.form.elements[i];
-            if(e.type === 'checkbox' && e.checked) {
+    private hideSelection() {
+        for (let i = 0; i < this.form.elements.length; i++) {
+            const e = <HTMLInputElement>this.form.elements[i];
+            if (e.type === 'checkbox' && e.checked) {
                 this.getSlide(e)
                     .classList.add('zero_opacity');
             }
         }
-    };
+    }
 
-    Lightbox.prototype.showSelection = function() {
-        var i, e, slide;
-        for(i = 0; i < this.form.elements.length; i++) {
-            e = this.form.elements[i];
-            if(e.type === 'checkbox' && e.checked) {
+    private showSelection() {
+        for (let i = 0; i < this.form.elements.length; i++) {
+            const e = <HTMLInputElement>this.form.elements[i];
+            if (e.type === 'checkbox' && e.checked) {
                 this.getSlide(e)
                     .classList.remove('zero_opacity');
             }
         }
-    };
+    }
 
-    Lightbox.prototype.deleteSelection = function() {
-        var i, e, slide;
-        for(i = 0; i < this.form.elements.length; i++) {
-            e = this.form.elements[i];
-            if(e.type === 'checkbox' && e.checked) {
-                slide = this.getSlide(e);
-                slide.classList.add('zero_width');
+    private deleteSelection() {
+        for (let i = 0; i < this.form.elements.length; i++) {
+            const e = <HTMLInputElement>this.form.elements[i];
+            if (e.type === 'checkbox' && e.checked) {
+                this.getSlide(e)
+                    .classList.add('zero_width');
             }
         }
-        var self = this;
         // if you change this, delay you should also change this css rule :
         // .lightbox span { transition: width 1s
-        setTimeout(function() {
-            self._removeSelection();
-        }, 1000);
-    };
+        setTimeout(() => this._removeSelection(), 1000);
+    }
 
-    Lightbox.prototype._removeSelection = function() {
-        var i, e;
-        var toRemove = [];
-        for(i = 0; i < this.form.elements.length; i++) {
-            e = this.form.elements[i];
-            if(e.type === 'checkbox' && e.checked) {
+    private _removeSelection() {
+        const toRemove: HTMLDivElement[] = [];
+        for (let i = 0; i < this.form.elements.length; i++) {
+            const e = <HTMLInputElement>this.form.elements[i];
+            if (e.type === 'checkbox' && e.checked) {
                 toRemove.push(this.getSlide(e));
             }
         }
-        for(i = 0; i < toRemove.length; i++) {
+        for (let i = 0; i < toRemove.length; i++) {
             this.grid.removeChild(toRemove[i]);
         }
         this._buildSlidesIndex();
         this.cbIndex = undefined;
         this.windowScrollGridHandler();
-    };
+    }
 
-    Lightbox.prototype.getCBIndex = function(cb) {
-        if(!this.cbIndex) {
+    private getCBIndex(cb: HTMLInputElement): number {
+        if (!this.cbIndex) {
             // build checkbox index
             this.cbIndex = [];
-            var i, node, c;
-            for(i = 0; i < this.slides.length; i++) {
-                node = this.slides[i];
-                c = node.getElementsByTagName('input')[0];
-                c.index = this.cbIndex.length;
+            for (let i = 0; i < this.slides.length; i++) {
+                const node = this.slides[i];
+                const c = <HTMLInputElement>node.getElementsByTagName('input')[0];
+                (<any>c).index = this.cbIndex.length;
                 this.cbIndex.push(c);
             }
         }
-        return cb.index;
-    };
+        return <number>(<any>cb).index;
+    }
 
-    Lightbox.prototype.selectCBRange = function(cb, evt) {
-        var shift = evt.shiftKey;
-        if(shift && this.lastCBChecked) {
+    private selectCBRange(cb: HTMLInputElement, evt: MouseEvent) {
+        const shift: boolean = evt.shiftKey;
+        if (shift && this.lastCBChecked) {
             clearSelection();
-            var from = this.getCBIndex(this.lastCBChecked);
-            var to = this.getCBIndex(cb);
-            var start = Math.min(from, to);
-            var stop = Math.max(from, to);
-            var i;
-            for(i = start; i < stop; i++) {
-                // this.cbIndex[i].setAttribute('checked', 'checked');
+            const from = this.getCBIndex(this.lastCBChecked);
+            const to = this.getCBIndex(cb);
+            const start = Math.min(from, to);
+            const stop = Math.max(from, to);
+            for (let i = start; i < stop; i++) {
                 this.cbIndex[i].checked = true;
             }
-        }
-        else if(cb.checked) {
+        } else if (cb.checked) {
             this.lastCBChecked = cb;
-        }
-        else {
+        } else {
             this.lastCBChecked = null;
         }
-    };
+    }
 
-    Lightbox.prototype.refreshGrid = function() {
-        var req = new XMLHttpRequest();
-        var self = this;
-        req.onreadystatechange = function() {
-            switch(req.readyState) {
-                case 1 :
-                    // showProgressImage();
-                    break;
-                case 4 :
-                    // hideProgressImage();
-                    if(req.status === 200) {
-                        self._refreshGrid(req);
-                    }
-                    break;
+    private refreshGrid() {
+        const req = new XMLHttpRequest();
+        req.addEventListener('load', (evt) => {
+                const resp = <XMLHttpRequest>evt.target;
+                if (resp.status === 200) {
+                    this._refreshGrid(resp);
+                }
             }
-        };
+        );
 
-        var url = absolute_url() +
+        const url = absolute_url() +
             '/portfolio_thumbnails_tail?start:int=0&size:int=' +
             this.slides.length;
         req.open('GET', url, true);
         req.send();
-    };
+    }
 
-    Lightbox.prototype._refreshGrid = function(req) {
-        var doc = req.responseXML.documentElement;
-        var i, node;
-        var j = 0;
-        for(i = 0; i < doc.childNodes.length; i++) {
-            node = doc.childNodes[i];
-            if(node.nodeType === 1) {
+    private _refreshGrid(req: XMLHttpRequest) {
+        const doc = req.responseXML.documentElement;
+        let j = 0;
+        for (let i = 0; i < doc.childNodes.length; i++) {
+            let node = <Node>doc.childNodes[i];
+            if (node.nodeType === 1) {
                 node = getCopyOfNode(node);
-                this.disableDefaultDragging(node);
+                this.disableDefaultDragging(<HTMLElement>node);
                 this.grid.replaceChild(node, this.slides[j]);
-                this.slides[j] = node;
-                j++;
+                this.slides[j++] = <HTMLDivElement>node;
             }
         }
         this.cbIndex = undefined;
-    };
+    }
 
-    Lightbox.prototype.fetchTail = function() {
-        var req = new XMLHttpRequest();
-        var self = this;
-        req.onreadystatechange = function() {
-            switch(req.readyState) {
-                case 1 :
-                    // showProgressImage();
-                    break;
-                case 4 :
-                    // hideProgressImage();
-                    if(req.status === 200) {
-                        self._appendTail(req);
-                    }
-                    break;
+    private fetchTail() {
+        const req = new XMLHttpRequest();
+        req.addEventListener('load', (evt) => {
+                const resp = <XMLHttpRequest>evt.target;
+                if (resp.status === 200) {
+                    this._appendTail(req);
+                }
             }
-        };
+        );
 
-        var url = absolute_url() +
-            '/portfolio_thumbnails_tail?start:int=' +
-            String(this.slides.length) +
-            '&size:int=10' +
-            '&container_type=' +
-            this.container_type;
-        req.open('GET', url, true);
+        const url = new URL(`${absolute_url()}/portfolio_thumbnails_tail`);
+        url.searchParams
+            .append('start:int', Number(this.slides.length).toString());
+        url.searchParams
+            .append('size:int', '10');
+        url.searchParams
+            .append('container_type', this.container_type);
+        req.open('GET', url.toString(), true);
         req.send();
-    };
+    }
 
-    Lightbox.prototype._appendTail = function(req) {
-        var doc = req.responseXML.documentElement;
-        var i, node, c;
-        for(i = 0; i < doc.childNodes.length; i++) {
-            node = doc.childNodes[i];
-            if(node.nodeType === 1) {
-                this.lastSlide = this.grid.appendChild(getCopyOfNode(node));
+    private _appendTail(req: XMLHttpRequest) {
+        const doc = req.responseXML.documentElement;
+        for (let i = 0; i < doc.childNodes.length; i++) {
+            const node = doc.childNodes[i];
+            if (node.nodeType === 1) {
+                this.lastSlide = <HTMLDivElement>this.grid.appendChild(getCopyOfNode(node));
                 this.disableDefaultDragging(this.lastSlide);
                 this.slides.push(this.lastSlide);
-                if(this.cbIndex) {
-                    c = this.lastSlide.getElementsByTagName('input')[0];
-                    c.index = this.cbIndex.length;
+                if (this.cbIndex) {
+                    const c = <HTMLInputElement>this.lastSlide.getElementsByTagName('input')[0];
+                    (<any>c).index = this.cbIndex.length;
                     this.cbIndex.push(c);
 
                 }
             }
         }
         this.fetchingDisabled = false;
-        if(doc.getAttribute('nomore')) {
+        if (doc.getAttribute('nomore')) {
             this.complete = true;
         }
         this.windowScrollGridHandler();
-    };
+    }
 
-
-    Lightbox.prototype.disableDefaultDragging = (isGecko) ?
-        function(element) {
-            /* on gecko browser, <img> and <a> elements have default dragging behavior
-            *  that must be disabled in order to drag only the slide container */
+    private disableDefaultDragging(element: HTMLElement = null) {
+        if (isGecko) {
             element = (element) ? element : this.grid;
-            for(var i = 0, all = element.querySelectorAll('a, img'); i < all.length; i++)
-                all[i].draggable = false;
-        } :
-        function() {
-        };
+            element.querySelectorAll('a, img')
+                .forEach((el: HTMLElement) => el.draggable = false);
+        }
+    }
 
-    Lightbox.prototype.getSelectedSlides = function() {
-        var i, e, slide;
-        var slides = [];
-        for(i = 0; i < this.form.elements.length; i++) {
-            e = this.form.elements[i];
-            if(e.type === 'checkbox' && e.checked) {
-                slide = this.getSlide(e);
-                slides.push(slide);
+    private getSelectedSlides(): HTMLDivElement[] {
+        const slides: HTMLDivElement[] = [];
+        for (let i = 0; i < this.form.elements.length; i++) {
+            const e = <HTMLInputElement>this.form.elements[i];
+            if (e.type === 'checkbox' && e.checked) {
+                slides.push(this.getSlide(e));
             }
         }
         return slides;
-    };
+    }
 
 
-    Lightbox.prototype.enableDDOrdering = function() {
+    private enableDDOrdering() {
         this.grid.addEventListener('dragstart', this._DDOrderingListeners.dragstart);
         this.grid.addEventListener('dragover', this._DDOrderingListeners.dragover);
         this.grid.addEventListener('dragend', this._DDOrderingListeners.dragend);
-    };
+    }
 
-    Lightbox.prototype.disableDDOrdering = function() {
+    private disableDDOrdering() {
         this.grid.removeEventListener('dragstart', this._DDOrderingListeners.dragstart);
         this.grid.removeEventListener('dragover', this._DDOrderingListeners.dragover);
         this.grid.removeEventListener('dragend', this._DDOrderingListeners.dragend);
-    };
+    }
 
-    Lightbox.prototype.onDragStart = function(evt) {
-        var target = evt.target;
+    private onDragStart(evt: DragEvent) {
+        const target = <HTMLDivElement>evt.target;
         this.dragged = target;
         this.draggedSelection = this.getSelectedSlides();
-        if(this.draggedSelection.indexOf(target) === -1) {
+        if (this.draggedSelection.indexOf(target) === -1) {
             this.draggedSelection.push(target);
         }
         evt.dataTransfer.setData('text', '');
-        var i, slide;
-        for(i = 0; i < this.draggedSelection.length; i++) {
-            slide = this.draggedSelection[i];
-            slide.style.opacity = 0;
-            slide.style.width = 0;
+        for (let i = 0; i < this.draggedSelection.length; i++) {
+            const slide: HTMLDivElement = this.draggedSelection[i];
+            slide.style.opacity = '0';
+            slide.style.width = '0';
         }
-    };
+    }
 
-    Lightbox.prototype.onDragOver = function(evt) {
-        if(!this.dragged) return;
-        var slide = this.getSlide(evt.target);
-        if(!slide) return;
+    private onDragOver(evt: DragEvent) {
+        if (!this.dragged) return;
+        const slide = this.getSlide(<HTMLElement>evt.target);
+        if (!slide) return;
 
-        if(slide !== this.dragged)
+        if (slide !== this.dragged)
             slide.classList.add('dragover');
 
-        if(this.lastDropTarget && this.lastDropTarget !== slide)
+        if (this.lastDropTarget && this.lastDropTarget !== slide)
             this.lastDropTarget.classList.remove('dragover');
 
         this.lastDropTarget = slide;
-    };
+    }
 
-    Lightbox.prototype.onDragEnd = function() {
-        if(this.lastDropTarget) {
+    private onDragEnd() {
+        if (this.lastDropTarget) {
             this.lastDropTarget.classList.remove('dragover');
-            var i, slide;
             this.pendingMovedSlides = [];
-            for(i = this.draggedSelection.length - 1; i >= 0; i--) {
-                slide = this.draggedSelection[i].cloneNode(true);
+            for (let i = this.draggedSelection.length - 1; i >= 0; i--) {
+                const slide = <HTMLDivElement>this.draggedSelection[i].cloneNode(true);
                 this.pendingMovedSlides.push(slide);
                 this.grid.insertBefore(slide, this.lastDropTarget.nextSibling);
-                slide.style.opacity = 1;
+                slide.style.opacity = '1';
                 slide.style.width = '';
             }
             this.moveSelectedPhotos();
         }
         this.dragged = undefined;
-    };
+    }
 
-    Lightbox.prototype.moveSelectedPhotos = function() {
-        var req = new XMLHttpRequest();
-        var self = this;
-        req.onreadystatechange = function() {
-            if(req.readyState === 4)
-                self._moveSelectedPhotos(req);
-        };
+    private moveSelectedPhotos() {
+        const req = new XMLHttpRequest();
+        req.addEventListener('load', (evt) => {
+                const resp = <XMLHttpRequest>evt.target;
+                if (resp.status === 200) {
+                    this._moveSelectedPhotos(resp)
+                }
+            }
+        );
 
-        var url = absolute_url() + '/portfolio_move_photos';
-        req.open("POST", url, true);
-        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-        var query = 'container_type=' + this.container_type;
-        var i;
-        for(i = 0; i < this.draggedSelection.length; i++) {
-            query += '&uids:list=' +
-                this.draggedSelection[i].querySelector('input[name="uids:list"]').value;
-        }
-        query += '&afterUid=' + this.lastDropTarget.querySelector('input[name="uids:list"]').value;
-        req.send(query);
-    };
+        req.open('POST', `${absolute_url()}/portfolio_move_photos`, true);
+        const fd = new FormData();
+        fd.append('container_type', this.container_type);
+        this.draggedSelection.forEach((slide) => {
+                fd.append(
+                    'uids:list',
+                    (<HTMLInputElement>slide.querySelector('input[name="uids:list"]')).value)
+            }
+        );
+        fd.append('afterUid', (<HTMLInputElement>this.lastDropTarget.querySelector('input[name="uids:list"]')).value)
+        req.send(fd);
+    }
 
-    Lightbox.prototype._moveSelectedPhotos = function(req) {
-        var i, slide;
-        if(req.status === 200) {
-            var doc = req.responseXML.documentElement;
-            if(doc.nodeName === 'ok') {
-                for(i = 0; i < this.draggedSelection.length; i++) {
-                    slide = this.draggedSelection[i];
+    private _moveSelectedPhotos(req: XMLHttpRequest) {
+        if (req.status === 200) {
+            const doc = req.responseXML.documentElement;
+            if (doc.nodeName === 'ok') {
+                for (let i = 0; i < this.draggedSelection.length; i++) {
+                    const slide = this.draggedSelection[i];
                     this.grid.removeChild(slide);
-                    this.pendingMovedSlides[i]
-                        .querySelector('input[name="uids:list"]').checked = false;
+                    (<HTMLInputElement>this.pendingMovedSlides[i]
+                        .querySelector('input[name="uids:list"]')).checked = false;
                 }
                 this.pendingMovedSlides = undefined;
                 this.cbIndex = undefined;
@@ -673,30 +577,29 @@ var Lightbox;
             }
         }
 
-        for(i = 0; i < this.pendingMovedSlides.length; i++) {
-            slide = this.pendingMovedSlides[i];
+        for (let i = 0; i < this.pendingMovedSlides.length; i++) {
+            const slide = this.pendingMovedSlides[i];
             this.grid.removeChild(slide);
         }
 
-        for(i = 0; i < this.draggedSelection.length; i++) {
-            slide = this.draggedSelection[i];
-            slide.style.opacity = 1;
+        for (let i = 0; i < this.draggedSelection.length; i++) {
+            const slide = this.draggedSelection[i];
+            slide.style.opacity = '1';
             slide.style.width = '';
         }
-    };
+    }
 
-    Lightbox.prototype.getSlide = function(descendent) {
-        var slide = descendent;
-        while(slide.parentNode !== this.grid && slide !== document.body)
-            slide = slide.parentNode;
-        return (slide.parentNode === this.grid) ? slide : null;
-    };
+    private getSlide(descendent: HTMLElement): HTMLDivElement | null {
+        let slide = descendent;
+        while (slide.parentElement !== this.grid && slide !== document.body)
+            slide = slide.parentElement;
+        return (slide.parentElement === this.grid) ? <HTMLDivElement>slide : null;
+    }
 
-    Lightbox.prototype.notifyAdd = function(slideElt) {
+    public notifyAdd(slideElt: HTMLDivElement) {
         this.slides.push(slideElt);
         this.disableDefaultDragging(slideElt);
         this.lastSlide = slideElt;
         this.grid.classList.remove('empty');
-    };
-
-}());
+    }
+}
