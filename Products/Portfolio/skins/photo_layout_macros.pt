@@ -28,7 +28,7 @@
               'options': {
                 'slideSize': portal_object.slide_size,
                 'thumbnailSize': portal_object.thumb_size
-                }
+                },
               }
               )">
         <div metal:define-macro="thumbnails"

@@ -149,9 +149,9 @@ export class DDImageUploader extends DDFileUploaderBase {
             .append('img')
             .attr('class', 'hidden')
             .style('opacity', '0.2')
-            .on('load', (d, i, g) => {
+            .on('load', (evt: Event) => {
                 const size = this.thumbnailSize;
-                const img = <HTMLImageElement>g[i];
+                const img = <HTMLImageElement>evt.target;
 
                 if (img.width > img.height) { // landscape
                     img.height = Math.round(size * img.height / img.width);
