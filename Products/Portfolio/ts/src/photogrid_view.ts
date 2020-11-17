@@ -1,5 +1,7 @@
 import * as $ from "jquery";
+import { absolute_url } from "plinn/src/components/utils";
 import {Lightbox} from "./components/lightbox";
+import {DDImageUploader} from "./components/portfolio_upload";
 
 function main() {
     const grid = <HTMLDivElement>document.querySelector('.lightbox');
@@ -14,6 +16,11 @@ function main() {
         initArgs.orderable,
         initArgs.options
     );
+
+    if(initArgs.dropable) {
+        const uploadUrl = `${absolute_url()}/put_upload`;
+        new DDImageUploader(lb, uploadUrl, initArgs.options);
+    }
 }
 
 $(() => main());

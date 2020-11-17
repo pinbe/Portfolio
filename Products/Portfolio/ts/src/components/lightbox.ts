@@ -20,7 +20,7 @@ enum ContainerType {
 }
 
 export class Lightbox {
-    private readonly grid: HTMLDivElement;
+    public readonly grid: HTMLDivElement;
     private fetchingDisabled: boolean;
     private complete: boolean;
     private readonly container_type: ContainerType;
