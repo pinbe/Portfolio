@@ -1,8 +1,9 @@
 import {FilmSlider} from "./components/photo_film_viewer";
 import PerfectScrollbar from "perfect-scrollbar";
 import "../node_modules/perfect-scrollbar/css/perfect-scrollbar.css";
+import * as $ from "jquery";
 
-window.addEventListener('load', () => {
+function main() {
     const bar = document.querySelector('.film_bar');
     const ctx = JSON.parse(bar.getAttribute('data-filmSliderContext'));
     new FilmSlider(
@@ -16,4 +17,6 @@ window.addEventListener('load', () => {
     new PerfectScrollbar(
         document.querySelector('.film_bar'),
         {suppressScrollY: true});
-});
+}
+
+$(() => main());

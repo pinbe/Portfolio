@@ -25,9 +25,9 @@ export class Lightbox {
     private complete: boolean;
     private readonly container_type: ContainerType;
     private readonly toolbar: HTMLDivElement;
-    private _toolbarMinTop: () => number;
+    private readonly _toolbarMinTop: () => number;
     private toolbarFixed: boolean;
-    private _resizeWindowToolbarListener: () => void;
+    private readonly _resizeWindowToolbarListener: () => void;
     private lastCBChecked: HTMLInputElement;
     private readonly form: HTMLFormElement;
     private fm: FormManager;

@@ -6,6 +6,7 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
   </head>
   <body>
+    <!-- grid -->
     <div metal:define-macro="grid"
          tal:define="slide_size portal_object/slide_size;
                      mayBeDropable exists:dropable;
@@ -16,8 +17,20 @@
       <div class="lightbox"
            tal:define="classes python:{'lightbox':True,
                                        'photo-drop-target': dropable,
-                                       'empty': not len(infos)}"
-           tal:attributes="class python:' '.join([k for (k, v) in classes.items() if v])">
+                                       'empty': not len(infos)};
+                       json_dumps python: modules['Products.Plinn.utils'].json_dumps"
+           tal:attributes="class python:' '.join([k for (k, v) in classes.items() if v]);
+                           data-lightbox_init_args python:json_dumps(
+              {'complete': not batch.next,
+              'container_type': options.get('container_type', 'portfolio'),
+              'dropable': dropable,
+              'orderable': orderable,
+              'options': {
+                'slideSize': portal_object.slide_size,
+                'thumbnailSize': portal_object.thumb_size
+                }
+              }
+              )">
         <div metal:define-macro="thumbnails"
              tal:omit-tag="">
           <tal:block tal:repeat="info infos">
@@ -68,7 +81,9 @@
       <noscript>
         <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
       </noscript>
-
+      <script type="text/javascript"
+              tal:attributes="src here/portfolio/jsbuild/photogrid_view.js/absolute_url"></script>
+      <tal:block: tal:replace="nothing">
       <script type="text/javascript" tal:condition="not:dropable"
               tal:content="structure python:'''
               new Lightbox(document.querySelector('.lightbox'),
@@ -103,7 +118,11 @@
                      'container_type' : options.get('container_type', 'portfolio'),
                      'orderable' : 'true' if orderable else 'false'}">
       </script>
+      </tal:block:>
     </div>
+    <!-- /grid -->
+
+    <!-- film_bar -->
     <div metal:define-macro="film_bar" tal:omit-tag="">
       <nav class="film_bar"
            tal:define="blank_img string:$portal_url/transparent.gif;
@@ -129,5 +148,6 @@
       <script type="text/javascript"
               tal:attributes="src here/portfolio/jsbuild/photo_view.js/absolute_url"></script>
     </div>
+    <!-- /film_bar -->
   </body>
 </html>

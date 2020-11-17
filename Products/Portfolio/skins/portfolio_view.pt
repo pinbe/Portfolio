@@ -3,18 +3,6 @@
 
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    <metal:block metal:fill-slot="javascript_head_slot">
-      <script type="text/javascript" tal:attributes="src string:$portal_url/cart_widgets.js"></script>
-      <script type="text/javascript" tal:attributes="src string:$portal_url/photo_lightbox_viewer.js"></script>
-      <tal:block
-               tal:define="AddPortalContent modules/Products/CMFCore/permissions/AddPortalContent"
-               tal:condition="python: mtool.checkPermission(AddPortalContent, here)">
-        <script type="text/javascript" tal:attributes="src string:$portal_url/js/fileupload.js"
-                charset="utf-8"></script>
-        <script type="text/javascript" tal:attributes="src string:$portal_url/portfolio_upload.js"
-                charset="utf-8"></script>
-      </tal:block>
-    </metal:block>
     <title>portfolio_view</title>
   </head>
 
