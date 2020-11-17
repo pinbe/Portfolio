@@ -1,5 +1,6 @@
 import {Lightbox} from "./lightbox";
 
+// nombre maximun d'image chargées en local
 const MAX_PREVIEW = 2;
 const isThumbnail = /.*\/getThumbnail$/;
 import {getCopyOfNode, getWindowHeight} from "plinn/src/components/utils";
@@ -7,8 +8,7 @@ import {DDFileUploaderBase, UploadedElement} from "plinn/src/components/fileuplo
 import * as d3 from "d3";
 
 
-interface D3SlideT extends d3.Selection<HTMLDivElement, File, null, null>, UploadedElement {
-}
+interface D3SlideT extends d3.Selection<HTMLDivElement, File, null, null>, UploadedElement {}
 
 
 export class DDImageUploader extends DDFileUploaderBase {
@@ -16,7 +16,7 @@ export class DDImageUploader extends DDFileUploaderBase {
     private lightbox: Lightbox;
     private readonly existingSlides: { [src: string]: HTMLImageElement };
     private slideSize: number; // pixels
-    private thumbnailSize: number; // pixels
+    private readonly thumbnailSize: number; // pixels
     private previewQueue: any[];
     private _previewQueueRunning: boolean;
     private previewsLoaded: number;
@@ -45,7 +45,10 @@ export class DDImageUploader extends DDFileUploaderBase {
     private indexExistingSlides(): { [src: string]: HTMLImageElement } {
         const index: { [src: string]: HTMLImageElement } = {};
         this.dropbox.querySelectorAll<HTMLImageElement>('img')
-            .forEach((im: HTMLImageElement) => index[im.src] = im);
+            .forEach((im) => {
+                if(isThumbnail.test(im.src))
+                    index[im.src] = im;
+            });
         return index;
     }
 
@@ -179,8 +182,7 @@ export class DDImageUploader extends DDFileUploaderBase {
         const reader = new FileReader();
         reader.onload = (evt) => {
             slide.select('img')
-                // @ts-ignore
-                .attr('src', evt.target.result);
+                .attr('src', <string>evt.target.result);
             setTimeout(() => this.previewQueueLoadNext(), 500);
         };
         reader.readAsDataURL(slide.datum());
