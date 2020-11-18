@@ -13,17 +13,52 @@ const isGecko = (!isTrident &&
     (ua.indexOf('gecko') !== -1 && ua.indexOf('safari') === -1));
 
 
+export interface TailLoader {
+    fetch(start: number, size: number): Promise<HTMLElement>;
+}
+
 enum ContainerType {
     PORTFOLIO = 'portfolio',
     LIGHTBOX = 'lightbox',
     SELECTION = 'selection'
 }
 
+export class DefaultTailLoader implements TailLoader {
+    private containerType: ContainerType;
+
+    constructor(containerType: ContainerType) {
+        this.containerType = containerType;
+    }
+
+    fetch(start: number, size: number): Promise<HTMLElement> {
+        return new Promise<HTMLElement>((resolve: (doc: HTMLElement) => void, reject: (req: XMLHttpRequest) => void) => {
+            const req = new XMLHttpRequest();
+            req.addEventListener('load', (evt) => {
+                    const resp = <XMLHttpRequest>evt.target;
+                    if (resp.status === 200)
+                        resolve(resp.responseXML.documentElement);
+                    else
+                        reject(resp);
+                }
+            );
+
+            const url = new URL(`${absolute_url()}/portfolio_thumbnails_tail`);
+            url.searchParams
+                .append('start:int', Number(start).toString());
+            url.searchParams
+                .append('size:int', Number(size).toString());
+            url.searchParams
+                .append('container_type', this.containerType);
+            req.open('GET', url.toString(), true);
+            req.send();
+        });
+    }
+}
+
 export class Lightbox {
     public readonly grid: HTMLDivElement;
     private fetchingDisabled: boolean;
     private complete: boolean;
-    private readonly container_type: ContainerType;
     private readonly toolbar: HTMLDivElement;
     private readonly _toolbarMinTop: () => number;
     private toolbarFixed: boolean;
@@ -45,24 +80,26 @@ export class Lightbox {
     private draggedSelection: HTMLDivElement[];
     private lastDropTarget: HTMLDivElement;
     private pendingMovedSlides: HTMLDivElement[];
+    private readonly tailLoader: TailLoader;
 
     constructor(grid: HTMLDivElement,
                 toolbar: HTMLDivElement,
                 complete: boolean,
-                container_type: ContainerType,
                 orderable: boolean,
-                options:
+                tailLoader: TailLoader,
+                options =
                     {
-                        slideSize: number,
-                        thumbnailSize: number,
-                        toolbarMagnetEltSelector: string
-                    }) {
+                        slideSize: 288,
+                        thumbnailSize: 278,
+                        toolbarMagnetEltSelector: '#top-bar'
+                    },
+    ) {
         this.grid = grid;
         this._buildSlidesIndex(); // set this.slides and this.lastSlide;
         this.fetchingDisabled = false;
         this.complete = complete;
-        this.container_type = container_type;
         this.toolbar = toolbar;
+        this.tailLoader = tailLoader;
         this._toolbarMinTop = () => 0;
 
         if (options.toolbarMagnetEltSelector) {
@@ -77,8 +114,6 @@ export class Lightbox {
             this._resizeWindowToolbarListener = () => this.fitToolBarWidth();
         }
 
-        window.addEventListener('scroll', () => this.windowScrollGridHandler());
-        window.addEventListener('load', () => this.windowScrollGridHandler());
 
         this.lastCBChecked = undefined;
         this.form = undefined;
@@ -111,6 +146,8 @@ export class Lightbox {
         };
         if (orderable)
             this.enableDDOrdering();
+        window.addEventListener('scroll', () => this.windowScrollGridHandler());
+        this.windowScrollGridHandler();
     }
 
     private _buildSlidesIndex() {
@@ -418,48 +455,72 @@ export class Lightbox {
     }
 
     private fetchTail() {
-        const req = new XMLHttpRequest();
-        req.addEventListener('load', (evt) => {
-                const resp = <XMLHttpRequest>evt.target;
-                if (resp.status === 200) {
-                    this._appendTail(req);
-                }
-            }
-        );
+        this.tailLoader.fetch(this.slides.length, 10)
+            .then((doc) => {
+                for (let i = 0; i < doc.childNodes.length; i++) {
+                    const node = doc.childNodes[i];
+                    if (node.nodeType === 1) {
+                        this.lastSlide = <HTMLDivElement>this.grid.appendChild(getCopyOfNode(node));
+                        this.disableDefaultDragging(this.lastSlide);
+                        this.slides.push(this.lastSlide);
+                        if (this.cbIndex) {
+                            const c = <HTMLInputElement>this.lastSlide.getElementsByTagName('input')[0];
+                            (<any>c).index = this.cbIndex.length;
+                            this.cbIndex.push(c);
 
-        const url = new URL(`${absolute_url()}/portfolio_thumbnails_tail`);
-        url.searchParams
-            .append('start:int', Number(this.slides.length).toString());
-        url.searchParams
-            .append('size:int', '10');
-        url.searchParams
-            .append('container_type', this.container_type);
-        req.open('GET', url.toString(), true);
-        req.send();
+                        }
+                    }
+                }
+                this.fetchingDisabled = false;
+                if (doc.getAttribute('nomore') || !doc.firstElementChild) {
+                    this.complete = true;
+                }
+                this.windowScrollGridHandler();
+
+            });
+
+        // const req = new XMLHttpRequest();
+        // req.addEventListener('load', (evt) => {
+        //         const resp = <XMLHttpRequest>evt.target;
+        //         if (resp.status === 200) {
+        //             this._appendTail(req);
+        //         }
+        //     }
+        // );
+        //
+        // const url = new URL(`${absolute_url()}/portfolio_thumbnails_tail`);
+        // url.searchParams
+        //     .append('start:int', Number(this.slides.length).toString());
+        // url.searchParams
+        //     .append('size:int', '10');
+        // // url.searchParams
+        // //     .append('container_type', this.container_type);
+        // req.open('GET', url.toString(), true);
+        // req.send();
     }
 
-    private _appendTail(req: XMLHttpRequest) {
-        const doc = req.responseXML.documentElement;
-        for (let i = 0; i < doc.childNodes.length; i++) {
-            const node = doc.childNodes[i];
-            if (node.nodeType === 1) {
-                this.lastSlide = <HTMLDivElement>this.grid.appendChild(getCopyOfNode(node));
-                this.disableDefaultDragging(this.lastSlide);
-                this.slides.push(this.lastSlide);
-                if (this.cbIndex) {
-                    const c = <HTMLInputElement>this.lastSlide.getElementsByTagName('input')[0];
-                    (<any>c).index = this.cbIndex.length;
-                    this.cbIndex.push(c);
-
-                }
-            }
-        }
-        this.fetchingDisabled = false;
-        if (doc.getAttribute('nomore')) {
-            this.complete = true;
-        }
-        this.windowScrollGridHandler();
-    }
+    // private _appendTail(req: XMLHttpRequest) {
+    //     const doc = req.responseXML.documentElement;
+    //     for (let i = 0; i < doc.childNodes.length; i++) {
+    //         const node = doc.childNodes[i];
+    //         if (node.nodeType === 1) {
+    //             this.lastSlide = <HTMLDivElement>this.grid.appendChild(getCopyOfNode(node));
+    //             this.disableDefaultDragging(this.lastSlide);
+    //             this.slides.push(this.lastSlide);
+    //             if (this.cbIndex) {
+    //                 const c = <HTMLInputElement>this.lastSlide.getElementsByTagName('input')[0];
+    //                 (<any>c).index = this.cbIndex.length;
+    //                 this.cbIndex.push(c);
+    //
+    //             }
+    //         }
+    //     }
+    //     this.fetchingDisabled = false;
+    //     if (doc.getAttribute('nomore')) {
+    //         this.complete = true;
+    //     }
+    //     this.windowScrollGridHandler();
+    // }
 
     private disableDefaultDragging(element: HTMLElement = null) {
         if (isGecko) {
@@ -550,7 +611,7 @@ export class Lightbox {
 
         req.open('POST', `${absolute_url()}/portfolio_move_photos`, true);
         const fd = new FormData();
-        fd.append('container_type', this.container_type);
+        // fd.append('container_type', this.container_type);
         this.draggedSelection.forEach((slide) => {
                 fd.append(
                     'uids:list',

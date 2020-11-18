@@ -1,8 +1,10 @@
 <metal:block metal:use-macro="here/main_template_macros/macros/global_defines" />
 <thumbnails tal:define="infos options/infos;
                  slide_size portal_object/slide_size;
-                 features options/features"
-     tal:attributes="nomore python:'nomore' if not options['batch'].next else nothing"
+                 features options/features;
+                 nomore python: options.get('nomore', None);
+                 nomore python: not options['batch'].next if nomore is None else nomore"
+     tal:attributes="nomore python:'nomore' if nomore else None"
      >
   <div metal:use-macro="here/photo_layout_macros/macros/thumbnails">
     thumbnails

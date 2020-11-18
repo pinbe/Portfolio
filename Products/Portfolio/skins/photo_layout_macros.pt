@@ -27,7 +27,8 @@
               'orderable': orderable,
               'options': {
                 'slideSize': portal_object.slide_size,
-                'thumbnailSize': portal_object.thumb_size
+                'thumbnailSize': portal_object.thumb_size,
+                'toolbarMagnetEltSelector': '#top-bar',
                 },
               }
               )">
