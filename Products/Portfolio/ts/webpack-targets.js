@@ -1,6 +1,7 @@
 const names = [
     'photo_view',
     'photogrid_view',
+    'portfolio_presentation_form',
 ];
 
 module.exports = {

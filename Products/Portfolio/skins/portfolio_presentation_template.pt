@@ -48,37 +48,8 @@
                tal:attributes="class python:here.samplePhotoPath is None and 'hidden' or None" />
 
       </form>
-      <script type="text/javascript">
-      // <!--
-        var fm = new FormManager(document.getElementById('sample_image_form'));
-        var portfolioPresentationForm = document.getElementById('sample_image_form');
-        portfolioPresentationForm.elements.namedItem("path").className = 'hidden';
-        portfolioPresentationForm.elements.namedItem("defineSample").name = 'selectSample';
-
-        fm.onBeforeSubmit = function(m, evt) {
-          if (m.submitButton.name == 'selectSample') {
-            var path = absolute_url().slice(portal_url().length);
-            var url = portal_url() + "/ckeditor/filemanager/browser/mac_finder/browser.html?Connector=connectors/plinn/connector&Type=Image&path=" + path + '/';
-            var winOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes,width=645,height=405";
-            window.open(url, 'StandaloneBrowser', winOptions);
-
-            window.SetUrl = function (url) {
-              with(m.submitButton) {
-                name = 'defineSample';
-                value = 'Valider';
-              }
-              portfolioPresentationForm.elements.namedItem('path').value = unescape(url.slice(absolute_url().length+1));
-              var thumbnail = new Image();
-              thumbnail.src = url + '/getThumbnail';
-              var img = document.getElementById('sampleImageThumbnail');
-              img.parentNode.replaceChild(thumbnail, img);
-              thumbnail.id = 'sampleImageThumbnail';
-            }
-            return 'cancelSubmit'
-          }
-        }
-      // -->
-      </script>
+      <script type="text/javascript"
+              tal:attributes="src here/portfolio/jsbuild/portfolio_presentation_form.js/absolute_url"></script>
     </div>
   </body>
 </html>
