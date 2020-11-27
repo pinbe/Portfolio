@@ -15,8 +15,11 @@
   "devDependencies": {
     "@types/d3": "^6.1.0",
     "@types/jquery": "^3.5.4",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "awesome-typescript-loader": "^5.2.1",
     "css-loader": "^4.2.1",
+    "eslint": "^7.14.0",
     "source-map-loader": "^1.0.2",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",

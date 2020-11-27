@@ -7,7 +7,7 @@ function main() {
     (<HTMLInputElement>portfolioPresentationForm.elements.namedItem("path")).className = 'hidden';
     (<HTMLInputElement>portfolioPresentationForm.elements.namedItem("defineSample")).name = 'selectSample';
 
-    fm.onBeforeSubmit = function (m: FormManager, evt: Event) {
+    fm.onBeforeSubmit = function (m: FormManager) {
         if (m.submitButton.name == 'selectSample') {
             const path = absolute_url().slice(portal_url().length);
             const url = portal_url() + "/ckeditor/filemanager/browser/mac_finder/browser.html?Connector=connectors/plinn/connector&Type=Image&path=" + path + '/';
@@ -24,10 +24,10 @@ function main() {
                 const img = document.getElementById('sampleImageThumbnail');
                 img.parentNode.replaceChild(thumbnail, img);
                 thumbnail.id = 'sampleImageThumbnail';
-            }
-            return 'cancelSubmit'
+            };
+            return 'cancelSubmit';
         }
-    }
+    };
 }
 
 main();

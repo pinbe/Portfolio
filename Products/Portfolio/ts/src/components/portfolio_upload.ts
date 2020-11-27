@@ -8,7 +8,8 @@ import {DDFileUploaderBase, UploadedElement} from "plinn/src/components/fileuplo
 import * as d3 from "d3";
 
 
-interface D3SlideT extends d3.Selection<HTMLDivElement, File, null, null>, UploadedElement {}
+interface D3SlideT extends d3.Selection<HTMLDivElement, File, null, null>, UploadedElement {
+}
 
 
 export class DDImageUploader extends DDFileUploaderBase {
@@ -46,14 +47,14 @@ export class DDImageUploader extends DDFileUploaderBase {
         const index: { [src: string]: HTMLImageElement } = {};
         this.dropbox.querySelectorAll<HTMLImageElement>('img')
             .forEach((im) => {
-                if(isThumbnail.test(im.src))
+                if (isThumbnail.test(im.src))
                     index[im.src] = im;
             });
         return index;
     }
 
     // Methods about upload.
-    protected handleFiles(files: FileList) {
+    protected handleFiles(files: FileList): void {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const slide = this.createSlide(file);
@@ -62,7 +63,7 @@ export class DDImageUploader extends DDFileUploaderBase {
         }
     }
 
-    protected beforeUpload(slide: D3SlideT) {
+    protected beforeUpload(slide: D3SlideT): void {
         slide.file = slide.datum(); // required by DDFileUploaderBase.prototype.upload
         this.uploadedSlide = slide;
         this.previewImg = slide.select<HTMLImageElement>('img').node();
@@ -75,7 +76,7 @@ export class DDImageUploader extends DDFileUploaderBase {
         window.scroll(0, to);
     }
 
-    protected uploadCompleteHandlerCB(req: XMLHttpRequest) {
+    protected uploadCompleteHandlerCB(req: XMLHttpRequest): void {
         let slide = this.uploadedSlide;
         slide.select('.filename').remove();
         slide.select('.progressbar').remove();
@@ -110,7 +111,7 @@ export class DDImageUploader extends DDFileUploaderBase {
         this.previewQueueLoadNext();
     }
 
-    protected progressHandlerCB(progress: number) {
+    protected progressHandlerCB(progress: number): void {
         this.progressBar.style.width = progress * 100 + '%';
         this.previewImg.style.opacity =
             Number(Math.max(

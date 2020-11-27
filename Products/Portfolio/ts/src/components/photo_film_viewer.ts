@@ -145,7 +145,7 @@ export class FilmSlider {
     }
 
     // adjust viewer to available height
-    fitViewer() {
+    fitViewer(): void {
         /* The following if / else if is used to enable "auto fullscreen"
            when device' screen is too small to display thumbnails bar and metadata. */
         if (document.body.getBoundingClientRect().width <= AUTO_FULLSCREEN_THRESHOLD)
@@ -161,7 +161,7 @@ export class FilmSlider {
         this.optimizeImg(this.image);
     }
 
-    optimizeImg(img: HTMLImageElement) {
+    optimizeImg(img: HTMLImageElement): void {
         const infos = /(^.*)\/getResizedImage\?size=(\d+)/.exec(img.src);
         const canonicalImgUrl = infos[1];
         const currentSize = parseInt(infos[2]);
@@ -180,7 +180,7 @@ export class FilmSlider {
         this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + optiSize;
     }
 
-    getBestFitSize(srcSize: Size) {
+    getBestFitSize(srcSize: Size): number {
         // ratio < 1 => portrait
         const viewPortRect = this.viewPort.getBoundingClientRect();
         const dstSize = {
@@ -213,7 +213,7 @@ export class FilmSlider {
         return stepSize;
     }
 
-    adjustImageSize(img: HTMLImageElement) {
+    adjustImageSize(img: HTMLImageElement): void {
         const viewPortRect = this.viewPort.getBoundingClientRect();
         const imgWidth = img.naturalWidth;
         const imgHeight = img.naturalHeight;
@@ -226,13 +226,13 @@ export class FilmSlider {
         img.height = imgHeight * scale;
     }
 
-    centerImage() {
+    centerImage(): void {
         const rect = this.viewPort.getBoundingClientRect();
         this.image.style.left = (rect.width - this.image.width) / 2 + 'px';
         this.image.style.top = (rect.height - this.image.height) / 2 + 'px';
     }
 
-    centerSlide(slide?: HTMLElement) {
+    centerSlide(slide?: HTMLElement): void {
         slide = (slide) ? slide : this.displayedSlide;
         const slideBCR = slide.getBoundingClientRect();
         const currentSlideCenter = slideBCR.left + slideBCR.width / 2;
@@ -240,7 +240,7 @@ export class FilmSlider {
         this.filmBar.scrollLeft += currentSlideCenter - filmBarBCR.width / 2 - filmBarBCR.left;
     }
 
-    loadSibling(previous: boolean) {
+    loadSibling(previous: boolean): Element | null {
         const slide = (previous) ?
             this.displayedSlide.parentElement.previousElementSibling :
             this.displayedSlide.parentElement.nextElementSibling;
@@ -291,7 +291,7 @@ export class FilmSlider {
             });
     }
 
-    translateImgUrl(url: string) {
+    translateImgUrl(url: string): string {
         let canonicalImgUrl: string;
         if (this.reBaseCtxUrl) {
             canonicalImgUrl = url.replace(this.reBaseCtxUrl,
@@ -302,7 +302,7 @@ export class FilmSlider {
         return canonicalImgUrl;
     }
 
-    thumbnailClickHandler(evt: MouseEvent) {
+    thumbnailClickHandler(evt: MouseEvent): void {
         let target = <HTMLElement>evt.target;
         while (target.tagName !== 'A' && target !== this.filmBar) {
             target = target.parentElement;
@@ -349,7 +349,7 @@ export class FilmSlider {
         this.displayedSlide.classList.add('displayed');
     }
 
-    toolbarClickHandler(evt: MouseEvent) {
+    toolbarClickHandler(evt: MouseEvent): void {
         let target = <HTMLElement>evt.target;
         while (target.tagName !== 'A' && target !== this.toolbar)
             target = target.parentElement;
@@ -385,7 +385,7 @@ export class FilmSlider {
         }
     }
 
-    keyDownHandler(evt: KeyboardEvent) {
+    keyDownHandler(evt: KeyboardEvent): void {
         switch (evt.keyCode) {
             case keyLeft :
                 this._stopSlideShow();
@@ -404,7 +404,7 @@ export class FilmSlider {
         }
     }
 
-    keyPressHandler(evt: KeyboardEvent) {
+    keyPressHandler(evt: KeyboardEvent): void {
         const target = <HTMLElement>evt.target;
         if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
             return;
@@ -430,7 +430,7 @@ export class FilmSlider {
         }
     }
 
-    populateViewer(req: XMLHttpRequest) {
+    populateViewer(req: XMLHttpRequest): void {
         const elements = req.responseXML.documentElement.childNodes;
         let i, element, cmf_uid, buyable = false;
         for (i = 0; i < elements.length; i++) {
@@ -464,7 +464,7 @@ export class FilmSlider {
         }
     }
 
-    displayPendingImage() {
+    displayPendingImage(): void {
         this.adjustImageSize(this.pendingImage);
         this.image.style.visibility = 'hidden';
         this.image.src = this.pendingImage.src;
@@ -480,14 +480,14 @@ export class FilmSlider {
         this._pendImgLoading = false;
     }
 
-    updateBreadcrumbs(url: string, title: string) {
+    updateBreadcrumbs(url: string, title: string): void {
         if (this.hasBreadcrumbs) {
             this.lastBCElement.href = url;
             this.lastBCElement.innerHTML = title;
         }
     }
 
-    startThumbnailsLoadQueue() {
+    startThumbnailsLoadQueue(): void {
         const thumbnails = this.film.getElementsByTagName('img');
         if (thumbnails.length === 1) {
             return;
@@ -516,7 +516,7 @@ export class FilmSlider {
         next.src = this.translateImgUrl((<HTMLAnchorElement>next.parentElement).href) + '/getThumbnail';
     }
 
-    toggleFullScreen() {
+    toggleFullScreen(): void {
         if (this.fullScreenCapable) {
             if (getVendorSpecific(document, 'fullscreenElement') === null ||
                 getVendorSpecific(document, 'fullScreenElement') === null)
@@ -543,7 +543,7 @@ export class FilmSlider {
         }
     }
 
-    onFullScreenChange(toggle?: boolean) {
+    onFullScreenChange(toggle?: boolean): void {
         if (getVendorSpecific(document, 'fullscreenElement') === null ||
             getVendorSpecific(document, 'fullScreenElement') === null ||
             toggle === false)
@@ -552,7 +552,7 @@ export class FilmSlider {
             this.onEnterFullScreen();
     }
 
-    onEnterFullScreen() {
+    onEnterFullScreen(): void {
         const btn = this.buttons.full_screen.querySelector('i');
         btn.classList.remove('fa-expand-arrows-alt');
         btn.classList.add('fa-compress-arrows-alt');
@@ -563,7 +563,7 @@ export class FilmSlider {
             this._fullScreenMouseMoveHandler);
     }
 
-    onExitFullScreen() {
+    onExitFullScreen(): void {
         const btn = this.buttons.full_screen.querySelector('i');
         btn.classList.remove('fa-compress-arrows-alt');
         btn.classList.add('fa-expand-arrows-alt');
@@ -574,7 +574,7 @@ export class FilmSlider {
         this._stopSlideShow();
     }
 
-    _showToolbar() {
+    _showToolbar(): void {
         this.toolbar.classList.remove('zero_opacity');
         clearTimeout(this.toolBarTimeoutID);
         this.toolBarTimeoutID = setTimeout(
@@ -584,7 +584,7 @@ export class FilmSlider {
             3500);
     }
 
-    toggleSlideShow() {
+    toggleSlideShow(): void {
         const slideShowBtn = this.buttons.slide_show.querySelector('i');
         if (slideShowBtn.classList.contains('fa-play')) {
             this._startSlideShow();
@@ -593,7 +593,7 @@ export class FilmSlider {
         }
     }
 
-    _startSlideShow() {
+    _startSlideShow(): void {
         const slideShowBtn = this.buttons.slide_show.querySelector('i');
         slideShowBtn.classList.remove('fa-play');
         slideShowBtn.classList.add('fa-pause');
@@ -608,14 +608,14 @@ export class FilmSlider {
             this.slideShowTimeout);
     }
 
-    _stopSlideShow() {
+    _stopSlideShow(): void {
         const slideShowBtn = this.buttons.slide_show.querySelector('i');
         slideShowBtn.classList.remove('fa-pause');
         slideShowBtn.classList.add('fa-play');
         clearInterval(this.slideShowIntervalId);
     }
 
-    _loadNextThumb() {
+    _loadNextThumb(): void {
         const next = this.thumbnailsLoadingOrder.shift();
         if (!next) {
             return;

@@ -24,7 +24,7 @@ enum ContainerType {
 }
 
 export class DefaultTailLoader implements TailLoader {
-    private containerType: ContainerType;
+    private readonly containerType: ContainerType;
 
     constructor(containerType: ContainerType) {
         this.containerType = containerType;
@@ -133,7 +133,7 @@ export class Lightbox {
         if (this.form) {
             const fm = this.fm = new FormManager(this.form);
             this.form.addEventListener('change', (evt) => this.onChangeHandler(evt));
-            fm.onBeforeSubmit = (fm_, evt) => this.onBeforeSubmit(fm_);
+            fm.onBeforeSubmit = (fm_, ) => this.onBeforeSubmit(fm_);
             fm.onResponseLoad = (req) => this.onResponseLoad(req);
         }
 
@@ -142,7 +142,7 @@ export class Lightbox {
         this._DDOrderingListeners = {
             'dragstart': (evt: DragEvent) => this.onDragStart(evt),
             'dragover': (evt: DragEvent) => this.onDragOver(evt),
-            'dragend': (evt: DragEvent) => this.onDragEnd(),
+            'dragend': () => this.onDragEnd(),
         };
         if (orderable)
             this.enableDDOrdering();
@@ -604,7 +604,7 @@ export class Lightbox {
         req.addEventListener('load', (evt) => {
                 const resp = <XMLHttpRequest>evt.target;
                 if (resp.status === 200) {
-                    this._moveSelectedPhotos(resp)
+                    this._moveSelectedPhotos(resp);
                 }
             }
         );
@@ -615,10 +615,10 @@ export class Lightbox {
         this.draggedSelection.forEach((slide) => {
                 fd.append(
                     'uids:list',
-                    (<HTMLInputElement>slide.querySelector('input[name="uids:list"]')).value)
+                    (<HTMLInputElement>slide.querySelector('input[name="uids:list"]')).value);
             }
         );
-        fd.append('afterUid', (<HTMLInputElement>this.lastDropTarget.querySelector('input[name="uids:list"]')).value)
+        fd.append('afterUid', (<HTMLInputElement>this.lastDropTarget.querySelector('input[name="uids:list"]')).value);
         req.send(fd);
     }
 
@@ -657,7 +657,7 @@ export class Lightbox {
         return (slide.parentElement === this.grid) ? <HTMLDivElement>slide : null;
     }
 
-    public notifyAdd(slideElt: HTMLDivElement) {
+    public notifyAdd(slideElt: HTMLDivElement): void {
         this.slides.push(slideElt);
         this.disableDefaultDragging(slideElt);
         this.lastSlide = slideElt;

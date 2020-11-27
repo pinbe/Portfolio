@@ -4,8 +4,8 @@ import {DefaultTailLoader, Lightbox, TailLoader} from "./components/lightbox";
 import {DDImageUploader} from "./components/portfolio_upload";
 
 class SearchResultTailLoader implements TailLoader {
-    private searchUrl: string;
-    private initQuery: any;
+    private readonly searchUrl: string;
+    private readonly initQuery: any;
 
     constructor(searchUrl: string, initQueryJson: string) {
         this.searchUrl = searchUrl;
