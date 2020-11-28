@@ -150,7 +150,7 @@ export class FilmSlider {
         this.stretchable.style.height = end - start + 'px';
 
         if(!initFit)
-            this.viewer.redraw();
+            this.viewer.redrawOnResize();
     }
 
     private centerSlide(slide?: HTMLElement): void {
