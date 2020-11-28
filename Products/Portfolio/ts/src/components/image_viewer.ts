@@ -1,4 +1,4 @@
-interface Size {
+export interface Size {
     width: number;
     height: number;
 }
@@ -9,7 +9,7 @@ export interface IImageViewer {
 }
 
 export abstract class ImageViewerBase implements IImageViewer {
-    private readonly viewPort: HTMLElement;
+    protected readonly viewPort: HTMLElement;
     private readonly stepSizes: number[];
     private thumbnail: HTMLImageElement;
     private naturalImgSize: Size;

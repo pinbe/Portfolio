@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import {fabric} from "fabric";
-import {ImageViewerBase} from "./image_viewer";
+import {ImageViewerBase, Size} from "./image_viewer";
 
 export class InSituDisplay extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
@@ -10,10 +10,10 @@ export class InSituDisplay extends ImageViewerBase {
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
                 stepSizes: number[]) {
-        super(image, viewPort, stepSizes);
+        super(viewPort, stepSizes);
         const canvasSel = d3.select(viewPort)
-                .append('canvas')
-                .style('position', 'absolute')
+            .append('canvas')
+            .style('position', 'absolute')
             // .style('border', '1px dashed blue')
         ;
         this.canvas = new fabric.Canvas(
@@ -27,23 +27,27 @@ export class InSituDisplay extends ImageViewerBase {
         d3.select(this.viewPort).select(`.${InSituDisplay.CONTAINER_CLASS}`)
             .style('position', 'absolute');
 
-        this.image = new fabric.Image(image, {selectable: false});
+        this.image = new fabric.Image(new Image(),
+            {selectable: false}
+        );
         this.canvas.add(this.image);
         image.parentNode.removeChild(image);
     }
 
-    loadFromURL(url: string): void {
-        this.image.setSrc(url, () => this.redraw());
-    }
-
-    redraw(): void {
-        const frame = this.viewPort.getBoundingClientRect();
+    fitContent(frame: Size, imSize: Size): void {
         this.canvas.setDimensions({width: frame.width, height: frame.height});
-        const imSize = this.image.getOriginalSize();
         let scale = Math.min(frame.width / imSize.width, frame.height / imSize.height);
         scale = Math.min(scale, 1);
         this.image.scaleX = this.image.scaleY = scale;
         this.image.center();
         this.canvas.renderAll();
+    }
+
+    updateImageUrl(url: string): Promise<Size> {
+        return new Promise<Size>((resolve) => {
+            this.image.setSrc(url, () => {
+                resolve(this.image.getOriginalSize());
+            });
+        });
     }
 }
