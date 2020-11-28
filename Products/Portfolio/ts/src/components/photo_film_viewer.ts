@@ -5,6 +5,8 @@ Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
 
 
+import {IImageViewer, ImageViewer} from "./image_viewer";
+
 const keyLeft = 37, keyRight = 39;
 const DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
 const DEFAULT_SLIDESHOW_TIMEOUT = 4000;
@@ -51,20 +53,13 @@ enum ViewMode {
     fullscreen
 }
 
-interface Size {
-    width: number;
-    height: number;
-}
-
 export class FilmSlider {
     private readonly stretchable: HTMLElement;
     private readonly filmBar: HTMLElement;
     private film: HTMLElement;
     private displayedSlide: HTMLElement;
-    private readonly displayedSlideInSelection: boolean;
     private cartSlide: HTMLElement;
-    private readonly image: HTMLImageElement;
-    private viewPort: HTMLElement;
+    private readonly viewPort: HTMLElement;
     private viewMode: ViewMode;
     private readonly buttons: { [name: string]: HTMLAnchorElement };
     private readonly toolbar: HTMLElement;
@@ -74,15 +69,13 @@ export class FilmSlider {
     private readonly slideShowTimeout: number;
     private readonly fullScreenCapable: boolean;
     private readonly _fullScreenMouseMoveHandler: () => void;
-    private readonly pendingImage: HTMLImageElement;
     private readonly center: number;
     private readonly reBaseCtxUrl: RegExp;
     private readonly canonicalUrl: string;
-    // private readonly ctxUrlTranslation: [(string | null), (string | null)];
-    private _pendImgLoading: boolean;
     private thumbnailsLoadingOrder: HTMLImageElement[];
     private toolBarTimeoutID: number;
     private slideShowIntervalId: number;
+    private viewer: IImageViewer;
 
     constructor(stretchableElement: HTMLElement,
                 image: HTMLImageElement,
@@ -100,11 +93,12 @@ export class FilmSlider {
         this.filmBar = filmBar;
         this.film = <HTMLElement>filmBar.firstElementChild;
         this.displayedSlide = filmBar.querySelector('a.displayed');
-        this.displayedSlideInSelection = this.displayedSlide.classList.contains('selected');
         this.cartSlide = document.getElementById('cart_slide');
-        this.image = image;
         this.viewPort = image.parentElement;
         this.viewMode = ViewMode.medium;
+        this.stepSizes = stepSizes;
+
+        this.viewer = new ImageViewer(image, this.viewPort, this.stepSizes);
 
         this.toolbar = toolbar;
         if (breadcrumbs) {
@@ -116,7 +110,6 @@ export class FilmSlider {
         } else {
             this.hasBreadcrumbs = false;
         }
-        this.stepSizes = stepSizes;
         this.slideShowTimeout = slideShowTimeout;
         this.fullScreenCapable = getVendorSpecific(document, 'fullScreenEnabled') === true ||
             getVendorSpecific(document, 'fullscreenEnabled') === true;
@@ -131,21 +124,17 @@ export class FilmSlider {
             this.buttons[b.getAttribute('name')] = b;
         }
 
-        this.pendingImage = new Image();
-        this.pendingImage.addEventListener('load', () => this.displayPendingImage());
         this.center = ctxInfos.center;
         this.reBaseCtxUrl = (ctxInfos.reBaseCtxUrl) ? new RegExp(ctxInfos.reBaseCtxUrl) : null;
         this.canonicalUrl = ctxInfos.canonicalUrl;
-        this._pendImgLoading = false;
 
         this.centerSlide();
-        this.fitViewer();
+        this.fitSize();
         this.addEventListeners();
         this.startThumbnailsLoadQueue();
     }
 
-    // adjust viewer to available height
-    private fitViewer(): void {
+    private fitSize(): void {
         /* The following if / else if is used to enable "auto fullscreen"
            when device' screen is too small to display thumbnails bar and metadata. */
         if (document.body.getBoundingClientRect().width <= AUTO_FULLSCREEN_THRESHOLD)
@@ -158,78 +147,8 @@ export class FilmSlider {
         const start = this.stretchable.getBoundingClientRect().top;
         const end = this.stretchable.nextElementSibling.getBoundingClientRect().top;
         this.stretchable.style.height = end - start + 'px';
-        this.optimizeImg(this.image);
-    }
 
-    private optimizeImg(img: HTMLImageElement): void {
-        const infos = /(^.*)\/getResizedImage\?size=(\d+)/.exec(img.src);
-        const canonicalImgUrl = infos[1];
-        const currentSize = parseInt(infos[2]);
-
-        const optiSize = this.getBestFitSize({width: img.width, height: img.height});
-        if (currentSize === optiSize) {
-            this.adjustImageSize(this.image);
-            this.centerImage();
-            return;
-        }
-
-        this.centerImage();
-        if (this._pendImgLoading)
-            return;
-        this._pendImgLoading = true;
-        this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + optiSize;
-    }
-
-    private getBestFitSize(srcSize: Size): number {
-        // ratio < 1 => portrait
-        const viewPortRect = this.viewPort.getBoundingClientRect();
-        const dstSize = {
-            width: viewPortRect.width,
-            height: viewPortRect.height
-        };
-
-        let i, stepSize, imgSize, scale;
-        const ratio = srcSize.width / srcSize.height;
-
-        for (i = 0; i < this.stepSizes.length; i++) {
-            stepSize = this.stepSizes[i];
-            if (ratio >= 1) {
-                imgSize = {
-                    width: stepSize,
-                    height: stepSize / ratio
-                };
-            } else {
-                imgSize = {
-                    width: stepSize * ratio,
-                    height: stepSize
-                };
-            }
-            scale = Math.min(dstSize.width / imgSize.width,
-                dstSize.height / imgSize.height);
-            if (scale <= 1)
-                return stepSize;
-        }
-
-        return stepSize;
-    }
-
-    private adjustImageSize(img: HTMLImageElement): void {
-        const viewPortRect = this.viewPort.getBoundingClientRect();
-        const imgWidth = img.naturalWidth;
-        const imgHeight = img.naturalHeight;
-
-        let scale = Math.min(viewPortRect.width / imgWidth,
-            viewPortRect.height / imgHeight);
-        scale = Math.min(scale, 1);
-
-        img.width = imgWidth * scale;
-        img.height = imgHeight * scale;
-    }
-
-    private centerImage(): void {
-        const rect = this.viewPort.getBoundingClientRect();
-        this.image.style.left = (rect.width - this.image.width) / 2 + 'px';
-        this.image.style.top = (rect.height - this.image.height) / 2 + 'px';
+        this.viewer.redraw();
     }
 
     private centerSlide(slide?: HTMLElement): void {
@@ -280,14 +199,14 @@ export class FilmSlider {
                 document.addEventListener(fullScreenEvents[i], _toggleFullScreen);
         }
 
-        window.addEventListener('resize', () => this.fitViewer());
+        window.addEventListener('resize', () => this.fitSize());
         window.addEventListener('orientationchange',
             () => {
                 /* On iOS with Chrome and Firefox
                 * orientationchange is raised too early,
                 * so, screen size is up to date after
                 * the end of the animation */
-                setTimeout(() => this.fitViewer(), 250);
+                setTimeout(() => this.fitSize(), 250);
             });
     }
 
@@ -311,8 +230,6 @@ export class FilmSlider {
             return;
 
         if (this.viewMode === ViewMode.fullscreen) {
-            // this.mosaique.unload();
-            // this.mosaique = null;
             this.viewMode = ViewMode.medium;
         }
         evt.preventDefault();
@@ -321,17 +238,9 @@ export class FilmSlider {
         history.pushState((<HTMLAnchorElement>target).href, '', (<HTMLAnchorElement>target).href);
 
         const imgBaseUrl = (<HTMLAnchorElement>target).href;
-        const canonicalImgUrl = this.translateImgUrl(imgBaseUrl);
-
         const ajaxUrl = imgBaseUrl + '/photo_view_ajax';
-
-        //this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=600';
         const thumbnail = target.querySelector('img');
-        const bestFitSize = this.getBestFitSize({
-            width: thumbnail.width,
-            height: thumbnail.height
-        });
-        this.pendingImage.src = canonicalImgUrl + '/getResizedImage?size=' + bestFitSize;
+        this.viewer.loadFromThumbnail(thumbnail);
 
         const req = new XMLHttpRequest();
         req.addEventListener('load', ev => {
@@ -442,10 +351,11 @@ export class FilmSlider {
                         dest.innerHTML = element.firstChild.nodeValue;
                     }
                     break;
+
                 case 'imageattributes' :
                     const link = this.buttons.back_to_portfolio;
                     link.href = element.getAttribute('back_to_context_url');
-                    this.image.alt = element.getAttribute('alt');
+                    // this.image.alt = element.getAttribute('alt');
                     this.updateBreadcrumbs(element.getAttribute('last_bc_url'),
                         element.getAttribute('img_id'));
                     cmf_uid = element.getAttribute('cmf_uid');
@@ -462,22 +372,6 @@ export class FilmSlider {
                     }
                 }));
         }
-    }
-
-    private displayPendingImage(): void {
-        this.adjustImageSize(this.pendingImage);
-        this.image.style.visibility = 'hidden';
-        this.image.src = this.pendingImage.src;
-        this.image.width = this.pendingImage.width;
-        this.image.height = this.pendingImage.height;
-        this.centerImage();
-        this.image.style.visibility = 'visible';
-        if (this.displayedSlideInSelection) {
-            this.image.parentElement.classList.add('selected');
-        } else {
-            this.image.parentElement.classList.remove('selected');
-        }
-        this._pendImgLoading = false;
     }
 
     private updateBreadcrumbs(url: string, title: string): void {
@@ -529,13 +423,13 @@ export class FilmSlider {
                 document.body.classList.remove('fakefullscreen');
                 // this.onExitFullScreen();
                 // window.dispatchEvent(new Event('resize'));
-                this.fitViewer();
+                this.fitSize();
                 this.onFullScreenChange(false);
                 window.scrollTo(0, 0);
             } else {
                 // enter fullscreen
                 document.body.classList.add('fakefullscreen');
-                this.fitViewer();
+                this.fitSize();
                 // this.onEnterFullScreen();
                 this.onFullScreenChange(true);
                 // window.dispatchEvent(new Event('resize'));
