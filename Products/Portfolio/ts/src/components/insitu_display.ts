@@ -1,0 +1,49 @@
+import * as d3 from "d3";
+import {fabric} from "fabric";
+import {ImageViewerBase} from "./image_viewer";
+
+export class InSituDisplay extends ImageViewerBase {
+    private readonly canvas: fabric.Canvas;
+    private readonly image: fabric.Image;
+    static CONTAINER_CLASS = 'fabric-canvas-wrapper';
+
+    constructor(image: HTMLImageElement,
+                viewPort: HTMLElement,
+                stepSizes: number[]) {
+        super(image, viewPort, stepSizes);
+        const canvasSel = d3.select(viewPort)
+                .append('canvas')
+                .style('position', 'absolute')
+            // .style('border', '1px dashed blue')
+        ;
+        this.canvas = new fabric.Canvas(
+            canvasSel.node(),
+            {
+                containerClass: InSituDisplay.CONTAINER_CLASS,
+                selection: false,
+                hoverCursor: 'unset'
+            }
+        );
+        d3.select(this.viewPort).select(`.${InSituDisplay.CONTAINER_CLASS}`)
+            .style('position', 'absolute');
+
+        this.image = new fabric.Image(image, {selectable: false});
+        this.canvas.add(this.image);
+        image.parentNode.removeChild(image);
+    }
+
+    loadFromURL(url: string): void {
+        this.image.setSrc(url, () => this.redraw());
+    }
+
+    redraw(): void {
+        const frame = this.viewPort.getBoundingClientRect();
+        this.canvas.setDimensions({width: frame.width, height: frame.height});
+        const imSize = this.image.getOriginalSize();
+        let scale = Math.min(frame.width / imSize.width, frame.height / imSize.height);
+        scale = Math.min(scale, 1);
+        this.image.scaleX = this.image.scaleY = scale;
+        this.image.center();
+        this.canvas.renderAll();
+    }
+}
