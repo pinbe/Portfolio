@@ -129,12 +129,13 @@ export class FilmSlider {
         this.canonicalUrl = ctxInfos.canonicalUrl;
 
         this.centerSlide();
-        this.fitSize();
+        this.fitSize(true);
+        this.viewer.loadFromThumbnail(this.displayedSlide.querySelector('img'));
         this.addEventListeners();
         this.startThumbnailsLoadQueue();
     }
 
-    private fitSize(): void {
+    private fitSize(initFit=false): void {
         /* The following if / else if is used to enable "auto fullscreen"
            when device' screen is too small to display thumbnails bar and metadata. */
         if (document.body.getBoundingClientRect().width <= AUTO_FULLSCREEN_THRESHOLD)
@@ -148,7 +149,8 @@ export class FilmSlider {
         const end = this.stretchable.nextElementSibling.getBoundingClientRect().top;
         this.stretchable.style.height = end - start + 'px';
 
-        this.viewer.redraw();
+        if(!initFit)
+            this.viewer.redraw();
     }
 
     private centerSlide(slide?: HTMLElement): void {
