@@ -27,7 +27,7 @@ export abstract class ImageViewerBase implements IImageViewer {
         return this.viewPort.getBoundingClientRect();
     }
 
-    private getBestFitSize(srcSize: Size): number {
+    protected getBestFitSize(srcSize: Size): number {
         const dstSize = this.frame;
 
         // ratio < 1 => portrait
