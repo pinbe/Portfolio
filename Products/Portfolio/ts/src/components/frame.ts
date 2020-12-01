@@ -6,7 +6,11 @@ export class FramedImage extends fabric.Group {
 
     static fromUrls(
         stickImgUrl: string,
-        mainImgUrl: string): Promise<FramedImage> {
+        mainImgUrl: string,
+        stickScale=1,
+        mainImgScale=1,
+        scale=1
+    ): Promise<FramedImage> {
 
 
         return new Promise<FramedImage>((resolve) => {
@@ -15,11 +19,21 @@ export class FramedImage extends fabric.Group {
                 im.addEventListener('load', () => resolve(im));
                 im.src = src;
             }));
-            Promise.all(imgPromises).then((imgs) => resolve(new FramedImage(imgs[0], imgs[1])));
+            Promise.all(imgPromises).then((imgs) => {
+                resolve(new FramedImage(
+                    imgs[0],
+                    imgs[1],
+                    stickScale,
+                    mainImgScale,
+                    scale
+                    ));
+            });
         });
     }
 
-    private constructor(stickImg: HTMLImageElement, mainImg: HTMLImageElement) {
+    private constructor(stickImg: HTMLImageElement, mainImg: HTMLImageElement, stickScale:number, mainImgScale:number, scale:number) {
+        const stickW = stickImg.height = stickImg.naturalHeight * stickScale;
+        stickImg.width = stickImg.naturalWidth * stickScale;
         const stickPattern = new fabric.Pattern(
             {
                 source: stickImg,
@@ -27,14 +41,21 @@ export class FramedImage extends fabric.Group {
             }
         );
 
-        // TODO: args
-        const stickW = stickImg.naturalHeight;
-        // const mImgW = 600;
-        // const mImgH = 600;
-        const mImgW = mainImg.naturalWidth;
-        const mImgH = mainImg.naturalHeight;
-        console.log('im size:', mImgW, mImgH);
-        const scale = 0.3;
+        // // TODO: args
+        // const stickW = stickImg.naturalHeight;
+
+        const mainFImg = new fabric.Image(
+            mainImg,
+            {
+                top: stickW,
+                left: stickW,
+                scaleX: mainImgScale,
+                scaleY: mainImgScale,
+            }
+        );
+        const mImgW = mainFImg.getScaledWidth();
+        const mImgH = mainFImg.getScaledHeight();
+
 
         function P(x: number, y: number) {
             return {x: x, y: y};
@@ -54,7 +75,6 @@ export class FramedImage extends fabric.Group {
                 top: 0,
                 left: 0,
                 angle: 0,
-                // hasBorders: false,
             }
         );
         const borderBottom = new fabric.Polygon(
@@ -88,14 +108,6 @@ export class FramedImage extends fabric.Group {
                 top: 0,
                 left: mImgW + 2 * stickW,
                 angle: 90,
-            }
-        );
-
-        const mainFImg = new fabric.Image(
-            mainImg,
-            {
-                top: stickW,
-                left: stickW,
             }
         );
 

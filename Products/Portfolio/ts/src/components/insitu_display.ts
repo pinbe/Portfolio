@@ -61,7 +61,11 @@ export class InSituDisplay extends ImageViewerBase {
     private debug() {
         FramedImage.fromUrls(
             'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/amcase-stick.png',
-            'http://localhost:8080/plinn/themes/NYC/DSC00231.jpg/getResizedImage?size=1200')
+            'http://localhost:8080/plinn/themes/NYC/DSC00231.jpg/getResizedImage?size=800',
+            0.5,
+            1,
+            1
+            )
             .then((frmi) => {
                 this.canvas.add(frmi);
             });
