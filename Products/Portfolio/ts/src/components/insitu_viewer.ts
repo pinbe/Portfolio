@@ -1,7 +1,8 @@
 import * as d3 from "d3";
 import {fabric} from "fabric";
-import {ImageViewerBase, Size} from "./image_viewer";
+import {ImageViewerBase} from "./image_viewer";
 import {FramedImage} from "./frame";
+import {Size} from "./utils";
 
 
 enum DisplayMode {
