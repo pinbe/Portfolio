@@ -60,45 +60,15 @@ export class InSituDisplay extends ImageViewerBase {
 
     private debug() {
         FramedImage.fromUrls(
-            'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/amcase-stick.png',
+            'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/am-stick.png',
             'http://localhost:8080/plinn/themes/NYC/DSC00231.jpg/getResizedImage?size=800',
-            0.5,
+            1,
             1,
             1
             )
             .then((frmi) => {
                 this.canvas.add(frmi);
+                this.canvas.renderAll();
             });
-        // const frm = new FramedImage(stickUrl, '');
-        // this.canvas.add(frm);
-        // const grp = new fabric.Group([new fabric.Rect({width:100, height:50})]);
-        // const grp = new fabric.Group(undefined, {width:500, height:500});
-        // grp.add(new fabric.Rect({width:100, height:50}));
-        // this.canvas.add(grp);
-        // window.setInterval(()=>this.fitContent(), 1000);
-        // let p = new Promise<HTMLImageElement>((resolve) => {
-        //     const stickImg = new Image();
-        //     stickImg.addEventListener('load', () => {
-        //         resolve(stickImg);
-        //     });
-        //     stickImg.src = 'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/amcase-stick.png';
-        // });
-        //
-        // p.then((im) => {
-        //     const pattern = new fabric.Pattern({
-        //         source: im,
-        //         repeat: 'repeat-x',
-        //
-        //     });
-        //     const bezel = new fabric.Polygon();
-        //     const borderRect = new fabric.Rect(
-        //         {
-        //             height: im.naturalHeight,
-        //             width: im.naturalWidth * 3,
-        //             fill: pattern
-        //         });
-        //     this.canvas.add(borderRect);
-        //
-        // });
     }
 }

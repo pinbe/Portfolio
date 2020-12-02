@@ -31,18 +31,33 @@ export class FramedImage extends fabric.Group {
         });
     }
 
-    private constructor(stickImg: HTMLImageElement, mainImg: HTMLImageElement, stickScale:number, mainImgScale:number, scale:number) {
-        const stickW = stickImg.height = stickImg.naturalHeight * stickScale;
-        stickImg.width = stickImg.naturalWidth * stickScale;
+    private constructor(stickImg: HTMLImageElement,
+                        mainImg: HTMLImageElement,
+                        stickScale:number,
+                        mainImgScale:number,
+                        scale:number) {
+        const stickFImg = new fabric.Image(
+            stickImg,
+            {
+                scaleX: stickScale,
+                scaleY: stickScale
+            }
+        );
+        const stickW = stickFImg.getScaledHeight();
+        const patternCanvas = new fabric.StaticCanvas(undefined);
+        patternCanvas.add(stickFImg);
+        patternCanvas.setDimensions({width: stickFImg.getScaledWidth(), height: stickFImg.getScaledHeight()});
+        const canvasElt = patternCanvas.getElement();
+        canvasElt.width = stickFImg.getScaledWidth();
+        canvasElt.height= stickFImg.getScaledHeight();
+        patternCanvas.renderAll();
         const stickPattern = new fabric.Pattern(
             {
-                source: stickImg,
+                source: <HTMLImageElement><unknown>canvasElt,
                 repeat: 'repeat-x',
             }
         );
 
-        // // TODO: args
-        // const stickW = stickImg.naturalHeight;
 
         const mainFImg = new fabric.Image(
             mainImg,
