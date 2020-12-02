@@ -6,7 +6,7 @@ Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 
 
 import {IImageViewer, ImageViewer} from "./image_viewer";
-import {InSituDisplay} from "./insitu_display";
+import {InSituViewer} from "./insitu_viewer";
 
 const keyLeft = 37, keyRight = 39;
 const DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
@@ -99,7 +99,7 @@ export class FilmSlider {
         this.viewMode = ViewMode.medium;
         this.stepSizes = stepSizes;
 
-        this.viewer = new InSituDisplay(image, this.viewPort, this.stepSizes);
+        this.viewer = new InSituViewer(image, this.viewPort, this.stepSizes);
         // this.viewer = new ImageViewer(image, this.viewPort, this.stepSizes);
 
         this.toolbar = toolbar;

@@ -9,12 +9,13 @@ enum DisplayMode {
     ImageInSitu
 }
 
-export class InSituDisplay extends ImageViewerBase {
+export class InSituViewer extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
     private readonly image: fabric.Image;
     private backgroundImage: fabric.Image;
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
     private displayMode: DisplayMode;
+    private static SELECTABLE = true; // change for debug
 
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
@@ -28,19 +29,19 @@ export class InSituDisplay extends ImageViewerBase {
         this.canvas = new fabric.Canvas(
             canvasSel.node(),
             {
-                containerClass: InSituDisplay.CONTAINER_CLASS,
+                containerClass: InSituViewer.CONTAINER_CLASS,
                 selection: false,
                 hoverCursor: 'unset'
             }
         );
-        d3.select(this.viewPort).select(`.${InSituDisplay.CONTAINER_CLASS}`)
+        d3.select(this.viewPort).select(`.${InSituViewer.CONTAINER_CLASS}`)
             .style('position', 'absolute');
 
-        this.image = new fabric.Image(new Image(),
-            {selectable: false}
+        this.image = new fabric.Image(image,
+            {selectable: InSituViewer.SELECTABLE}
         );
-
-        window.setTimeout(() => this.debug(), 1000);
+        this.canvas.add(this.image);
+        d3.select(image).remove();
     }
 
     fitContent(viewportSize?: Size, naturalImgSize?: Size): void {
@@ -48,14 +49,22 @@ export class InSituDisplay extends ImageViewerBase {
             this.canvas.setDimensions({width: viewportSize.width, height: viewportSize.height});
         else
             viewportSize = <Size>this.canvas;
-        this.canvas.renderAll();
-        console.log('TODO: fitContent');
-        return;
+        let scale = Math.min(
+            viewportSize.width / naturalImgSize.width,
+            viewportSize.height / naturalImgSize.height);
+        scale = Math.min(scale, 1);
+        this.image.scale(scale);
+        this.image.center();
     }
 
     updateImageUrl(url: string): Promise<Size> {
-        console.log('TODO: updateImageUrl', url);
-        return Promise.resolve(undefined);
+        return new Promise<Size>(
+            (resolve) => {
+                this.image.setSrc(url, () => {
+                    resolve(<Size>this.image);
+                });
+            }
+        );
     }
 
     private debug() {
@@ -65,7 +74,7 @@ export class InSituDisplay extends ImageViewerBase {
             1,
             1,
             1
-            )
+        )
             .then((frmi) => {
                 this.canvas.add(frmi);
                 this.canvas.renderAll();

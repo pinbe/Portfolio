@@ -57,7 +57,7 @@ export abstract class ImageViewerBase implements IImageViewer {
 
 
     loadFromThumbnail(thumbnail: HTMLImageElement): void {
-        if(thumbnail !== this.thumbnail) {
+        if (thumbnail !== this.thumbnail) {
             this.thumbnail = null;
             this.maxSizeReached = false;
             this.naturalImgSize = null;
@@ -72,11 +72,14 @@ export abstract class ImageViewerBase implements IImageViewer {
         });
         const canonicalImgUrl = /(.*)\/getThumbnail$/.exec(thumbnail.src)[1];
         const imgUrl = `${canonicalImgUrl}/getResizedImage?size=${bestFitSize}`;
-        this.updateImageUrl(imgUrl).then((naturalImgSize) => {
-            this.thumbnail = thumbnail;
-            this.naturalImgSize = naturalImgSize;
-            this.fitContent(this.frame, naturalImgSize);
-        });
+        this.updateImageUrl(imgUrl).then(
+            (naturalImgSize) => {
+                this.thumbnail = thumbnail;
+                this.naturalImgSize = naturalImgSize;
+                this.fitContent(this.frame, naturalImgSize);
+            },
+            () => null,
+        );
     }
 
     redrawOnResize(): void {
