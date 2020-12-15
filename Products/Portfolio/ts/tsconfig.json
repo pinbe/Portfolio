@@ -3,16 +3,28 @@
         "outDir": "./dist/",
         "sourceMap": true,
         "noImplicitAny": true,
-        "module": "esnext",
+        "module": "amd",
         "target": "es5",
-//        "jsx": "react",
-        "lib": ["dom", "es2017"],
+        //        "jsx": "react",
+        "lib": [
+            "dom",
+            "es2017"
+        ],
         "allowJs": false,
         "pretty": true,
         "experimentalDecorators": true,
         "downlevelIteration": true,
         "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./",
+        "paths": {
+            "*": [
+                "./node_modules/@types/*",
+                "../../../../photoprint/Products/photoprint/ts/node_modules/@types/*",
+                "*"
+            ]
+        },
+        "types": []
     },
     "include": [
         "./src/**/*"

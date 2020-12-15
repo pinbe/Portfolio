@@ -3,6 +3,7 @@ import {fabric} from "fabric";
 import {ImageViewerBase} from "./image_viewer";
 import {FramedImage} from "./frame";
 import {Size} from "./utils";
+import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
 
 
 enum DisplayMode {
@@ -13,10 +14,9 @@ enum DisplayMode {
 export class InSituViewer extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
     private readonly image: fabric.Image;
-    private backgroundImage: fabric.Image;
-    static CONTAINER_CLASS = 'fabric-canvas-wrapper';
     private displayMode: DisplayMode;
     private static SELECTABLE = true; // change for debug
+    static CONTAINER_CLASS = 'fabric-canvas-wrapper';
 
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
@@ -43,6 +43,11 @@ export class InSituViewer extends ImageViewerBase {
         );
         this.canvas.add(this.image);
         d3.select(image).remove();
+        document.addEventListener(
+            PHOTO_ORDER_OPTIONS_CHANGED_EVENT,
+            (e: CustomEvent<PhotoOrderOptionsChangedEventDetail>) => {
+                this.onPhotoOrderOptionsChangedEvent(e.detail);
+            });
     }
 
     fitContent(viewportSize?: Size, naturalImgSize?: Size): void {
@@ -68,9 +73,25 @@ export class InSituViewer extends ImageViewerBase {
         );
     }
 
+
+    private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
+        if(!detail.frame)
+            return;
+
+        FramedImage.fromUrls(
+            detail.frame.preview_img.url,
+            this.image.getSrc(),
+            1,1,1
+        ).then((frim)=>{
+            this.canvas.remove(this.image);
+            this.canvas.add(frim);
+            this.canvas.renderAll();
+        });
+    }
+
     private debug() {
         FramedImage.fromUrls(
-            'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/am-stick.png',
+            'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/am-bois.png',
             'http://localhost:8080/plinn/themes/NYC/DSC00231.jpg/getResizedImage?size=800',
             1,
             1,

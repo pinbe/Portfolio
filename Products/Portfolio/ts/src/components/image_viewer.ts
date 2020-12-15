@@ -20,12 +20,12 @@ export abstract class ImageViewerBase implements IImageViewer {
         this.maxSizeReached = false;
     }
 
-    private get frame(): Size {
+    private get viewPortSize(): Size {
         return this.viewPort.getBoundingClientRect();
     }
 
     protected getBestFitSize(srcSize: Size): number {
-        const dstSize = this.frame;
+        const dstSize = this.viewPortSize;
 
         // ratio < 1 => portrait
         const ratio = srcSize.width / srcSize.height;
@@ -54,7 +54,8 @@ export abstract class ImageViewerBase implements IImageViewer {
 
 
     loadFromThumbnail(thumbnail: HTMLImageElement): void {
-        if (thumbnail !== this.thumbnail) {
+        const newImg = thumbnail !== this.thumbnail;
+        if (newImg) {
             this.thumbnail = null;
             this.maxSizeReached = false;
             this.naturalImgSize = null;
@@ -69,11 +70,11 @@ export abstract class ImageViewerBase implements IImageViewer {
         });
         const canonicalImgUrl = /(.*)\/getThumbnail$/.exec(thumbnail.src)[1];
         const imgUrl = `${canonicalImgUrl}/getResizedImage?size=${bestFitSize}`;
-        this.updateImageUrl(imgUrl).then(
+        this.updateImageUrl(imgUrl, newImg).then(
             (naturalImgSize) => {
                 this.thumbnail = thumbnail;
                 this.naturalImgSize = naturalImgSize;
-                this.fitContent(this.frame, naturalImgSize);
+                this.fitContent(this.viewPortSize, naturalImgSize);
             },
             () => null,
         );
@@ -82,17 +83,17 @@ export abstract class ImageViewerBase implements IImageViewer {
     redrawOnResize(): void {
         if (!this.thumbnail)
             return;
-        const frame = this.frame;
+        const vpSize = this.viewPortSize;
         if (!this.maxSizeReached &&
-            this.naturalImgSize.width < frame.width &&
-            this.naturalImgSize.height < frame.height) {
+            this.naturalImgSize.width < vpSize.width &&
+            this.naturalImgSize.height < vpSize.height) {
             this.loadFromThumbnail(this.thumbnail);
         } else {
-            this.fitContent(this.frame, this.naturalImgSize);
+            this.fitContent(this.viewPortSize, this.naturalImgSize);
         }
     }
 
-    abstract updateImageUrl(url: string): Promise<Size>;
+    abstract updateImageUrl(url: string, newImg: boolean): Promise<Size>;
 
     abstract fitContent(viewportSize: Size, naturalImgSize: Size): void;
 

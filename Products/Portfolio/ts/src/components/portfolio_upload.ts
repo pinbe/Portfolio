@@ -153,7 +153,8 @@ export class DDImageUploader extends DDFileUploaderBase {
             .append('img')
             .attr('class', 'hidden')
             .style('opacity', '0.2')
-            .on('load', (evt: Event) => {
+            .node()
+            .addEventListener('load', (evt: Event)=> {
                 const size = this.thumbnailSize;
                 const img = <HTMLImageElement>evt.target;
 

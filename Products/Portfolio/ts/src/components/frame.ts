@@ -1,5 +1,4 @@
 import {fabric} from "fabric";
-import {IObjectOptions} from "fabric/fabric-impl";
 
 export class FramedImage extends fabric.Group {
     private stickPattern: fabric.Pattern;
@@ -9,10 +8,7 @@ export class FramedImage extends fabric.Group {
         mainImgUrl: string,
         stickScale=1,
         mainImgScale=1,
-        scale=1
-    ): Promise<FramedImage> {
-
-
+        scale=1): Promise<FramedImage> {
         return new Promise<FramedImage>((resolve) => {
             const imgPromises = [stickImgUrl, mainImgUrl].map((src) => new Promise<HTMLImageElement>((resolve) => {
                 const im = new Image();
@@ -54,7 +50,7 @@ export class FramedImage extends fabric.Group {
         const stickPattern = new fabric.Pattern(
             {
                 source: <HTMLImageElement><unknown>canvasElt,
-                repeat: 'repeat-x',
+                repeat: 'repeat',
             }
         );
 
