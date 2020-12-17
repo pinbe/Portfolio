@@ -15,7 +15,7 @@ export class InSituViewer extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
     private readonly image: fabric.Image;
     private displayMode: DisplayMode;
-    private static SELECTABLE = true; // change for debug
+    private static SELECTABLE = false; // change for debug
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
 
     constructor(image: HTMLImageElement,
@@ -87,19 +87,5 @@ export class InSituViewer extends ImageViewerBase {
             this.canvas.add(frim);
             this.canvas.renderAll();
         });
-    }
-
-    private debug() {
-        FramedImage.fromUrls(
-            'http://localhost:8080/plinn/portal_photo_print/demo_backgrounds/am-bois.png',
-            'http://localhost:8080/plinn/themes/NYC/DSC00231.jpg/getResizedImage?size=800',
-            1,
-            1,
-            1
-        )
-            .then((frmi) => {
-                this.canvas.add(frmi);
-                this.canvas.renderAll();
-            });
     }
 }
