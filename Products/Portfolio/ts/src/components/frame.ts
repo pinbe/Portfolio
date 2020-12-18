@@ -33,9 +33,22 @@ export class FramedImage extends fabric.Group {
                         stickRealWidth: number,
                         frameRealSize: Size,
                         scale: number) {
+        const frmRatio = frameRealSize.width / frameRealSize.height;
+        const imgRatio = mainImg.naturalWidth / mainImg.naturalHeight;
+
+        let imgHeight: number, imgWidth: number, mainImgResolution: number;
+        if (frmRatio > imgRatio) {
+            imgHeight = mainImg.naturalHeight;
+            imgWidth = mainImg.naturalHeight * imgRatio;
+            mainImgResolution = mainImg.naturalHeight / frameRealSize.height;
+        } else {
+            imgWidth = mainImg.naturalWidth;
+            imgHeight = mainImg.naturalWidth / imgRatio;
+            mainImgResolution = mainImg.naturalWidth / frameRealSize.width;
+        }
 
         const mainImgScale = 1;
-        const mainImgResolution = mainImg.naturalHeight / frameRealSize.height; // pix/cm
+        // const mainImgResolution = mainImg.naturalHeight / frameRealSize.height; // pix/cm
         const frameBorderWidth = stickRealWidth * mainImgResolution; // pixels according to main image resolution
         const stickScale = frameBorderWidth / stickImg.naturalHeight;
 
@@ -61,18 +74,20 @@ export class FramedImage extends fabric.Group {
             }
         );
 
+        const frmW = frameRealSize.width * mainImgResolution;
+        const frmH = frameRealSize.height * mainImgResolution;
+
+        console.info(`frm: (${frmW}, ${frmH}); img: (${imgWidth}, ${imgHeight}) `);
 
         const mainFImg = new fabric.Image(
             mainImg,
             {
-                top: stickW,
-                left: stickW,
+                top: stickW + (frmH - imgHeight) / 2,
+                left: stickW + (frmW - imgWidth) / 2,
                 scaleX: mainImgScale,
                 scaleY: mainImgScale,
             }
         );
-        const mImgW = mainFImg.getScaledWidth();
-        const mImgH = mainFImg.getScaledHeight();
 
 
         function P(x: number, y: number) {
@@ -81,14 +96,14 @@ export class FramedImage extends fabric.Group {
 
 
         const bezel = [
-            P(0, 0), P(mImgW + 2 * stickW - 1, 0), P(mImgW + stickW - 1, stickW), P(stickW, stickW)
+            P(0, 0), P(frmW + 2 * stickW - 1, 0), P(frmW + stickW - 1, stickW), P(stickW, stickW)
         ];
 
         const borderTop = new fabric.Polygon(
             bezel,
             {
                 height: stickW,
-                width: mImgW + 2 * stickW,
+                width: frmW + 2 * stickW,
                 fill: stickPattern,
                 top: 0,
                 left: 0,
@@ -99,20 +114,20 @@ export class FramedImage extends fabric.Group {
             bezel,
             {
                 height: stickW,
-                width: mImgW + 2 * stickW,
+                width: frmW + 2 * stickW,
                 fill: stickPattern,
-                top: stickW * 2 + mImgH,
-                left: mImgW + 2 * stickW,
+                top: stickW * 2 + frmH,
+                left: frmW + 2 * stickW,
                 angle: 180,
             }
         );
 
         const borderLeft = new fabric.Rect(
             {
-                width: stickW * 2 + mImgH - 1,
+                width: stickW * 2 + frmH - 1,
                 height: stickW,
                 fill: stickPattern,
-                top: mImgH + 2 * stickW,
+                top: frmH + 2 * stickW,
                 left: 0,
                 angle: 270,
             }
@@ -120,18 +135,18 @@ export class FramedImage extends fabric.Group {
 
         const borderRight = new fabric.Rect(
             {
-                width: stickW * 2 + mImgH - 1,
+                width: stickW * 2 + frmH - 1,
                 height: stickW,
                 fill: stickPattern,
                 top: 0,
-                left: mImgW + 2 * stickW,
+                left: frmW + 2 * stickW,
                 angle: 90,
             }
         );
 
         super(
             [borderLeft, borderRight, borderTop, borderBottom, mainFImg],
-            {scaleX: scale, scaleY: scale, top: 50, left: 50}
+            {scaleX: scale, scaleY: scale}
         );
         this.stickPattern = stickPattern;
     }
