@@ -1,4 +1,5 @@
 import {fabric} from "fabric";
+import {Size} from "./utils";
 
 export class FramedImage extends fabric.Group {
     private stickPattern: fabric.Pattern;
@@ -6,9 +7,9 @@ export class FramedImage extends fabric.Group {
     static fromUrls(
         stickImgUrl: string,
         mainImgUrl: string,
-        stickScale=1,
-        mainImgScale=1,
-        scale=1): Promise<FramedImage> {
+        stickRealWidth: number,
+        frameRealSize: Size,
+        scale = 1): Promise<FramedImage> {
         return new Promise<FramedImage>((resolve) => {
             const imgPromises = [stickImgUrl, mainImgUrl].map((src) => new Promise<HTMLImageElement>((resolve) => {
                 const im = new Image();
@@ -19,19 +20,25 @@ export class FramedImage extends fabric.Group {
                 resolve(new FramedImage(
                     imgs[0],
                     imgs[1],
-                    stickScale,
-                    mainImgScale,
+                    stickRealWidth,
+                    frameRealSize,
                     scale
-                    ));
+                ));
             });
         });
     }
 
     private constructor(stickImg: HTMLImageElement,
                         mainImg: HTMLImageElement,
-                        stickScale:number,
-                        mainImgScale:number,
-                        scale:number) {
+                        stickRealWidth: number,
+                        frameRealSize: Size,
+                        scale: number) {
+
+        const mainImgScale = 1;
+        const mainImgResolution = mainImg.naturalHeight / frameRealSize.height; // pix/cm
+        const frameBorderWidth = stickRealWidth * mainImgResolution; // pixels according to main image resolution
+        const stickScale = frameBorderWidth / stickImg.naturalHeight;
+
         const stickFImg = new fabric.Image(
             stickImg,
             {
@@ -45,7 +52,7 @@ export class FramedImage extends fabric.Group {
         patternCanvas.setDimensions({width: stickFImg.getScaledWidth(), height: stickFImg.getScaledHeight()});
         const canvasElt = patternCanvas.getElement();
         canvasElt.width = stickFImg.getScaledWidth();
-        canvasElt.height= stickFImg.getScaledHeight();
+        canvasElt.height = stickFImg.getScaledHeight();
         patternCanvas.renderAll();
         const stickPattern = new fabric.Pattern(
             {

@@ -14,6 +14,7 @@ enum DisplayMode {
 export class InSituViewer extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
     private readonly image: fabric.Image;
+    private sceneRoot: fabric.Object;
     private displayMode: DisplayMode;
     private static SELECTABLE = false; // change for debug
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
@@ -38,10 +39,10 @@ export class InSituViewer extends ImageViewerBase {
         d3.select(this.viewPort).select(`.${InSituViewer.CONTAINER_CLASS}`)
             .style('position', 'absolute');
 
-        this.image = new fabric.Image(image,
+        this.sceneRoot = this.image = new fabric.Image(image,
             {selectable: InSituViewer.SELECTABLE}
         );
-        this.canvas.add(this.image);
+        this.canvas.add(this.sceneRoot);
         d3.select(image).remove();
         document.addEventListener(
             PHOTO_ORDER_OPTIONS_CHANGED_EVENT,
@@ -55,18 +56,25 @@ export class InSituViewer extends ImageViewerBase {
             this.canvas.setDimensions({width: viewportSize.width, height: viewportSize.height});
         else
             viewportSize = <Size>this.canvas;
+
+        naturalImgSize = (naturalImgSize) ? naturalImgSize : <Size>this.sceneRoot;
         let scale = Math.min(
             viewportSize.width / naturalImgSize.width,
             viewportSize.height / naturalImgSize.height);
         scale = Math.min(scale, 1);
-        this.image.scale(scale);
-        this.image.center();
+        this.sceneRoot.scale(scale);
+        this.sceneRoot.center();
     }
 
     updateImageUrl(url: string): Promise<Size> {
         return new Promise<Size>(
             (resolve) => {
                 this.image.setSrc(url, () => {
+                    if (this.sceneRoot != this.image) {
+                        this.canvas.remove(this.sceneRoot);
+                        this.sceneRoot = this.image;
+                        this.canvas.add(this.sceneRoot);
+                    }
                     resolve(<Size>this.image);
                 });
             }
@@ -75,16 +83,37 @@ export class InSituViewer extends ImageViewerBase {
 
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
-        if(!detail.frame)
+        if (!detail.frame || !detail.frame.preview_img) {
+            if (this.sceneRoot != this.image) {
+                // restore image without frame
+                this.canvas.remove(this.sceneRoot);
+                this.sceneRoot = this.image;
+                this.canvas.add(this.sceneRoot);
+                this.fitContent();
+                this.canvas.renderAll();
+            }
             return;
+        }
+
+        let frameSize: Size;
+        const origSize = this.image.getOriginalSize();
+        if(origSize.width >= origSize.height) {
+            // landscape
+            frameSize = {width: detail.format.long_edge, height: detail.format.short_edge};
+        }
+        else {
+            frameSize = {width: detail.format.short_edge, height: detail.format.long_edge};
+        }
 
         FramedImage.fromUrls(
             detail.frame.preview_img.url,
             this.image.getSrc(),
-            1,1,1
-        ).then((frim)=>{
-            this.canvas.remove(this.image);
-            this.canvas.add(frim);
+            detail.frame.preview_img.real_width, frameSize, 1
+        ).then((frim) => {
+            this.canvas.remove(this.sceneRoot);
+            this.sceneRoot = frim;
+            this.canvas.add(this.sceneRoot);
+            this.fitContent();
             this.canvas.renderAll();
         });
     }
