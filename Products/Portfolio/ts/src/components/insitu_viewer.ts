@@ -57,7 +57,9 @@ export class InSituViewer extends ImageViewerBase {
         else
             viewportSize = <Size>this.canvas;
 
-        naturalImgSize = (naturalImgSize) ? naturalImgSize : <Size>this.sceneRoot;
+        // naturalImgSize = (naturalImgSize) ? naturalImgSize : <Size>this.sceneRoot;
+        naturalImgSize = <Size>this.sceneRoot;
+        console.log('scene size: ', `(${naturalImgSize.width}, ${naturalImgSize.height})`);
         let scale = Math.min(
             viewportSize.width / naturalImgSize.width,
             viewportSize.height / naturalImgSize.height);
@@ -66,7 +68,7 @@ export class InSituViewer extends ImageViewerBase {
         this.sceneRoot.center();
     }
 
-    updateImageUrl(url: string): Promise<Size> {
+    updateImageUrl(url: string, newImg: boolean): Promise<Size> {
         return new Promise<Size>(
             (resolve) => {
                 this.image.setSrc(url, () => {
@@ -97,11 +99,10 @@ export class InSituViewer extends ImageViewerBase {
 
         let frameSize: Size;
         const origSize = this.image.getOriginalSize();
-        if(origSize.width >= origSize.height) {
+        if (origSize.width >= origSize.height) {
             // landscape
             frameSize = {width: detail.format.long_edge, height: detail.format.short_edge};
-        }
-        else {
+        } else {
             frameSize = {width: detail.format.short_edge, height: detail.format.long_edge};
         }
 
