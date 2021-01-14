@@ -4,25 +4,30 @@ import {ImageViewerBase} from "./image_viewer";
 import {FramedImage} from "./frame";
 import {Size} from "./utils";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
+import {InsituImage} from "./insitu";
 
 
 enum DisplayMode {
     ImageOnly,
-    ImageInSitu
+    Framed,
+    InSitu
 }
 
 export class InSituViewer extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
     private readonly image: fabric.Image;
+    private insituImg: InsituImage;
     private sceneRoot: fabric.Object;
     private displayMode: DisplayMode;
-    private static SELECTABLE = false; // change for debug
+    private readonly portal_url: string;
+    private static SELECTABLE = true; // change for debug
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
 
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
                 stepSizes: number[]) {
         super(viewPort, stepSizes);
+        this.portal_url = document.body.getAttribute('data-portal_url');
         this.displayMode = DisplayMode.ImageOnly;
         const canvasSel = d3.select(viewPort)
             .append('canvas')
@@ -49,6 +54,13 @@ export class InSituViewer extends ImageViewerBase {
             (e: CustomEvent<PhotoOrderOptionsChangedEventDetail>) => {
                 this.onPhotoOrderOptionsChangedEvent(e.detail);
             });
+
+        InsituImage
+            .fromInfoUrl(`${this.portal_url}/getInsituBgInfos`, this.image)
+            .then((insituImage) => {
+                this.insituImg = insituImage;
+            })
+        ;
     }
 
     fitContent(viewportSize?: Size, naturalImgSize?: Size): void {
@@ -85,17 +97,38 @@ export class InSituViewer extends ImageViewerBase {
 
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
-        if (!detail.frame || !detail.frame.preview_img) {
-            if (this.sceneRoot != this.image) {
-                // restore image without frame
-                this.canvas.remove(this.sceneRoot);
-                this.sceneRoot = this.image;
-                this.canvas.add(this.sceneRoot);
-                this.fitContent();
-                this.canvas.renderAll();
-            }
-            return;
+        const landscape: boolean = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
+        const physicalWidth = (landscape) ? detail.format.long_edge : detail.format.short_edge;
+
+        switch (this.displayMode) {
+            case DisplayMode.ImageOnly:
+                this.setDisplayMode(DisplayMode.InSitu);
+                (<InsituImage>this.sceneRoot).setImgPhysicalSize(physicalWidth);
+                break;
+
+            case DisplayMode.Framed:
+                if (!detail.frame || !detail.frame.preview_img) {
+                    this.setDisplayMode(DisplayMode.ImageOnly);
+                }
+                break;
+
+            case DisplayMode.InSitu:
+                (<InsituImage>this.sceneRoot).setImgPhysicalSize(physicalWidth);
+                break;
         }
+        this.canvas.renderAll();
+        return;
+        // if (!detail.frame || !detail.frame.preview_img) {
+        //     if (this.sceneRoot != this.image) {
+        //         // restore image without frame
+        //         this.canvas.remove(this.sceneRoot);
+        //         this.sceneRoot = this.image;
+        //         this.canvas.add(this.sceneRoot);
+        //         this.fitContent();
+        //         this.canvas.renderAll();
+        //     }
+        //     return;
+        // }
 
         let frameSize: Size;
         const origSize = this.image.getOriginalSize();
@@ -117,5 +150,25 @@ export class InSituViewer extends ImageViewerBase {
             this.fitContent();
             this.canvas.renderAll();
         });
+    }
+
+    private setDisplayMode(mode: DisplayMode) {
+        if (mode === this.displayMode) return;
+
+        this.canvas.remove(this.sceneRoot);
+        switch (mode) {
+            case DisplayMode.ImageOnly:
+                break;
+            case DisplayMode.Framed:
+                break;
+            case DisplayMode.InSitu:
+                this.sceneRoot = this.insituImg;
+                break;
+
+        }
+        this.canvas.add(this.sceneRoot);
+        this.fitContent();
+        this.canvas.renderAll();
+        this.displayMode = mode;
     }
 }
