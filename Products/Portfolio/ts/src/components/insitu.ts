@@ -1,4 +1,6 @@
 import {fabric} from "fabric";
+import {Imagelike} from "./imagelike";
+import {IImageOptions} from "fabric/fabric-impl";
 
 export interface BGInfos {
     url: string;
@@ -9,10 +11,11 @@ export interface BGInfos {
 }
 
 
-export class InsituImage extends fabric.Group {
+export class InsituImage extends fabric.Group implements Imagelike {
     private readonly bgInfos: BGInfos;
     private mainImg: fabric.Object;
     private bgImg: fabric.Image;
+    private imgPhyWidth: number;
 
     static fromInfoUrl(infoUrl: string,
                        mainImg: fabric.Image): Promise<InsituImage> {
@@ -56,12 +59,39 @@ export class InsituImage extends fabric.Group {
         this.bgImg = bgImg;
         this.mainImg = mainImg;
         this.mainImg.shadow = new fabric.Shadow(bgInfos.shadow);
-        this.mainImg.shadow.nonScaling=true;
+        this.mainImg.shadow.nonScaling = true;
         this.bgInfos = bgInfos;
     }
 
     public setImgPhysicalSize(imgPhyWidth: number): void {
-        const imgPixW = imgPhyWidth * this.bgImg.width / this.bgInfos.physical_width;
-        this.mainImg.scaleToWidth(imgPixW);
+        console.log('setImgPhysicalSize', imgPhyWidth);
+        this.imgPhyWidth = imgPhyWidth;
+        this.scaleMainImg();
+    }
+
+    private scaleMainImg() {
+        if (!this.imgPhyWidth)
+            return;
+        const imgPixW = this.imgPhyWidth * this.bgImg.width / this.bgInfos.physical_width;
+        console.log('scale from',
+            this.mainImg.width,
+            this.mainImg.getScaledWidth(),
+            'to', imgPixW);
+
+        const scaleX = imgPixW / this.bgImg.width;
+        this.mainImg.scale(scaleX);
+        console.info('scaledWidth', this.mainImg.getScaledWidth());
+    }
+
+    setSrc(src: string, callback?: Function, options?: IImageOptions): Imagelike {
+        console.info('setSrc', src);
+        (<Imagelike><unknown>this.mainImg).setSrc(src,
+            () => {
+                this.scaleMainImg();
+                callback();
+            },
+            options
+        );
+        return <Imagelike>this;
     }
 }

@@ -1,8 +1,11 @@
 import {fabric} from "fabric";
 import {Size} from "./utils";
+import {Imagelike} from "./imagelike";
+import {IImageOptions} from "fabric/fabric-impl";
 
-export class FramedImage extends fabric.Group {
+export class FramedImage extends fabric.Group implements Imagelike{
     private stickPattern: fabric.Pattern;
+    private mainFImg: fabric.Image;
 
     static fromUrls(
         stickImgUrl: string,
@@ -149,5 +152,12 @@ export class FramedImage extends fabric.Group {
             {scaleX: scale, scaleY: scale}
         );
         this.stickPattern = stickPattern;
+        this.mainFImg = mainFImg;
     }
+
+    setSrc(src: string, callback?: Function, options?: IImageOptions): Imagelike {
+        this.mainFImg.setSrc(src, callback, options);
+        return <Imagelike>this;
+    }
+
 }
