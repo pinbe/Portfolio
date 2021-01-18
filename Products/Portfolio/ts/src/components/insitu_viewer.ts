@@ -22,7 +22,7 @@ export class InSituViewer extends ImageViewerBase {
     private displayMode: DisplayMode;
     private readonly portal_url: string;
     private readyP: Promise<void>;
-    private static SELECTABLE = true; // change for debug
+    private static SELECTABLE = false; // change to true for debug
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
 
     constructor(image: HTMLImageElement,
@@ -59,7 +59,10 @@ export class InSituViewer extends ImageViewerBase {
 
         this.readyP = new Promise((resolve) => {
             InsituImage
-                .fromInfoUrl(`${this.portal_url}/getInsituBgInfos`, this.image)
+                .fromInfoUrl(`${this.portal_url}/getInsituBgInfos`,
+                    this.image,
+                    {selectable: InSituViewer.SELECTABLE}
+                    )
                 .then((insituImage) => {
                     this.insituImg = insituImage;
                     resolve();
@@ -106,12 +109,16 @@ export class InSituViewer extends ImageViewerBase {
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
         const landscape: boolean = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
-        const physicalWidth = (landscape) ? detail.format.long_edge : detail.format.short_edge;
+        const physicalSize: Size = (landscape) ?
+            {width: detail.format.long_edge, height: detail.format.short_edge} :
+            {width: detail.format.short_edge, height: detail.format.long_edge}
+        ;
+        // detail.format.long_edge : detail.format.short_edge;
 
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
                 this.setDisplayMode(DisplayMode.InSitu);
-                (<InsituImage>this.sceneRoot).setImgPhysicalSize(physicalWidth);
+                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
                 break;
 
             case DisplayMode.Framed:
@@ -121,7 +128,7 @@ export class InSituViewer extends ImageViewerBase {
                 break;
 
             case DisplayMode.InSitu:
-                (<InsituImage>this.sceneRoot).setImgPhysicalSize(physicalWidth);
+                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
                 break;
         }
         this.canvas.renderAll();
