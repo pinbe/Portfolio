@@ -1,6 +1,8 @@
 import {fabric} from "fabric";
 import {IObjectOptions} from "fabric/fabric-impl";
 import {Size} from "./utils";
+import {FrameBorderDescription} from "photoprint//src/components/interfaces";
+import {FramedImage} from "./frame";
 
 export interface BGInfos {
     url: string;
@@ -11,7 +13,7 @@ export interface BGInfos {
 }
 
 
-export class InsituImage extends fabric.Group{
+export class InsituImage extends fabric.Group {
     private readonly bgInfos: BGInfos;
     private readonly phyRes: number; // physical resolution. pixel per centimeters
     private mainImg: fabric.Object;
@@ -19,15 +21,31 @@ export class InsituImage extends fabric.Group{
     phySize: Size;
 
     static fromInfoUrl(infoUrl: string,
-                       mainImg: fabric.Image,
+                       mainImgSrc: string,
+                       frameDesc: FrameBorderDescription,
+                       framePhysicalSize: Size,
                        options?: IObjectOptions): Promise<InsituImage> {
         return new Promise<InsituImage>((resolve, reject) => {
 
-            const cloneP = new Promise<fabric.Image>((resolve) => {
-                fabric.Image.fromURL(mainImg.getSrc(), (cloned: fabric.Image) => resolve(cloned));
+            const mainImgP = new Promise<fabric.Object>((resolve) => {
+                if (frameDesc) {
+                    FramedImage
+                        .fromUrls(
+                            frameDesc.url,
+                            mainImgSrc,
+                            frameDesc.real_width,
+                            framePhysicalSize,
+                            frameDesc.background
+                        )
+                        .then((frim: FramedImage) => {
+                            resolve(frim);
+                        });
+                } else {
+                    fabric.Image.fromURL(mainImgSrc, (cloned: fabric.Image) => resolve(cloned));
+                }
             });
 
-            cloneP.then((clonedMainImg: fabric.Image) => {
+            mainImgP.then((mainImg: fabric.Object) => {
                 const bgImage = new fabric.Image(undefined);
                 const req = new XMLHttpRequest();
                 req.open('GET', infoUrl);
@@ -39,7 +57,7 @@ export class InsituImage extends fabric.Group{
                             bgImage.setSrc(bgInfos.url, () => {
                                 resolve(new InsituImage(bgInfos,
                                     bgImage,
-                                    clonedMainImg,
+                                    mainImg,
                                     options));
                             });
                         } else {
@@ -79,6 +97,10 @@ export class InsituImage extends fabric.Group{
         const scaleX = framePxSize.width / this.mainImg.width;
         const scaleY = framePxSize.height / this.mainImg.height;
         this.mainImg.scale(Math.min(scaleX, scaleY));
+        this._calcBounds();
+        this._updateObjectsCoords();
+        this.setCoords();
+        this.dirty = true;
     }
 
     setImgPhysicalFrame(phySize: Size): void {

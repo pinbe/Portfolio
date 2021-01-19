@@ -1,6 +1,5 @@
 import {fabric} from "fabric";
 import {Size} from "./utils";
-import {IImageOptions} from "fabric/fabric-impl";
 
 export class FramedImage extends fabric.Group{
     private stickPattern: fabric.Pattern;

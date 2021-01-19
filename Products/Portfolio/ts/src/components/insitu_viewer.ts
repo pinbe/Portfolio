@@ -4,6 +4,7 @@ import {ImageViewerBase} from "./image_viewer";
 import {Size} from "./utils";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
 import {InsituImage} from "./insitu";
+import {FrameBorderDescription} from "photoprint/src/components/interfaces";
 
 
 enum DisplayMode {
@@ -20,6 +21,8 @@ export class InSituViewer extends ImageViewerBase {
     private readonly portal_url: string;
     private static SELECTABLE = false; // change to true for debug
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
+    private frameDesc: FrameBorderDescription;
+    private physicalImgFormatSize: Size;
 
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
@@ -75,7 +78,20 @@ export class InSituViewer extends ImageViewerBase {
         return new Promise<Size>(
             (resolve) => {
                 this.image.setSrc(url, () => {
-                    this.updateDisplay();
+                    if (this.physicalImgFormatSize) {
+                        const landscape = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
+                        this.physicalImgFormatSize = (landscape) ?
+                            {
+                                width: Math.max(this.physicalImgFormatSize.width, this.physicalImgFormatSize.height),
+                                height: Math.min(this.physicalImgFormatSize.width, this.physicalImgFormatSize.height)
+                            } :
+                            {
+                                width: Math.min(this.physicalImgFormatSize.width, this.physicalImgFormatSize.height),
+                                height: Math.max(this.physicalImgFormatSize.width, this.physicalImgFormatSize.height)
+                            }
+                        ;
+                    }
+                    this.updateDisplay(this.frameDesc, this.physicalImgFormatSize);
                     resolve(<Size>this.image);
                 });
             }
@@ -89,20 +105,18 @@ export class InSituViewer extends ImageViewerBase {
             {width: detail.format.long_edge, height: detail.format.short_edge} :
             {width: detail.format.short_edge, height: detail.format.long_edge}
         ;
+        const frameDesc = detail.frame?.frame_border_description;
 
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
-                this.setDisplayMode(DisplayMode.InSitu, imgPhysicalSize);
+                this.setDisplayMode(DisplayMode.InSitu, frameDesc, imgPhysicalSize);
                 break;
 
             case DisplayMode.Framed:
-                if (!detail.frame || !detail.frame.preview_img) {
-                    this.setDisplayMode(DisplayMode.ImageOnly);
-                }
                 break;
 
             case DisplayMode.InSitu:
-                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(imgPhysicalSize);
+                this.updateDisplay(frameDesc, imgPhysicalSize);
                 break;
         }
 
@@ -111,7 +125,9 @@ export class InSituViewer extends ImageViewerBase {
     }
 
 
-    private setDisplayMode(mode: DisplayMode, physicalSize?: Size) {
+    private setDisplayMode(mode: DisplayMode, frameDesc: FrameBorderDescription, physicalImgFormatSize: Size) {
+        this.frameDesc = frameDesc;
+        this.physicalImgFormatSize = physicalImgFormatSize;
         if (mode === this.displayMode) return;
 
         switch (mode) {
@@ -129,12 +145,18 @@ export class InSituViewer extends ImageViewerBase {
                 InsituImage
                     .fromInfoUrl(
                         `${this.portal_url}/getInsituBgInfos`,
-                        this.image,
+                        this.image.getSrc(),
+                        frameDesc,
+                        physicalImgFormatSize,
                         {selectable: InSituViewer.SELECTABLE}
                     )
                     .then((insituImg) => {
+                        const bw = (frameDesc) ? frameDesc.real_width : 0;
                         this.canvas.remove(this.sceneRoot);
-                        insituImg.setImgPhysicalFrame(physicalSize);
+                        insituImg.setImgPhysicalFrame({
+                            width: physicalImgFormatSize.width + 2 * bw,
+                            height: physicalImgFormatSize.height + 2 * bw
+                        });
                         this.sceneRoot = insituImg;
                         this.canvas.add(this.sceneRoot);
                         this.fitContent();
@@ -145,7 +167,10 @@ export class InSituViewer extends ImageViewerBase {
         this.displayMode = mode;
     }
 
-    private updateDisplay() {
+    private updateDisplay(frameDesc: FrameBorderDescription, physicalImgFormatSize: Size) {
+        this.frameDesc = frameDesc;
+        this.physicalImgFormatSize = physicalImgFormatSize;
+
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
                 return;
@@ -154,26 +179,21 @@ export class InSituViewer extends ImageViewerBase {
                 break;
 
             case DisplayMode.InSitu:
-                let physicalSize: Size = (<InsituImage>this.sceneRoot).phySize;
-                const landscape = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
-                physicalSize = (landscape) ?
-                    {
-                        width: Math.max(physicalSize.width, physicalSize.height),
-                        height: Math.min(physicalSize.width, physicalSize.height)
-                    } :
-                    {
-                        width: Math.min(physicalSize.width, physicalSize.height),
-                        height: Math.max(physicalSize.width, physicalSize.height)
-                    };
                 InsituImage
                     .fromInfoUrl(
                         `${this.portal_url}/getInsituBgInfos`,
-                        this.image,
+                        this.image.getSrc(),
+                        frameDesc,
+                        physicalImgFormatSize,
                         {selectable: InSituViewer.SELECTABLE}
                     )
                     .then((insituImg) => {
+                        const bw = (frameDesc) ? frameDesc.real_width : 0;
                         this.canvas.remove(this.sceneRoot);
-                        insituImg.setImgPhysicalFrame(physicalSize);
+                        insituImg.setImgPhysicalFrame({
+                            width: physicalImgFormatSize.width + 2 * bw,
+                            height: physicalImgFormatSize.height + 2 * bw
+                        });
                         this.sceneRoot = insituImg;
                         this.canvas.add(this.sceneRoot);
                         this.fitContent();
