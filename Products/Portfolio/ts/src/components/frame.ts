@@ -12,7 +12,6 @@ export class FramedImage extends fabric.Group implements Imagelike {
         mainImgUrl: string,
         stickRealWidth: number,
         frameRealSize: Size,
-        scale = 1,
         background='white'): Promise<FramedImage> {
         return new Promise<FramedImage>((resolve) => {
             const imgPromises = [stickImgUrl, mainImgUrl].map((src) => new Promise<HTMLImageElement>((resolve) => {
@@ -26,7 +25,6 @@ export class FramedImage extends fabric.Group implements Imagelike {
                     imgs[1],
                     stickRealWidth,
                     frameRealSize,
-                    scale,
                     background
                 ));
             });
@@ -37,7 +35,6 @@ export class FramedImage extends fabric.Group implements Imagelike {
                         mainImg: HTMLImageElement,
                         stickRealWidth: number,
                         frameRealSize: Size,
-                        scale: number,
                         background: string) {
         const frmRatio = frameRealSize.width / frameRealSize.height;
         const imgRatio = mainImg.naturalWidth / mainImg.naturalHeight;
@@ -157,7 +154,6 @@ export class FramedImage extends fabric.Group implements Imagelike {
         });
         super(
             [bgRect, borderLeft, borderRight, borderTop, borderBottom, mainFImg],
-            {scaleX: scale, scaleY: scale}
         );
         this.stickPattern = stickPattern;
         this.mainFImg = mainFImg;

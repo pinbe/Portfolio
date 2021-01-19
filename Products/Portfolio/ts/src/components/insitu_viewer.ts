@@ -76,7 +76,6 @@ export class InSituViewer extends ImageViewerBase {
         else
             viewportSize = <Size>this.canvas;
 
-        // naturalImgSize = (naturalImgSize) ? naturalImgSize : <Size>this.sceneRoot;
         naturalImgSize = <Size>this.sceneRoot;
         console.log('fitContent: ', `(${naturalImgSize.width}, ${naturalImgSize.height})`);
         let scale = Math.min(
@@ -133,7 +132,6 @@ export class InSituViewer extends ImageViewerBase {
                         this.image.getSrc(),
                         bw,
                         imgPhysicalSize,
-                        1,
                         detail.frame.preview_img.background
                     ).then((frim) => {
                         if (this.displayMode === DisplayMode.InSitu) {
@@ -142,7 +140,6 @@ export class InSituViewer extends ImageViewerBase {
                                 height: imgPhysicalSize.height + 2 * bw
                             };
                             (<InsituImage>this.sceneRoot).setMainImg(frim, framePhysicalSize);
-                            // (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
                             this.canvas.renderAll();
                         }
                     });
@@ -176,7 +173,6 @@ export class InSituViewer extends ImageViewerBase {
         }
         this.canvas.add(this.sceneRoot);
         this.fitContent();
-        // this.canvas.renderAll();
         this.displayMode = mode;
     }
 }
