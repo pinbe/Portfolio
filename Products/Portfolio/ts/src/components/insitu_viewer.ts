@@ -5,7 +5,6 @@ import {FramedImage} from "./frame";
 import {Size} from "./utils";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
 import {InsituImage} from "./insitu";
-import {Imagelike} from "./imagelike";
 
 
 enum DisplayMode {
@@ -109,7 +108,7 @@ export class InSituViewer extends ImageViewerBase {
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
         const landscape: boolean = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
-        const physicalSize: Size = (landscape) ?
+        const imgPhysicalSize: Size = (landscape) ?
             {width: detail.format.long_edge, height: detail.format.short_edge} :
             {width: detail.format.short_edge, height: detail.format.long_edge}
         ;
@@ -117,7 +116,7 @@ export class InSituViewer extends ImageViewerBase {
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
                 this.setDisplayMode(DisplayMode.InSitu);
-                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
+                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(imgPhysicalSize);
                 break;
 
             case DisplayMode.Framed:
@@ -128,20 +127,28 @@ export class InSituViewer extends ImageViewerBase {
 
             case DisplayMode.InSitu:
                 if (detail.frame && detail.frame.preview_img) {
+                    const bw = detail.frame.preview_img.real_width; // physical border width
                     FramedImage.fromUrls(
                         detail.frame.preview_img.url,
                         this.image.getSrc(),
-                        detail.frame.preview_img.real_width, physicalSize, 1
+                        bw,
+                        imgPhysicalSize,
+                        1,
+                        detail.frame.preview_img.background
                     ).then((frim) => {
                         if (this.displayMode === DisplayMode.InSitu) {
-                            (<InsituImage>this.sceneRoot).setMainImg(frim, physicalSize);
+                            const framePhysicalSize = {
+                                width: imgPhysicalSize.width + 2 * bw,
+                                height: imgPhysicalSize.height + 2 * bw
+                            };
+                            (<InsituImage>this.sceneRoot).setMainImg(frim, framePhysicalSize);
                             // (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
                             this.canvas.renderAll();
                         }
                     });
 
                 } else {
-                    (<InsituImage>this.sceneRoot).setMainImg(this.image, physicalSize);
+                    (<InsituImage>this.sceneRoot).setMainImg(this.image, imgPhysicalSize);
                     this.canvas.renderAll();
                 }
 

@@ -3,7 +3,7 @@ import {Size} from "./utils";
 import {Imagelike} from "./imagelike";
 import {IImageOptions} from "fabric/fabric-impl";
 
-export class FramedImage extends fabric.Group implements Imagelike{
+export class FramedImage extends fabric.Group implements Imagelike {
     private stickPattern: fabric.Pattern;
     private mainFImg: fabric.Image;
 
@@ -12,7 +12,8 @@ export class FramedImage extends fabric.Group implements Imagelike{
         mainImgUrl: string,
         stickRealWidth: number,
         frameRealSize: Size,
-        scale = 1): Promise<FramedImage> {
+        scale = 1,
+        background='white'): Promise<FramedImage> {
         return new Promise<FramedImage>((resolve) => {
             const imgPromises = [stickImgUrl, mainImgUrl].map((src) => new Promise<HTMLImageElement>((resolve) => {
                 const im = new Image();
@@ -25,7 +26,8 @@ export class FramedImage extends fabric.Group implements Imagelike{
                     imgs[1],
                     stickRealWidth,
                     frameRealSize,
-                    scale
+                    scale,
+                    background
                 ));
             });
         });
@@ -35,7 +37,8 @@ export class FramedImage extends fabric.Group implements Imagelike{
                         mainImg: HTMLImageElement,
                         stickRealWidth: number,
                         frameRealSize: Size,
-                        scale: number) {
+                        scale: number,
+                        background: string) {
         const frmRatio = frameRealSize.width / frameRealSize.height;
         const imgRatio = mainImg.naturalWidth / mainImg.naturalHeight;
 
@@ -147,8 +150,13 @@ export class FramedImage extends fabric.Group implements Imagelike{
             }
         );
 
+        const bgRect = new fabric.Rect({
+            width: frmW + stickW + 1,
+            height: frmH + stickW + 1,
+            fill: background
+        });
         super(
-            [borderLeft, borderRight, borderTop, borderBottom, mainFImg],
+            [bgRect, borderLeft, borderRight, borderTop, borderBottom, mainFImg],
             {scaleX: scale, scaleY: scale}
         );
         this.stickPattern = stickPattern;
