@@ -62,13 +62,15 @@ export class InsituImage extends fabric.Group implements Imagelike {
         mainImg.left = bgInfos.hook_x;
         mainImg.top = bgInfos.hook_y;
 
-        super([bgImg, mainImg], options);
+        super([], options);
         this.bgImg = bgImg;
         this.mainImg = mainImg;
         this.mainImg.shadow = new fabric.Shadow(bgInfos.shadow);
         this.mainImg.shadow.nonScaling = true;
         this.bgInfos = bgInfos;
         this.phyRes = bgImg.width / bgInfos.physical_width;
+        this.addWithUpdate(this.bgImg);
+        this.addWithUpdate(this.mainImg);
     }
 
     public setImgPhysicalFrame(phySize: Size): void {
