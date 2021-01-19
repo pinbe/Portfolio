@@ -62,7 +62,7 @@ export class InSituViewer extends ImageViewerBase {
                 .fromInfoUrl(`${this.portal_url}/getInsituBgInfos`,
                     this.image,
                     {selectable: InSituViewer.SELECTABLE}
-                    )
+                )
                 .then((insituImage) => {
                     this.insituImg = insituImage;
                     resolve();
@@ -113,7 +113,6 @@ export class InSituViewer extends ImageViewerBase {
             {width: detail.format.long_edge, height: detail.format.short_edge} :
             {width: detail.format.short_edge, height: detail.format.long_edge}
         ;
-        // detail.format.long_edge : detail.format.short_edge;
 
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
@@ -128,43 +127,29 @@ export class InSituViewer extends ImageViewerBase {
                 break;
 
             case DisplayMode.InSitu:
-                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
+                if (detail.frame && detail.frame.preview_img) {
+                    FramedImage.fromUrls(
+                        detail.frame.preview_img.url,
+                        this.image.getSrc(),
+                        detail.frame.preview_img.real_width, physicalSize, 1
+                    ).then((frim) => {
+                        if (this.displayMode === DisplayMode.InSitu) {
+                            (<InsituImage>this.sceneRoot).setMainImg(frim, physicalSize);
+                            // (<InsituImage>this.sceneRoot).setImgPhysicalFrame(physicalSize);
+                            this.canvas.renderAll();
+                        }
+                    });
+
+                } else {
+                    (<InsituImage>this.sceneRoot).setMainImg(this.image, physicalSize);
+                    this.canvas.renderAll();
+                }
+
                 break;
         }
+
+
         this.canvas.renderAll();
-        return;
-        // if (!detail.frame || !detail.frame.preview_img) {
-        //     if (this.sceneRoot != this.image) {
-        //         // restore image without frame
-        //         this.canvas.remove(this.sceneRoot);
-        //         this.sceneRoot = this.image;
-        //         this.canvas.add(this.sceneRoot);
-        //         this.fitContent();
-        //         this.canvas.renderAll();
-        //     }
-        //     return;
-        // }
-
-        let frameSize: Size;
-        const origSize = this.image.getOriginalSize();
-        if (origSize.width >= origSize.height) {
-            // landscape
-            frameSize = {width: detail.format.long_edge, height: detail.format.short_edge};
-        } else {
-            frameSize = {width: detail.format.short_edge, height: detail.format.long_edge};
-        }
-
-        FramedImage.fromUrls(
-            detail.frame.preview_img.url,
-            this.image.getSrc(),
-            detail.frame.preview_img.real_width, frameSize, 1
-        ).then((frim) => {
-            this.canvas.remove(this.sceneRoot);
-            this.sceneRoot = frim;
-            this.canvas.add(this.sceneRoot);
-            this.fitContent();
-            // this.canvas.renderAll();
-        });
     }
 
     private setDisplayMode(mode: DisplayMode) {

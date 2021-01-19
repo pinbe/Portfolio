@@ -57,23 +57,15 @@ export class InsituImage extends fabric.Group implements Imagelike {
                 bgImg: fabric.Image,
                 mainImg: fabric.Object,
                 options?: IObjectOptions) {
-        mainImg.set('originX', 'center');
-        mainImg.set('originY', 'center');
-        mainImg.left = bgInfos.hook_x;
-        mainImg.top = bgInfos.hook_y;
-
         super([], options);
         this.bgImg = bgImg;
-        this.mainImg = mainImg;
-        this.mainImg.shadow = new fabric.Shadow(bgInfos.shadow);
-        this.mainImg.shadow.nonScaling = true;
         this.bgInfos = bgInfos;
         this.phyRes = bgImg.width / bgInfos.physical_width;
         this.addWithUpdate(this.bgImg);
-        this.addWithUpdate(this.mainImg);
+        this.setMainImg(mainImg);
     }
 
-    public setImgPhysicalFrame(phySize: Size): void {
+    setImgPhysicalFrame(phySize: Size): void {
         this.phySize = phySize;
         this.scaleMainImg();
     }
@@ -108,5 +100,20 @@ export class InsituImage extends fabric.Group implements Imagelike {
                 callback();
             }, options);
         return <Imagelike>this;
+    }
+
+    setMainImg(mainImg: fabric.Object, physicalSize?: Size): void {
+        if (this.mainImg)
+            this.remove(this.mainImg);
+        mainImg.originX = 'center';
+        mainImg.originY = 'center';
+        mainImg.left = this.bgInfos.hook_x - this.width/2;
+        mainImg.top = this.bgInfos.hook_y - this.height/2;
+        mainImg.shadow = new fabric.Shadow(this.bgInfos.shadow);
+        mainImg.shadow.nonScaling = true;
+        this.mainImg = mainImg;
+        if (physicalSize)
+            this.setImgPhysicalFrame(physicalSize);
+        this.add(this.mainImg);
     }
 }
