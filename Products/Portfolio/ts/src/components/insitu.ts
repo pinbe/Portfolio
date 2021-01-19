@@ -1,6 +1,5 @@
 import {fabric} from "fabric";
-import {Imagelike} from "./imagelike";
-import {IImageOptions, IObjectOptions} from "fabric/fabric-impl";
+import {IObjectOptions} from "fabric/fabric-impl";
 import {Size} from "./utils";
 
 export interface BGInfos {
@@ -12,12 +11,12 @@ export interface BGInfos {
 }
 
 
-export class InsituImage extends fabric.Group implements Imagelike {
+export class InsituImage extends fabric.Group{
     private readonly bgInfos: BGInfos;
     private readonly phyRes: number; // physical resolution. pixel per centimeters
     private mainImg: fabric.Object;
-    private bgImg: fabric.Image;
-    private phySize: Size;
+    private readonly bgImg: fabric.Image;
+    phySize: Size;
 
     static fromInfoUrl(infoUrl: string,
                        mainImg: fabric.Image,
@@ -57,17 +56,19 @@ export class InsituImage extends fabric.Group implements Imagelike {
                 bgImg: fabric.Image,
                 mainImg: fabric.Object,
                 options?: IObjectOptions) {
-        super([], options);
+
+        mainImg.originX = 'center';
+        mainImg.originY = 'center';
+        mainImg.left = bgInfos.hook_x;
+        mainImg.top = bgInfos.hook_y;
+        mainImg.shadow = new fabric.Shadow(bgInfos.shadow);
+        mainImg.shadow.nonScaling = true;
+        super([bgImg, mainImg], options);
+
+        this.mainImg = mainImg;
         this.bgImg = bgImg;
         this.bgInfos = bgInfos;
         this.phyRes = bgImg.width / bgInfos.physical_width;
-        this.addWithUpdate(this.bgImg);
-        this.setMainImg(mainImg);
-    }
-
-    setImgPhysicalFrame(phySize: Size): void {
-        this.phySize = phySize;
-        this.scaleMainImg();
     }
 
     private scaleMainImg() {
@@ -80,40 +81,8 @@ export class InsituImage extends fabric.Group implements Imagelike {
         this.mainImg.scale(Math.min(scaleX, scaleY));
     }
 
-    setSrc(src: string, callback?: Function, options?: IImageOptions): Imagelike {
-        (<Imagelike><unknown>this.mainImg).setSrc(src,
-            () => {
-                if (this.phySize) {
-                    const landscape: boolean = this.mainImg.width > this.mainImg.height;
-                    const phySize: Size = (landscape) ?
-                        {
-                            width: Math.max(this.phySize.width, this.phySize.height),
-                            height: Math.min(this.phySize.width, this.phySize.height),
-                        } :
-                        {
-                            width: Math.min(this.phySize.width, this.phySize.height),
-                            height: Math.max(this.phySize.width, this.phySize.height),
-                        };
-                    this.phySize = phySize;
-                    this.scaleMainImg();
-                }
-                callback();
-            }, options);
-        return <Imagelike>this;
-    }
-
-    setMainImg(mainImg: fabric.Object, physicalSize?: Size): void {
-        if (this.mainImg)
-            this.remove(this.mainImg);
-        mainImg.originX = 'center';
-        mainImg.originY = 'center';
-        mainImg.left = this.bgInfos.hook_x - this.width/2;
-        mainImg.top = this.bgInfos.hook_y - this.height/2;
-        mainImg.shadow = new fabric.Shadow(this.bgInfos.shadow);
-        mainImg.shadow.nonScaling = true;
-        this.mainImg = mainImg;
-        if (physicalSize)
-            this.setImgPhysicalFrame(physicalSize);
-        this.add(this.mainImg);
+    setImgPhysicalFrame(phySize: Size): void {
+        this.phySize = phySize;
+        this.scaleMainImg();
     }
 }

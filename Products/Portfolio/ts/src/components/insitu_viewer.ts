@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 import {fabric} from "fabric";
 import {ImageViewerBase} from "./image_viewer";
-import {FramedImage} from "./frame";
 import {Size} from "./utils";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
 import {InsituImage} from "./insitu";
@@ -16,11 +15,9 @@ enum DisplayMode {
 export class InSituViewer extends ImageViewerBase {
     private readonly canvas: fabric.Canvas;
     private readonly image: fabric.Image;
-    private insituImg: InsituImage;
     private sceneRoot: fabric.Object;
     private displayMode: DisplayMode;
     private readonly portal_url: string;
-    private readyP: Promise<void>;
     private static SELECTABLE = false; // change to true for debug
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
 
@@ -55,19 +52,6 @@ export class InSituViewer extends ImageViewerBase {
             (e: CustomEvent<PhotoOrderOptionsChangedEventDetail>) => {
                 this.onPhotoOrderOptionsChangedEvent(e.detail);
             });
-
-        this.readyP = new Promise((resolve) => {
-            InsituImage
-                .fromInfoUrl(`${this.portal_url}/getInsituBgInfos`,
-                    this.image,
-                    {selectable: InSituViewer.SELECTABLE}
-                )
-                .then((insituImage) => {
-                    this.insituImg = insituImage;
-                    resolve();
-                })
-            ;
-        });
     }
 
     fitContent(viewportSize?: Size, naturalImgSize?: Size): void {
@@ -90,16 +74,10 @@ export class InSituViewer extends ImageViewerBase {
     updateImageUrl(url: string, newImg: boolean): Promise<Size> {
         return new Promise<Size>(
             (resolve) => {
-                const imgP = new Promise<void>((resolve) => {
-                    this.image.setSrc(url, () => resolve());
+                this.image.setSrc(url, () => {
+                    this.updateDisplay();
+                    resolve(<Size>this.image);
                 });
-                const insituImgP = new Promise<void>((resolve) => {
-                    this.readyP.then(() => {
-                        this.insituImg.setSrc(url, () => resolve());
-                    });
-                });
-                Promise.all([imgP, insituImgP])
-                    .then(() => resolve(<Size>this.sceneRoot));
             }
         );
     }
@@ -114,8 +92,7 @@ export class InSituViewer extends ImageViewerBase {
 
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
-                this.setDisplayMode(DisplayMode.InSitu);
-                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(imgPhysicalSize);
+                this.setDisplayMode(DisplayMode.InSitu, imgPhysicalSize);
                 break;
 
             case DisplayMode.Framed:
@@ -125,30 +102,7 @@ export class InSituViewer extends ImageViewerBase {
                 break;
 
             case DisplayMode.InSitu:
-                if (detail.frame && detail.frame.preview_img) {
-                    const bw = detail.frame.preview_img.real_width; // physical border width
-                    FramedImage.fromUrls(
-                        detail.frame.preview_img.url,
-                        this.image.getSrc(),
-                        bw,
-                        imgPhysicalSize,
-                        detail.frame.preview_img.background
-                    ).then((frim) => {
-                        if (this.displayMode === DisplayMode.InSitu) {
-                            const framePhysicalSize = {
-                                width: imgPhysicalSize.width + 2 * bw,
-                                height: imgPhysicalSize.height + 2 * bw
-                            };
-                            (<InsituImage>this.sceneRoot).setMainImg(frim, framePhysicalSize);
-                            this.canvas.renderAll();
-                        }
-                    });
-
-                } else {
-                    (<InsituImage>this.sceneRoot).setMainImg(this.image, imgPhysicalSize);
-                    this.canvas.renderAll();
-                }
-
+                (<InsituImage>this.sceneRoot).setImgPhysicalFrame(imgPhysicalSize);
                 break;
         }
 
@@ -156,23 +110,76 @@ export class InSituViewer extends ImageViewerBase {
         this.canvas.renderAll();
     }
 
-    private setDisplayMode(mode: DisplayMode) {
+
+    private setDisplayMode(mode: DisplayMode, physicalSize?: Size) {
         if (mode === this.displayMode) return;
 
-        this.canvas.remove(this.sceneRoot);
         switch (mode) {
             case DisplayMode.ImageOnly:
+                this.canvas.remove(this.sceneRoot);
                 this.sceneRoot = this.image;
+                this.canvas.add(this.sceneRoot);
+                this.fitContent();
                 break;
+
             case DisplayMode.Framed:
                 break;
+
             case DisplayMode.InSitu:
-                this.sceneRoot = this.insituImg;
+                InsituImage
+                    .fromInfoUrl(
+                        `${this.portal_url}/getInsituBgInfos`,
+                        this.image,
+                        {selectable: InSituViewer.SELECTABLE}
+                    )
+                    .then((insituImg) => {
+                        this.canvas.remove(this.sceneRoot);
+                        insituImg.setImgPhysicalFrame(physicalSize);
+                        this.sceneRoot = insituImg;
+                        this.canvas.add(this.sceneRoot);
+                        this.fitContent();
+                    });
                 break;
 
         }
-        this.canvas.add(this.sceneRoot);
-        this.fitContent();
         this.displayMode = mode;
+    }
+
+    private updateDisplay() {
+        switch (this.displayMode) {
+            case DisplayMode.ImageOnly:
+                return;
+
+            case DisplayMode.Framed:
+                break;
+
+            case DisplayMode.InSitu:
+                let physicalSize: Size = (<InsituImage>this.sceneRoot).phySize;
+                const landscape = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
+                physicalSize = (landscape) ?
+                    {
+                        width: Math.max(physicalSize.width, physicalSize.height),
+                        height: Math.min(physicalSize.width, physicalSize.height)
+                    } :
+                    {
+                        width: Math.min(physicalSize.width, physicalSize.height),
+                        height: Math.max(physicalSize.width, physicalSize.height)
+                    };
+                InsituImage
+                    .fromInfoUrl(
+                        `${this.portal_url}/getInsituBgInfos`,
+                        this.image,
+                        {selectable: InSituViewer.SELECTABLE}
+                    )
+                    .then((insituImg) => {
+                        this.canvas.remove(this.sceneRoot);
+                        insituImg.setImgPhysicalFrame(physicalSize);
+                        this.sceneRoot = insituImg;
+                        this.canvas.add(this.sceneRoot);
+                        this.fitContent();
+                    });
+                break;
+
+        }
     }
 }
