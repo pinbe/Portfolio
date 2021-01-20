@@ -4,19 +4,25 @@ import {DisplayMode} from "./insitu_viewer";
 
 class Tile extends fabric.Group {
     private topOb: fabric.Object;
-    static DEFAULT_RECT_OPTIONS: IObjectOptions = {
-        fill: 'rgba(255, 255, 255, 0.6)',
-        stroke: 'rgba(56, 101, 148, 0.75)',
-        strokeWidth: 1
-    }
-    private readonly rect: fabric.Rect;
+    readonly rect: fabric.Rect;
+    readonly mode: DisplayMode;
 
-    constructor(options?: IObjectOptions) {
+    static HIDDEN = false;
+    static DEFAULT_RECT_OPTIONS: IObjectOptions = {
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: 'rgba(56, 101, 148, 0.75)',
+        strokeWidth: 1,
+    }
+
+    constructor(mode: DisplayMode, options?: IObjectOptions) {
         super([], options);
-        console.log(Object.assign(Tile.DEFAULT_RECT_OPTIONS, options));
+        this.mode = mode;
         this.rect = new fabric.Rect(Object.assign(Tile.DEFAULT_RECT_OPTIONS, options));
         this.addWithUpdate(this.rect);
-        this.visible = false;
+        this.visible = Tile.HIDDEN;
+        this.on('mousemove', ()=>{
+            this.canvas.setCursor('pointer');
+        });
     }
 
     get borderWidth() {
@@ -31,7 +37,7 @@ class Tile extends fabric.Group {
             this.add(ob);
             this.visible = true;
         } else {
-            this.visible = false;
+            this.visible = Tile.HIDDEN;
         }
     }
 }
@@ -48,15 +54,21 @@ export class ModeSwitcher extends fabric.Group {
     private readonly tileWidth: number;
     private direction: Direction;
 
-    constructor(tileWidth: number, direction: Direction, options?: IObjectOptions) {
+    constructor(
+        tileWidth: number,
+        direction: Direction,
+        onModeSelect: (mode: DisplayMode) => void,
+        options?: IObjectOptions) {
         const tileOpts = {
             width: tileWidth,
             height: tileWidth,
         };
-        const imageOnlyBtn = new Tile(tileOpts);
-        const inSituBtn = new Tile(tileOpts);
-        const framedBtn = new Tile(tileOpts);
-        super([imageOnlyBtn, inSituBtn, framedBtn]);
+        const imageOnlyBtn = new Tile(DisplayMode.ImageOnly, tileOpts);
+        const inSituBtn = new Tile(DisplayMode.InSitu, tileOpts);
+        const framedBtn = new Tile(DisplayMode.Framed, tileOpts);
+        super(
+            [imageOnlyBtn, inSituBtn, framedBtn],
+            Object.assign({subTargetCheck: true, hoverCursor:'unset'}, options));
 
         this.tileWidth = tileWidth;
         this.buttons = [imageOnlyBtn, inSituBtn, framedBtn];
@@ -66,25 +78,30 @@ export class ModeSwitcher extends fabric.Group {
         this.perModeButtons[DisplayMode.Framed] = framedBtn;
         this.direction = direction;
         this.refreshLayout();
+        this.on('mousedown', (e) => {
+            if (e.subTargets)
+                onModeSelect((<Tile>e.subTargets[0]).mode);
+        });
     }
 
-    public setDirection(direction: Direction){
+    public setDirection(direction: Direction) {
         this.direction = direction;
         this.refreshLayout();
     }
 
     private refreshLayout() {
-        const visibleBtns = this.buttons.filter((btn) => btn.visible);
         const varParam = (this.direction === Direction.row) ? 'left' : 'top';
         const fixedParam = (this.direction === Direction.row) ? 'top' : 'left';
-        for (let i = 0; i < visibleBtns.length; i++) {
-            const btn = visibleBtns[i];
-            btn.set(varParam, (this.tileWidth + ModeSwitcher.MARGIN) * i);
-            btn.set(fixedParam, 0);
+        let i = 0;
+        for (const btn of this.buttons) {
+            if (btn.visible) {
+                btn.set(varParam, (this.tileWidth + ModeSwitcher.MARGIN) * i++);
+                btn.set(fixedParam, 0);
+            } else
+                btn.left = btn.top = 0;
         }
         this._calcBounds();
         this._updateObjectsCoords();
-        this.setCoords();
         this.dirty = true;
     }
 
@@ -106,8 +123,6 @@ export class ModeSwitcher extends fabric.Group {
                     clone.left = -clone.getScaledWidth() / 2;
                     clone.top = -clone.getScaledHeight() / 2;
                     clone.shadow = null;
-                    console.log('clone size:', longEdge, clone.getScaledWidth(), clone.getScaledHeight());
-                    console.log('tile size:', btn.width, btn.height, btn.borderWidth);
 
                     btn.updateTop(clone);
                     this.refreshLayout();
@@ -118,5 +133,14 @@ export class ModeSwitcher extends fabric.Group {
                 resolve();
             }
         });
+    }
+
+    setMode(mode: DisplayMode) {
+        for (const btn of this.buttons) {
+            if (btn.mode === mode)
+                btn.rect.set('fill', '#e8e8e8');
+            else
+                btn.rect.set('fill', Tile.DEFAULT_RECT_OPTIONS.fill);
+        }
     }
 }

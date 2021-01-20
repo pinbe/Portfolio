@@ -6,6 +6,7 @@ import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} 
 import {InsituImage} from "./insitu";
 import {FrameBorderDescription} from "photoprint/src/components/interfaces";
 import {Direction, ModeSwitcher} from "./modeswitch";
+import {FramedImage} from "./frame";
 
 
 export enum DisplayMode {
@@ -60,6 +61,7 @@ export class InSituViewer extends ImageViewerBase {
         this.modeSwitcher = new ModeSwitcher(
             120,
             (this.landscape) ? Direction.row : Direction.column,
+            (mode) => this.setDisplayMode(mode, this.frameDesc, this.physicalImgFormatSize),
             {selectable: InSituViewer.SELECTABLE});
         this.modeSwitcher.updateBtn(this.displayMode, this.sceneRoot);
         this.canvas.add(this.modeSwitcher);
@@ -77,14 +79,14 @@ export class InSituViewer extends ImageViewerBase {
             viewportSize = <Size>this.canvas;
 
         naturalImgSize = <Size>this.sceneRoot;
-        console.log('fitContent: ', `(${naturalImgSize.width}, ${naturalImgSize.height})`);
         let scale = Math.min(
             viewportSize.width / naturalImgSize.width,
             viewportSize.height / naturalImgSize.height);
         scale = Math.min(scale, 1);
         this.sceneRoot.scale(scale);
         this.sceneRoot.center();
-        this.modeSwitcher.left = this.canvas.width - this.modeSwitcher.width - 1;
+        this.modeSwitcher.set('left', this.canvas.width - this.modeSwitcher.width - 1);
+        this.modeSwitcher.setCoords();
         this.modeSwitcher.bringToFront();
         this.canvas.renderAll();
     }
@@ -107,7 +109,7 @@ export class InSituViewer extends ImageViewerBase {
                     }
                     this.updateDisplay(this.frameDesc, this.physicalImgFormatSize);
                     resolve(<Size>this.image);
-                    this.modeSwitcher.setDirection((this.landscape) ? Direction.row: Direction.column);
+                    this.modeSwitcher.setDirection((this.landscape) ? Direction.row : Direction.column);
                     this.modeSwitcher.updateBtn(DisplayMode.ImageOnly, this.image)
                         .then(() => this.fitContent());
                 });
@@ -129,6 +131,7 @@ export class InSituViewer extends ImageViewerBase {
                 break;
 
             case DisplayMode.Framed:
+                this.updateDisplay(frameDesc, imgPhysicalSize);
                 break;
 
             case DisplayMode.InSitu:
@@ -145,6 +148,8 @@ export class InSituViewer extends ImageViewerBase {
         this.frameDesc = frameDesc;
         this.physicalImgFormatSize = physicalImgFormatSize;
         if (mode === this.displayMode) return;
+
+        this.modeSwitcher.setMode(mode);
 
         switch (mode) {
             case DisplayMode.ImageOnly:
@@ -191,12 +196,11 @@ export class InSituViewer extends ImageViewerBase {
         this.frameDesc = frameDesc;
         this.physicalImgFormatSize = physicalImgFormatSize;
 
+        this.modeSwitcher.setMode(this.displayMode);
+
         switch (this.displayMode) {
             case DisplayMode.ImageOnly:
                 return;
-
-            case DisplayMode.Framed:
-                break;
 
             case DisplayMode.InSitu:
                 InsituImage
