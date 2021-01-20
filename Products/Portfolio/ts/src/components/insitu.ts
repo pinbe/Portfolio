@@ -16,7 +16,7 @@ export interface BGInfos {
 export class InsituImage extends fabric.Group {
     private readonly bgInfos: BGInfos;
     private readonly phyRes: number; // physical resolution. pixel per centimeters
-    private mainImg: fabric.Object;
+    mainImg: fabric.Object;
     private readonly bgImg: fabric.Image;
     phySize: Size;
 

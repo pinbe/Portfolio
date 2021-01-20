@@ -5,9 +5,10 @@ import {Size} from "./utils";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
 import {InsituImage} from "./insitu";
 import {FrameBorderDescription} from "photoprint/src/components/interfaces";
+import {Direction, ModeSwitcher} from "./modeswitch";
 
 
-enum DisplayMode {
+export enum DisplayMode {
     ImageOnly,
     Framed,
     InSitu
@@ -23,6 +24,7 @@ export class InSituViewer extends ImageViewerBase {
     static CONTAINER_CLASS = 'fabric-canvas-wrapper';
     private frameDesc: FrameBorderDescription;
     private physicalImgFormatSize: Size;
+    private readonly modeSwitcher: ModeSwitcher;
 
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
@@ -55,6 +57,17 @@ export class InSituViewer extends ImageViewerBase {
             (e: CustomEvent<PhotoOrderOptionsChangedEventDetail>) => {
                 this.onPhotoOrderOptionsChangedEvent(e.detail);
             });
+        this.modeSwitcher = new ModeSwitcher(
+            120,
+            (this.landscape) ? Direction.row : Direction.column,
+            {selectable: InSituViewer.SELECTABLE});
+        this.modeSwitcher.updateBtn(this.displayMode, this.sceneRoot);
+        this.canvas.add(this.modeSwitcher);
+    }
+
+    get landscape(): boolean {
+        const size = this.image.getOriginalSize();
+        return size.width > size.height;
     }
 
     fitContent(viewportSize?: Size, naturalImgSize?: Size): void {
@@ -71,6 +84,8 @@ export class InSituViewer extends ImageViewerBase {
         scale = Math.min(scale, 1);
         this.sceneRoot.scale(scale);
         this.sceneRoot.center();
+        this.modeSwitcher.left = this.canvas.width - this.modeSwitcher.width - 1;
+        this.modeSwitcher.bringToFront();
         this.canvas.renderAll();
     }
 
@@ -79,8 +94,7 @@ export class InSituViewer extends ImageViewerBase {
             (resolve) => {
                 this.image.setSrc(url, () => {
                     if (this.physicalImgFormatSize) {
-                        const landscape = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
-                        this.physicalImgFormatSize = (landscape) ?
+                        this.physicalImgFormatSize = (this.landscape) ?
                             {
                                 width: Math.max(this.physicalImgFormatSize.width, this.physicalImgFormatSize.height),
                                 height: Math.min(this.physicalImgFormatSize.width, this.physicalImgFormatSize.height)
@@ -93,6 +107,9 @@ export class InSituViewer extends ImageViewerBase {
                     }
                     this.updateDisplay(this.frameDesc, this.physicalImgFormatSize);
                     resolve(<Size>this.image);
+                    this.modeSwitcher.setDirection((this.landscape) ? Direction.row: Direction.column);
+                    this.modeSwitcher.updateBtn(DisplayMode.ImageOnly, this.image)
+                        .then(() => this.fitContent());
                 });
             }
         );
@@ -100,8 +117,7 @@ export class InSituViewer extends ImageViewerBase {
 
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
-        const landscape: boolean = this.image.getOriginalSize().width > this.image.getOriginalSize().height;
-        const imgPhysicalSize: Size = (landscape) ?
+        const imgPhysicalSize: Size = (this.landscape) ?
             {width: detail.format.long_edge, height: detail.format.short_edge} :
             {width: detail.format.short_edge, height: detail.format.long_edge}
         ;
@@ -159,6 +175,10 @@ export class InSituViewer extends ImageViewerBase {
                         });
                         this.sceneRoot = insituImg;
                         this.canvas.add(this.sceneRoot);
+                        this.modeSwitcher.updateBtn(DisplayMode.InSitu, insituImg)
+                            .then(() => this.fitContent());
+                        this.modeSwitcher.updateBtn(DisplayMode.Framed, (frameDesc) ? insituImg.mainImg : null)
+                            .then(() => this.fitContent());
                         this.fitContent();
                     });
                 break;
@@ -196,6 +216,10 @@ export class InSituViewer extends ImageViewerBase {
                         });
                         this.sceneRoot = insituImg;
                         this.canvas.add(this.sceneRoot);
+                        this.modeSwitcher.updateBtn(DisplayMode.InSitu, insituImg)
+                            .then(() => this.fitContent());
+                        this.modeSwitcher.updateBtn(DisplayMode.Framed, (frameDesc) ? insituImg.mainImg : null)
+                            .then(() => this.fitContent());
                         this.fitContent();
                     });
                 break;
