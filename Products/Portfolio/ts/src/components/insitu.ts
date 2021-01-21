@@ -35,7 +35,8 @@ export class InsituImage extends fabric.Group {
                             mainImgSrc,
                             frameDesc.real_width,
                             framePhysicalSize,
-                            frameDesc.background
+                            frameDesc.background,
+                            options
                         )
                         .then((frim: FramedImage) => {
                             resolve(frim);

@@ -1,7 +1,8 @@
 import {fabric} from "fabric";
 import {Size} from "./utils";
+import {IObjectOptions} from "fabric/fabric-impl";
 
-export class FramedImage extends fabric.Group{
+export class FramedImage extends fabric.Group {
     private stickPattern: fabric.Pattern;
     private mainFImg: fabric.Image;
 
@@ -10,7 +11,8 @@ export class FramedImage extends fabric.Group{
         mainImgUrl: string,
         stickRealWidth: number,
         frameRealSize: Size,
-        background='white'): Promise<FramedImage> {
+        background = 'white',
+        options?: IObjectOptions): Promise<FramedImage> {
         return new Promise<FramedImage>((resolve) => {
             const imgPromises = [stickImgUrl, mainImgUrl].map((src) => new Promise<HTMLImageElement>((resolve) => {
                 const im = new Image();
@@ -23,7 +25,8 @@ export class FramedImage extends fabric.Group{
                     imgs[1],
                     stickRealWidth,
                     frameRealSize,
-                    background
+                    background,
+                    options
                 ));
             });
         });
@@ -33,7 +36,8 @@ export class FramedImage extends fabric.Group{
                         mainImg: HTMLImageElement,
                         stickRealWidth: number,
                         frameRealSize: Size,
-                        background: string) {
+                        background: string,
+                        options?: IObjectOptions) {
         const frmRatio = frameRealSize.width / frameRealSize.height;
         const imgRatio = mainImg.naturalWidth / mainImg.naturalHeight;
 
@@ -77,8 +81,6 @@ export class FramedImage extends fabric.Group{
 
         const frmW = frameRealSize.width * mainImgResolution;
         const frmH = frameRealSize.height * mainImgResolution;
-
-        console.info(`frm: (${frmW}, ${frmH}); img: (${imgWidth}, ${imgHeight}) `);
 
         const mainFImg = new fabric.Image(
             mainImg,
@@ -152,6 +154,7 @@ export class FramedImage extends fabric.Group{
         });
         super(
             [bgRect, borderLeft, borderRight, borderTop, borderBottom, mainFImg],
+            options
         );
         this.stickPattern = stickPattern;
         this.mainFImg = mainFImg;

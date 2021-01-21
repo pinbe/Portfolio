@@ -1,12 +1,11 @@
 import * as d3 from "d3";
 import {fabric} from "fabric";
 import {ImageViewerBase} from "./image_viewer";
-import {Size} from "./utils";
+import {getObjSize, Size} from "./utils";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "photoprint/src/components/event";
 import {InsituImage} from "./insitu";
 import {FrameBorderDescription} from "photoprint/src/components/interfaces";
 import {Direction, ModeSwitcher} from "./modeswitch";
-import {FramedImage} from "./frame";
 
 
 export enum DisplayMode {
@@ -61,7 +60,7 @@ export class InSituViewer extends ImageViewerBase {
         this.modeSwitcher = new ModeSwitcher(
             120,
             (this.landscape) ? Direction.row : Direction.column,
-            (mode) => this.setDisplayMode(mode, this.frameDesc, this.physicalImgFormatSize),
+            (mode) => this.updateDisplay(this.frameDesc, this.physicalImgFormatSize, mode),
             {selectable: InSituViewer.SELECTABLE});
         this.modeSwitcher.updateBtn(this.displayMode, this.sceneRoot);
         this.canvas.add(this.modeSwitcher);
@@ -78,7 +77,8 @@ export class InSituViewer extends ImageViewerBase {
         else
             viewportSize = <Size>this.canvas;
 
-        naturalImgSize = <Size>this.sceneRoot;
+        naturalImgSize = <Size>getObjSize(this.sceneRoot);
+        // naturalImgSize = <Size>this.sceneRoot;
         let scale = Math.min(
             viewportSize.width / naturalImgSize.width,
             viewportSize.height / naturalImgSize.height);
@@ -124,45 +124,94 @@ export class InSituViewer extends ImageViewerBase {
             {width: detail.format.short_edge, height: detail.format.long_edge}
         ;
         const frameDesc = detail.frame?.frame_border_description;
+        this.updateDisplay(frameDesc, imgPhysicalSize);
 
-        switch (this.displayMode) {
-            case DisplayMode.ImageOnly:
-                this.setDisplayMode(DisplayMode.InSitu, frameDesc, imgPhysicalSize);
-                break;
-
-            case DisplayMode.Framed:
-                this.updateDisplay(frameDesc, imgPhysicalSize);
-                break;
-
-            case DisplayMode.InSitu:
-                this.updateDisplay(frameDesc, imgPhysicalSize);
-                break;
-        }
+        // switch (this.displayMode) {
+        //     case DisplayMode.ImageOnly:
+        //         this.setDisplayMode(DisplayMode.InSitu, frameDesc, imgPhysicalSize);
+        //         break;
+        //
+        //     case DisplayMode.Framed:
+        //         this.updateDisplay(frameDesc, imgPhysicalSize);
+        //         break;
+        //
+        //     case DisplayMode.InSitu:
+        //         this.updateDisplay(frameDesc, imgPhysicalSize);
+        //         break;
+        // }
 
 
         this.canvas.renderAll();
     }
 
 
-    private setDisplayMode(mode: DisplayMode, frameDesc: FrameBorderDescription, physicalImgFormatSize: Size) {
+    // private setDisplayMode(mode: DisplayMode, frameDesc: FrameBorderDescription, physicalImgFormatSize: Size) {
+    //     this.frameDesc = frameDesc;
+    //     this.physicalImgFormatSize = physicalImgFormatSize;
+    //     if (mode === this.displayMode) return;
+    //
+    //     this.modeSwitcher.setMode(mode);
+    //
+    //     switch (mode) {
+    //         case DisplayMode.ImageOnly:
+    //             this.canvas.remove(this.sceneRoot);
+    //             this.sceneRoot = this.image;
+    //             this.canvas.add(this.sceneRoot);
+    //             this.fitContent();
+    //             break;
+    //
+    //         case DisplayMode.Framed:
+    //             break;
+    //
+    //         case DisplayMode.InSitu:
+    //             InsituImage
+    //                 .fromInfoUrl(
+    //                     `${this.portal_url}/getInsituBgInfos`,
+    //                     this.image.getSrc(),
+    //                     frameDesc,
+    //                     physicalImgFormatSize,
+    //                     {selectable: InSituViewer.SELECTABLE}
+    //                 )
+    //                 .then((insituImg) => {
+    //                     const bw = (frameDesc) ? frameDesc.real_width : 0;
+    //                     this.canvas.remove(this.sceneRoot);
+    //                     insituImg.setImgPhysicalFrame({
+    //                         width: physicalImgFormatSize.width + 2 * bw,
+    //                         height: physicalImgFormatSize.height + 2 * bw
+    //                     });
+    //                     this.sceneRoot = insituImg;
+    //                     this.canvas.add(this.sceneRoot);
+    //                     this.modeSwitcher.updateBtn(DisplayMode.InSitu, insituImg)
+    //                         .then(() => this.fitContent());
+    //                     this.modeSwitcher.updateBtn(DisplayMode.Framed, (frameDesc) ? insituImg.mainImg : null)
+    //                         .then(() => this.fitContent());
+    //                     this.fitContent();
+    //                 });
+    //             break;
+    //
+    //     }
+    //     this.displayMode = mode;
+    // }
+
+    private updateDisplay(frameDesc: FrameBorderDescription, physicalImgFormatSize: Size, mode?: DisplayMode) {
         this.frameDesc = frameDesc;
         this.physicalImgFormatSize = physicalImgFormatSize;
-        if (mode === this.displayMode) return;
+        if (mode !== undefined)
+            this.displayMode = mode;
 
-        this.modeSwitcher.setMode(mode);
-
-        switch (mode) {
-            case DisplayMode.ImageOnly:
+        if (!physicalImgFormatSize) {
+            this.displayMode = DisplayMode.ImageOnly;
+            if (this.sceneRoot != this.image) {
                 this.canvas.remove(this.sceneRoot);
                 this.sceneRoot = this.image;
                 this.canvas.add(this.sceneRoot);
                 this.fitContent();
-                break;
+            }
+        } else {
+            new Promise<fabric.Object>((resolve) => {
+                if (this.displayMode === DisplayMode.ImageOnly)
+                    resolve(this.image);
 
-            case DisplayMode.Framed:
-                break;
-
-            case DisplayMode.InSitu:
                 InsituImage
                     .fromInfoUrl(
                         `${this.portal_url}/getInsituBgInfos`,
@@ -173,61 +222,40 @@ export class InSituViewer extends ImageViewerBase {
                     )
                     .then((insituImg) => {
                         const bw = (frameDesc) ? frameDesc.real_width : 0;
-                        this.canvas.remove(this.sceneRoot);
                         insituImg.setImgPhysicalFrame({
                             width: physicalImgFormatSize.width + 2 * bw,
                             height: physicalImgFormatSize.height + 2 * bw
                         });
-                        this.sceneRoot = insituImg;
-                        this.canvas.add(this.sceneRoot);
-                        this.modeSwitcher.updateBtn(DisplayMode.InSitu, insituImg)
+                        switch (this.displayMode) {
+                            case DisplayMode.ImageOnly:
+                                break;
+
+                            case DisplayMode.Framed:
+                                if (this.frameDesc) {
+                                    insituImg.mainImg.clone((cloned: fabric.Object) => {
+                                        // cloned.set('shadow', null);
+                                        resolve(cloned);
+                                    }, ['selectable']);
+                                }
+                                break;
+
+                            case DisplayMode.InSitu:
+                                resolve(insituImg);
+                                break;
+                        }
+
+                        Promise.all([
+                            this.modeSwitcher.updateBtn(DisplayMode.InSitu, insituImg),
+                            this.modeSwitcher.updateBtn(DisplayMode.Framed, (frameDesc) ? insituImg.mainImg : null)])
                             .then(() => this.fitContent());
-                        this.modeSwitcher.updateBtn(DisplayMode.Framed, (frameDesc) ? insituImg.mainImg : null)
-                            .then(() => this.fitContent());
-                        this.fitContent();
                     });
-                break;
-
+            }).then((sceneRoot: fabric.Object) => {
+                this.canvas.remove(this.sceneRoot);
+                this.sceneRoot = sceneRoot;
+                this.canvas.add(this.sceneRoot);
+                this.fitContent();
+            });
         }
-        this.displayMode = mode;
-    }
-
-    private updateDisplay(frameDesc: FrameBorderDescription, physicalImgFormatSize: Size) {
-        this.frameDesc = frameDesc;
-        this.physicalImgFormatSize = physicalImgFormatSize;
-
         this.modeSwitcher.setMode(this.displayMode);
-
-        switch (this.displayMode) {
-            case DisplayMode.ImageOnly:
-                return;
-
-            case DisplayMode.InSitu:
-                InsituImage
-                    .fromInfoUrl(
-                        `${this.portal_url}/getInsituBgInfos`,
-                        this.image.getSrc(),
-                        frameDesc,
-                        physicalImgFormatSize,
-                        {selectable: InSituViewer.SELECTABLE}
-                    )
-                    .then((insituImg) => {
-                        const bw = (frameDesc) ? frameDesc.real_width : 0;
-                        this.canvas.remove(this.sceneRoot);
-                        insituImg.setImgPhysicalFrame({
-                            width: physicalImgFormatSize.width + 2 * bw,
-                            height: physicalImgFormatSize.height + 2 * bw
-                        });
-                        this.sceneRoot = insituImg;
-                        this.canvas.add(this.sceneRoot);
-                        this.modeSwitcher.updateBtn(DisplayMode.InSitu, insituImg)
-                            .then(() => this.fitContent());
-                        this.modeSwitcher.updateBtn(DisplayMode.Framed, (frameDesc) ? insituImg.mainImg : null)
-                            .then(() => this.fitContent());
-                        this.fitContent();
-                    });
-                break;
-
-        }
     }
 }
