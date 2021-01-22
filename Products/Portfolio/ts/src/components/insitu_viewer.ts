@@ -120,17 +120,19 @@ export class InSituViewer extends ImageViewerBase {
 
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
+        const targetMode = (!this.selectedOrderOptions) ? DisplayMode.InSitu : undefined;
         this.selectedOrderOptions = detail;
         const imgPhysicalSize: Size = (this.landscape) ?
             {width: detail.format.long_edge, height: detail.format.short_edge} :
             {width: detail.format.short_edge, height: detail.format.long_edge}
         ;
         const frameDesc = detail.frame?.frame_border_description;
-        this.updateDisplay(frameDesc, imgPhysicalSize);
-        this.canvas.renderAll();
+        this.updateDisplay(frameDesc, imgPhysicalSize, targetMode);
+        // this.canvas.renderAll();
     }
 
     private updateDisplay(frameDesc: FrameBorderDescription, physicalImgFormatSize: Size, mode?: DisplayMode) {
+        console.log('frameDesc', frameDesc);
         this.frameDesc = frameDesc;
         this.physicalImgFormatSize = physicalImgFormatSize;
         if (mode !== undefined)
@@ -164,15 +166,15 @@ export class InSituViewer extends ImageViewerBase {
                             height: physicalImgFormatSize.height + 2 * bw
                         });
                         switch (this.displayMode) {
-                            case DisplayMode.ImageOnly:
-                                break;
-
                             case DisplayMode.Framed:
                                 if (this.frameDesc) {
                                     insituImg.mainImg.clone((cloned: fabric.Object) => {
-                                        // cloned.set('shadow', null);
                                         resolve(cloned);
                                     }, ['selectable']);
+                                } else {
+                                    // no frame description, back to image only mode
+                                    this.displayMode = DisplayMode.ImageOnly;
+                                    resolve(this.image);
                                 }
                                 break;
 
@@ -191,8 +193,8 @@ export class InSituViewer extends ImageViewerBase {
                 this.sceneRoot = sceneRoot;
                 this.canvas.add(this.sceneRoot);
                 this.fitContent();
+                this.modeSwitcher.setMode(this.displayMode);
             });
         }
-        this.modeSwitcher.setMode(this.displayMode);
     }
 }

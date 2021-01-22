@@ -20,7 +20,7 @@ class Tile extends fabric.Group {
         this.rect = new fabric.Rect(Object.assign(Tile.DEFAULT_RECT_OPTIONS, options));
         this.addWithUpdate(this.rect);
         this.visible = Tile.HIDDEN;
-        this.on('mousemove', ()=>{
+        this.on('mousemove', () => {
             this.canvas.setCursor('pointer');
         });
     }
@@ -68,7 +68,7 @@ export class ModeSwitcher extends fabric.Group {
         const framedBtn = new Tile(DisplayMode.Framed, tileOpts);
         super(
             [imageOnlyBtn, inSituBtn, framedBtn],
-            Object.assign({subTargetCheck: true, hoverCursor:'unset'}, options));
+            Object.assign({subTargetCheck: true, hoverCursor: 'unset'}, options));
 
         this.tileWidth = tileWidth;
         this.buttons = [imageOnlyBtn, inSituBtn, framedBtn];
@@ -102,6 +102,7 @@ export class ModeSwitcher extends fabric.Group {
         }
         this._calcBounds();
         this._updateObjectsCoords();
+        this.visible = this.buttons.filter((btn) => btn.visible).length > 1;
         this.dirty = true;
     }
 
