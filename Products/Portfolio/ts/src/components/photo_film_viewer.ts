@@ -5,14 +5,14 @@ Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
 
 
-import {IImageViewer, ImageViewer} from "./image_viewer";
+import {IImageViewer} from "./image_viewer";
 import {InSituViewer} from "./insitu_viewer";
+import {PHOTO_LOADED_EVENT, PhotoLoadedEventDetail} from "./event";
 
 const keyLeft = 37, keyRight = 39;
 const DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
 const DEFAULT_SLIDESHOW_TIMEOUT = 4000;
 const AUTO_FULLSCREEN_THRESHOLD = 800;
-const PHOTO_LOADED_EVENT = 'PHOTO_LOADED_EVENT';
 
 const ua = navigator.userAgent.toLowerCase();
 let vendorPrefix = '';
@@ -368,11 +368,12 @@ export class FilmSlider {
             }
         }
         if (cmf_uid) {
-            document.dispatchEvent(new CustomEvent(PHOTO_LOADED_EVENT,
+            document.dispatchEvent(new CustomEvent<PhotoLoadedEventDetail>(PHOTO_LOADED_EVENT,
                 {
                     detail: {
                         cmf_uid: cmf_uid,
-                        buyable: buyable
+                        buyable: buyable,
+                        selectedOrderOptions: (<InSituViewer>this.viewer).selectedOrderOptions
                     }
                 }));
         }

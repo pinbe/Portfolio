@@ -25,6 +25,7 @@ export class InSituViewer extends ImageViewerBase {
     private frameDesc: FrameBorderDescription;
     private physicalImgFormatSize: Size;
     private readonly modeSwitcher: ModeSwitcher;
+    public selectedOrderOptions: PhotoOrderOptionsChangedEventDetail;
 
     constructor(image: HTMLImageElement,
                 viewPort: HTMLElement,
@@ -119,6 +120,7 @@ export class InSituViewer extends ImageViewerBase {
 
 
     private onPhotoOrderOptionsChangedEvent(detail: PhotoOrderOptionsChangedEventDetail) {
+        this.selectedOrderOptions = detail;
         const imgPhysicalSize: Size = (this.landscape) ?
             {width: detail.format.long_edge, height: detail.format.short_edge} :
             {width: detail.format.short_edge, height: detail.format.long_edge}
