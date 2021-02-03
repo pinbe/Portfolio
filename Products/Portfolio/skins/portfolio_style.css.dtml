@@ -32,7 +32,7 @@
 
 .image_metadata {
   padding: 0 1em 1em 1em;
-  height: 100%;
+  height: calc(100% - 38px); /* 38px: #image_toolbar height */
   overflow: scroll;
 }
 
