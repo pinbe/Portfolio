@@ -27,10 +27,13 @@
   background: &dtml-metadata_bar_background;;
   width:20em;
   vertical-align: top;
+  position: relative;
 }
 
 .image_metadata {
   padding: 0 1em 1em 1em;
+  height: 100%;
+  overflow: scroll;
 }
 
 .photo_viewer .photographer {
@@ -320,6 +323,9 @@ table.metadata_category select:focus {
   transition: opacity 500ms;
   background: &dtml-image_toolbar_background;;
   z-index: 1;
+  position: relative;
+  top: 0;
+  left: 0;
 }
 
 #lightbox_toolbar.image_toolbar {
