@@ -34,21 +34,23 @@
           <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
           <div class="portfolio_lightbox">
             <a tal:repeat="portfolio batch"
-                     tal:attributes="href portfolio/absolute_url">
-            <span tal:define="sphoto portfolio/samplePhoto" tal:omit-tag="">
-              <span tal:condition="sphoto" tal:omit-tag="">
-                <img tal:attributes="src string:${sphoto/url}/getThumbnail;
-                                     alt sphoto/title;
-                                     width sphoto/thumb_size/width;
-                                     height sphoto/thumb_size/height;
-                                     "/>
-              </span>
-              <span tal:condition="not:sphoto" tal:omit-tag="">
-                <img tal:attributes="src here/empty_portfolio.gif/absolute_url;
-                        alt portfolio/title_or_id"/>
-              </span>
-            </span>
+               tal:attributes="href portfolio/absolute_url">
               <h3 tal:content="portfolio/Title">Portfolio title or id</h3>
+              <tal:block tal:define="sphoto portfolio/samplePhoto">
+                <tal:block tal:condition="sphoto">
+                  <img tal:attributes="
+                          src string:${sphoto/url}/getThumbnail;
+                          alt sphoto/title;
+                          width sphoto/thumb_size/width;
+                          height sphoto/thumb_size/height;
+                          "/>
+                </tal:block>
+                <tal:block tal:condition="not:sphoto">
+                  <img tal:attributes="
+                          src here/empty_portfolio.gif/absolute_url;
+                          alt portfolio/title_or_id"/>
+                </tal:block>
+              </tal:block>
               <div tal:content="portfolio/Description"></div>
             </a>
           </div>
