@@ -153,11 +153,20 @@ div.portfolio_lightbox {
   text-align:center;
   overflow:hidden;
   margin: 5px;
-  border: thin solid transparent;
+  border: thin dotted transparent;
+  transition: all 0.25s;
 }
 
 .portfolio_lightbox a:hover {
   border: thin dotted &dtml-linkHoverColor;;
+  color: &dtml-linkHoverColor;;
+}
+
+.portfolio_lightbox h3 {
+  text-align: center;
+  border-bottom: thin solid #000;
+  padding: 2px;
+  transition: all 0.25s;
 }
 
 .portfolio_lightbox a:hover,
@@ -170,11 +179,6 @@ div.portfolio_lightbox {
   border:none;
 }
 
-.portfolio_lightbox h3 {
-  text-align: center;
-  border-bottom: thin solid #000;
-  padding: 2px;
-}
 
 .portfolio_lightbox div {
   /*padding:0 8px;*/
