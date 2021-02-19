@@ -26,35 +26,10 @@
                          port_start python:request.get('port_start', 0);
                          portfolios python:Batch(here.listNearestFolderContents(contentFilter={'portal_type' : 'Portfolio'}),
                                                  16, port_start, orphan=1, quantumleap=1, b_start_str='port_start');">
-      <div tal:condition="python:here.hasPresentationPage() and pho_start < 20"
-           tal:content="structure here/presentation_page">custom presentation
-      </div>
-      <div tal:condition="portfolios" tal:omit-tag="">
-        <div tal:define="batch portfolios" tal:omit-tag="">
-          <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
-          <div class="portfolio_lightbox">
-            <a tal:repeat="portfolio batch"
-               tal:attributes="href portfolio/absolute_url">
-              <h3 tal:content="portfolio/Title">Portfolio title or id</h3>
-              <tal:block tal:define="sphoto portfolio/samplePhoto">
-                <tal:block tal:condition="sphoto">
-                  <img tal:attributes="
-                          src string:${sphoto/url}/getThumbnail;
-                          alt sphoto/title;
-                          width sphoto/thumb_size/width;
-                          height sphoto/thumb_size/height;
-                          "/>
-                </tal:block>
-                <tal:block tal:condition="not:sphoto">
-                  <img tal:attributes="
-                          src here/empty_portfolio.gif/absolute_url;
-                          alt portfolio/title_or_id"/>
-                </tal:block>
-              </tal:block>
-              <div tal:content="portfolio/Description"></div>
-            </a>
-          </div>
-        </div>
+      <div tal:condition="here/hasPresentationPage">
+        <div tal:replace="structure here/presentation_page">custom presentation</div>
+        <script type="text/javascript"
+                 tal:attributes="src string:$portal_url/plinn/jsbuild/slideshow_helper.js"></script>
       </div>
 
       <div tal:define="batchInfos python:here.getPhotosInfos(here,
@@ -66,7 +41,7 @@
         <form tal:attributes="action string:${here/absolute_url}/portfolio_edit_form" method="post">
           <div id="lightbox_toolbar"
                class="image_toolbar"
-               tal:condition="python:features">
+               tal:condition="python:features and not portfolios">
             <a tal:condition="python:features.has_key('select')"
                tal:attributes="href string:$portal_url/selection_view"
                i18n:translate="">
@@ -99,7 +74,33 @@
           </div>
         </form>
       </div>
-      <br clear="all"/>
+      <div tal:condition="portfolios" tal:omit-tag="">
+        <div tal:define="batch portfolios" tal:omit-tag="">
+          <div metal:use-macro="here/batch_macros/macros/navigation">batch navigation</div>
+          <div class="portfolio_lightbox">
+            <a tal:repeat="portfolio batch"
+               tal:attributes="href portfolio/absolute_url">
+              <h3 tal:content="portfolio/Title">Portfolio title or id</h3>
+              <tal:block tal:define="sphoto portfolio/samplePhoto">
+                <tal:block tal:condition="sphoto">
+                  <img tal:attributes="
+                          src string:${sphoto/url}/getThumbnail;
+                          alt sphoto/title;
+                          width sphoto/thumb_size/width;
+                          height sphoto/thumb_size/height;
+                          "/>
+                </tal:block>
+                <tal:block tal:condition="not:sphoto">
+                  <img tal:attributes="
+                          src here/empty_portfolio.gif/absolute_url;
+                          alt portfolio/title_or_id"/>
+                </tal:block>
+              </tal:block>
+              <div tal:content="portfolio/Description"></div>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 
