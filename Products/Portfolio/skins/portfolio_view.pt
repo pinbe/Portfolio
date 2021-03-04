@@ -9,7 +9,7 @@
   <body i18n:domain="portfolio">
     <div metal:fill-slot="header" tal:omit-tag="" tal:condition="not:here/hasPresentationPage">
       <h1 id="DesktopTitle">
-        <span tal:replace="here/title_or_id">Page Title</span>
+        <span tal:content="here/title_or_id">Page Title</span>
       </h1>
       <div id="DesktopDescription" tal:content="structure here/Description">
         Description of the resource goes here, perhaps even wrapping lines; this is to make it long enough to test.

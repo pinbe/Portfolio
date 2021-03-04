@@ -442,6 +442,30 @@ div.portfolio_lightbox {
   border-bottom: 2px solid &dtml-outlineColor;;
 }
 
+body.pt-portfolio #DesktopTitle,
+body.pt-portfolio #DesktopDescription {
+  text-align: center;
+}
+
+body.pt-portfolio #DesktopTitle > span {
+  position: relative;
+}
+
+body.pt-portfolio #DesktopTitle > span::before {
+	display: block;
+	position: absolute;
+	content: "";
+	width: 50%;
+	left: 25%;
+	top: 1.2em;
+	border-bottom: 2px solid #484848;
+}
+
+#header_portfolio_presentation_template #DesktopTitle,
+#header_portfolio_presentation_template #DesktopDescription {
+  text-align: left;
+}
+
 
 /* fullscreen */
 :-moz-full-screen {
