@@ -462,7 +462,9 @@ body.pt-portfolio #DesktopTitle > span::before {
 }
 
 #header_portfolio_presentation_template #DesktopTitle,
-#header_portfolio_presentation_template #DesktopDescription {
+#header_portfolio_presentation_template #DesktopDescription,
+#header_folder_contents_template #DesktopTitle,
+#header_folder_contents_template #DesktopDescription {
   text-align: left;
 }
 
