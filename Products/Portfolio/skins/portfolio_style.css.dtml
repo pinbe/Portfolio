@@ -468,6 +468,10 @@ body.pt-portfolio #DesktopTitle > span::before {
   text-align: left;
 }
 
+body.pt-photo #content-wrapper {
+  margin-top: 0;
+}
+
 
 /* fullscreen */
 :-moz-full-screen {
