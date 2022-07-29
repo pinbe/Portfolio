@@ -49,7 +49,7 @@ def outline(self, image, mask, distance=128
 			, maxsize=1600) :
     iw, ih = image.size
     if iw > maxsize or ih > maxsize :
-        raise Unauthorized, "You are not allowed to get an image larger than 800px"
+        raise Unauthorized, "You are not allowed to get an image larger than %dpx" % maxsize
 
     mask = imgopen(StringIO(mask))
     assert mask.mode == 'L', "mask must be in L mode"
