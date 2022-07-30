@@ -3,8 +3,7 @@ copyright 2008-2014 Benoit Pin - Centre de recherche en informatique - MINES Par
 http://plinn.org
 Licence Creative Commons http://creativecommons.org/licenses/by-nc/2.0/
 */
-
-
+import * as Hammer from "hammerjs";
 import {IImageViewer} from "./image_viewer";
 import {InSituViewer} from "./insitu_viewer";
 import {PHOTO_LOADED_EVENT, PhotoLoadedEventDetail} from "./event";
@@ -137,7 +136,7 @@ export class FilmSlider {
         this.startThumbnailsLoadQueue();
     }
 
-    private fitSize(initFit=false): void {
+    private fitSize(initFit = false): void {
         /* The following if / else if is used to enable "auto fullscreen"
            when device' screen is too small to display thumbnails bar and metadata. */
         if (document.body.getBoundingClientRect().width <= AUTO_FULLSCREEN_THRESHOLD)
@@ -151,7 +150,7 @@ export class FilmSlider {
         const end = this.stretchable.nextElementSibling.getBoundingClientRect().top;
         this.stretchable.style.height = end - start + 'px';
 
-        if(!initFit)
+        if (!initFit)
             this.viewer.redrawOnResize();
     }
 
@@ -188,6 +187,14 @@ export class FilmSlider {
         });
         document.addEventListener('keypress', (evt) => {
             this.keyPressHandler(evt);
+        });
+
+        const hmanager = new Hammer.Manager(this.viewPort);
+        const swipe = new Hammer.Swipe();
+        hmanager.add(swipe);
+        hmanager.on('swipe', (e) => {
+            this._stopSlideShow();
+            this.loadSibling(e.deltaX > 0);
         });
 
         if (this.fullScreenCapable) {
