@@ -9,7 +9,7 @@ import {InSituViewer} from "./insitu_viewer";
 import {PHOTO_LOADED_EVENT, PhotoLoadedEventDetail} from "./event";
 
 const keyLeft = 37, keyRight = 39;
-const DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600];
+const DEFAULT_IMAGE_SIZES = [500, 600, 800, 1200, 1600, 1920, 2560, 3840];
 const DEFAULT_SLIDESHOW_TIMEOUT = 4000;
 const AUTO_FULLSCREEN_THRESHOLD = 800;
 
