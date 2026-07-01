@@ -55,7 +55,7 @@ elif fg('delete.x') or form.has_key('delete') :
         msg = _('Nothing to remove.')
     
     if fg('ajax') :
-        context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
+        context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
         return '<deleted>%s</deleted>' % msg
     else :
         context.setStatus(True, msg)

@@ -8,7 +8,7 @@ uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
 form = context.REQUEST.form
 fg = form.get
 if fg('ajax') :
-    context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
+    context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
 
 if fg('delete.x') or form.has_key('delete') :
     ids = [uidh.getBrain(uid).getId for uid in fg('uids', [])]

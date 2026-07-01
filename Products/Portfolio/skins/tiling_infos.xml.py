@@ -26,5 +26,5 @@ for zoom in context.getAvailableZooms() :
 	
 	options['zoomLevels'].append(levelInfos)
 
-context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
+context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
 return context.tiling_infos_template(**options)

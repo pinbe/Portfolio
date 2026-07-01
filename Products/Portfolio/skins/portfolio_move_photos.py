@@ -11,7 +11,7 @@ if container_type == 'portfolio' :
     dropId = uidh.getBrain(int(fg('afterUid'))).getId
     uids = fg('uids', [])
     ids = [uidh.getBrain(uid).getId for uid in uids]
-    context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
+    context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
     try :
         context.moveObjectsAfter(ids, dropId)
         return '<ok/>'
